@@ -24,8 +24,8 @@ import com.demo.server.common.exception.AppException;
 import com.demo.server.common.util.RequestUtil;
 
 /**
- * 应用ControllerAdvice全局异常处理
- *
+ * 应用ControllerAdvice全局异常处理,记录请求异常日志
+ * 
  */
 @ControllerAdvice
 public class AppExceptionAdvice {
