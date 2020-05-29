@@ -23,10 +23,14 @@ import com.demo.server.bean.response.ResultCode;
 import com.demo.server.common.exception.AppException;
 import com.demo.server.common.util.RequestUtil;
 
+/**
+ * 应用ControllerAdvice全局异常处理
+ *
+ */
 @ControllerAdvice
-public class AppExceptionInterceptor {
+public class AppExceptionAdvice {
 
-	private static final Logger logger = LoggerFactory.getLogger(AppExceptionInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(AppExceptionAdvice.class);
 
 	private static String buildMessage(ObjectError error) {
 		if (error instanceof FieldError) {
@@ -89,7 +93,7 @@ public class AppExceptionInterceptor {
 
 		Result<Void> result = new Result<Void>();
 		result.setCode(ResultCode.MISS_PARAM.code);
-		result.setMsg(e.getBindingResult().getAllErrors().stream().map(AppExceptionInterceptor::buildMessage)
+		result.setMsg(e.getBindingResult().getAllErrors().stream().map(AppExceptionAdvice::buildMessage)
 				.collect(Collectors.joining(";")));
 
 		recordLog(request, result, e);
