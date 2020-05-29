@@ -1,0 +1,7 @@
+*.class
+*.DS_Store
+/catalina.*
+/target/
+/.classpath
+.settings/
+.project
