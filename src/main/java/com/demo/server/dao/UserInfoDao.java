@@ -16,7 +16,7 @@ import tk.mybatis.mapper.common.Mapper;
 @Repository
 public interface UserInfoDao extends Mapper<UserInfo> {
 
-	@Select("select id,user_name,email from user_info where deleted = 1 and email=#{email}")
+	@Select("select id,user_name,email from user_info where deleted = 0 and email=#{email}")
 	UserInfo getByEmail(String email);
 
 }

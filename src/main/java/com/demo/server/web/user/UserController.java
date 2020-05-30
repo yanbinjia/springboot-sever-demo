@@ -12,8 +12,8 @@ import com.demo.server.bean.response.Result;
 import com.demo.server.service.user.UserInfoService;
 
 @RestController
-@RequestMapping("/userInfo")
-public class UserInfoController {
+@RequestMapping("/user")
+public class UserController {
 
 	@Autowired
 	private UserInfoService userInfoService;

@@ -107,7 +107,7 @@
 			<version>1.2.12</version>
 		</dependency>
 
-		<!-- druid springboot integration -->
+		<!-- druid https://github.com/alibaba/druid -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid-spring-boot-starter</artifactId>
@@ -146,20 +146,31 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.8.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.14</version>
+		</dependency>
 
-		<!-- guava -->
+		<!-- guava https://github.com/google/guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>25.0-jre</version>
 		</dependency>
 
-		<!-- jwt auth0 https://auth0.com-->
+		<!-- auth0 jwt https://github.com/auth0/java-jwt -->
 		<dependency>
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
 			<version>3.10.3</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>
