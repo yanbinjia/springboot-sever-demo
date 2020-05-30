@@ -1,8 +1,8 @@
-# springboot-sever-demo
-## De
+## springboot-sever-demo
 springboot-sever-demo
 
-## integration 
+## demo server function
 * durid
 * tk.mybatis
-* 
+* AppResponseAdvice 
+* AppExceptionAdvice
