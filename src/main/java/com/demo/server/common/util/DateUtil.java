@@ -9,7 +9,7 @@ import java.util.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class DateUtils {
+public class DateUtil {
 
 	public final static String DATE_FORMAT = "yyyy-MM-dd";
 
@@ -38,7 +38,7 @@ public class DateUtils {
 	}
 
 	public static String getCurrentYMDHMS() {
-		return DateUtils.getDateStr(DateUtils.getCurrentDate(), DateUtils.DATE_YYYYMMDDHHMMSS);
+		return DateUtil.getDateStr(DateUtil.getCurrentDate(), DateUtil.DATE_YYYYMMDDHHMMSS);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String getCurrentMonthDateStr() {
-		return DateUtils.getDateStr(DateUtils.getCurrentDate(), DateUtils.MONTH_DAY_FORMAT);
+		return DateUtil.getDateStr(DateUtil.getCurrentDate(), DateUtil.MONTH_DAY_FORMAT);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String getCurrentDateStr() {
-		return DateUtils.getDateStr(DateUtils.getCurrentDate(), DateUtils.DATE_FORMAT);
+		return DateUtil.getDateStr(DateUtil.getCurrentDate(), DateUtil.DATE_FORMAT);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String getCurrentDateStrCN() {
-		return DateUtils.getDateStr(DateUtils.getCurrentDate(), DateUtils.DATE_FORMAT_CN);
+		return DateUtil.getDateStr(DateUtil.getCurrentDate(), DateUtil.DATE_FORMAT_CN);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String getCurrentDateTimeStr() {
-		return DateUtils.getDateStr(DateUtils.getCurrentDate(), DateUtils.DATE_TIME_FORMAT);
+		return DateUtil.getDateStr(DateUtil.getCurrentDate(), DateUtil.DATE_TIME_FORMAT);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String getCurrentDateTimeStrCN() {
-		return DateUtils.getDateStr(DateUtils.getCurrentDate(), DateUtils.DATE_TIME_FORMAT_CN);
+		return DateUtil.getDateStr(DateUtil.getCurrentDate(), DateUtil.DATE_TIME_FORMAT_CN);
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class DateUtils {
 	 * @throws Exception
 	 */
 	public static Date getDateStr(String inputDateStr) {
-		return DateUtils.getDateStr(inputDateStr, DateUtils.DATE_FORMAT);
+		return DateUtil.getDateStr(inputDateStr, DateUtil.DATE_FORMAT);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class DateUtils {
 	 * @throws Exception
 	 */
 	public static Date getDateStrCN(String inputDateStr) throws Exception {
-		return DateUtils.getDateStr(inputDateStr, DateUtils.DATE_FORMAT_CN);
+		return DateUtil.getDateStr(inputDateStr, DateUtil.DATE_FORMAT_CN);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String getDateDayStr(Date inputDate) {
-		return DateUtils.getDateStr(inputDate, DateUtils.DAY_FORMAT);
+		return DateUtil.getDateStr(inputDate, DateUtil.DAY_FORMAT);
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class DateUtils {
 	 */
 	public static String getFormatMonthDay(String dateStr) throws Exception {
 		Calendar cal = Calendar.getInstance();
-		Date date = getDateStr(dateStr, DateUtils.DATE_TIME_FORMAT);
+		Date date = getDateStr(dateStr, DateUtil.DATE_TIME_FORMAT);
 		cal.setTime(date);
 		int day = cal.get(Calendar.DATE);
 		int month = cal.get(Calendar.MONTH) + 1;
@@ -173,7 +173,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String getDateMonthStr(Date inputDate) {
-		return DateUtils.getDateStr(inputDate, DateUtils.MONTH_FORMAT);
+		return DateUtil.getDateStr(inputDate, DateUtil.MONTH_FORMAT);
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class DateUtils {
 	 * @return 格式化后的日期，类型为String
 	 */
 	public static String getDateStr(Date inputDate) {
-		return DateUtils.getDateStr(inputDate, DateUtils.DATE_FORMAT);
+		return DateUtil.getDateStr(inputDate, DateUtil.DATE_FORMAT);
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class DateUtils {
 	 * @return 格式化后的日期，类型为String
 	 */
 	public static String getDateStrCN(Date inputDate) {
-		return DateUtils.getDateStr(inputDate, DateUtils.DATE_FORMAT_CN);
+		return DateUtil.getDateStr(inputDate, DateUtil.DATE_FORMAT_CN);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class DateUtils {
 	 * @throws Exception
 	 */
 	public static Date getDateTimeStr(String inputDateStr) throws Exception {
-		return DateUtils.getDateStr(inputDateStr, DateUtils.DATE_TIME_FORMAT);
+		return DateUtil.getDateStr(inputDateStr, DateUtil.DATE_TIME_FORMAT);
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class DateUtils {
 	 * @throws Exception
 	 */
 	public static Date getDateTimeStrCN(String inputDateStr) throws Exception {
-		return DateUtils.getDateStr(inputDateStr, DateUtils.DATE_TIME_FORMAT_CN);
+		return DateUtil.getDateStr(inputDateStr, DateUtil.DATE_TIME_FORMAT_CN);
 	}
 
 	/**
@@ -240,7 +240,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String getDateTimeStr(Date inputDate) {
-		return DateUtils.getDateStr(inputDate, DateUtils.DATE_TIME_FORMAT);
+		return DateUtil.getDateStr(inputDate, DateUtil.DATE_TIME_FORMAT);
 	}
 
 	/**
@@ -250,7 +250,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String getDateTimeStrCN(Date inputDate) {
-		return DateUtils.getDateStr(inputDate, DateUtils.DATE_TIME_FORMAT_CN);
+		return DateUtil.getDateStr(inputDate, DateUtil.DATE_TIME_FORMAT_CN);
 	}
 
 	/**
@@ -299,7 +299,7 @@ public class DateUtils {
 	}
 
 	public static Date getDateTimeStrCNS(String inputDateStr) throws Exception {
-		return DateUtils.getDateStr(inputDateStr, DateUtils.DATE_TIME_FORMAT_CNS);
+		return DateUtil.getDateStr(inputDateStr, DateUtil.DATE_TIME_FORMAT_CNS);
 	}
 
 	/**
@@ -336,7 +336,7 @@ public class DateUtils {
 		Calendar cal = Calendar.getInstance();
 		int firstDay = cal.getMinimum(Calendar.DAY_OF_MONTH);
 		cal.set(Calendar.DAY_OF_MONTH, firstDay);
-		return DateUtils.getDateStr(cal.getTime(), DateUtils.DATE_FORMAT);
+		return DateUtil.getDateStr(cal.getTime(), DateUtil.DATE_FORMAT);
 	}
 
 	/**
@@ -542,8 +542,8 @@ public class DateUtils {
 		if (StringUtils.isEmpty(date1) || StringUtils.isEmpty(date2)) {
 			return 0;
 		}
-		long time1 = DateUtils.formatStringToMillions(date1);
-		long time2 = DateUtils.formatStringToMillions(date2);
+		long time1 = DateUtil.formatStringToMillions(date1);
+		long time2 = DateUtil.formatStringToMillions(date2);
 		long diff;
 		if (time1 < time2) {
 			diff = time2 - time1;
@@ -561,7 +561,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static long compareDateByDay(String date1, String date2) {
-		long diff = DateUtils.compareDateByMilliseconds(date1, date2);
+		long diff = DateUtil.compareDateByMilliseconds(date1, date2);
 		if (diff > 24 * 60 * 60 * 1000) {
 			return diff / (24 * 60 * 60 * 1000);
 		}
@@ -576,7 +576,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static long compareDateByMin(String date1, String date2) {
-		long diff = DateUtils.compareDateByMilliseconds(date1, date2);
+		long diff = DateUtil.compareDateByMilliseconds(date1, date2);
 		if (diff > 60 * 1000) {
 			return diff / (60 * 1000);
 		}
@@ -591,7 +591,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static long compareDateByHour(String date1, String date2) {
-		long diff = DateUtils.compareDateByMilliseconds(date1, date2);
+		long diff = DateUtil.compareDateByMilliseconds(date1, date2);
 		if (diff > 60 * 60 * 1000) {
 			return diff / (60 * 60 * 1000);
 		}
@@ -613,8 +613,8 @@ public class DateUtils {
 	 * @return
 	 */
 	public static int compareDateByMonth(Date date1, Date date2) {
-		String strDate1 = DateUtils.getDateDayStr(date1);
-		String strDate2 = DateUtils.getDateDayStr(date2);
+		String strDate1 = DateUtil.getDateDayStr(date1);
+		String strDate2 = DateUtil.getDateDayStr(date2);
 		if (strDate1.length() != 8 || strDate2.length() != 8) {
 			return 0;
 		}
@@ -654,12 +654,12 @@ public class DateUtils {
 	public static String formatMillsToString(long millsTime) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(millsTime);
-		SimpleDateFormat simple = new SimpleDateFormat(DateUtils.DATE_TIME_FORMAT);
+		SimpleDateFormat simple = new SimpleDateFormat(DateUtil.DATE_TIME_FORMAT);
 		return simple.format(calendar.getTime());
 	}
 
 	private static long formatStringToMillions(String time) {
-		SimpleDateFormat sdf = new SimpleDateFormat(DateUtils.DATE_TIME_FORMAT);
+		SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.DATE_TIME_FORMAT);
 		Date d = null;
 		try {
 			d = sdf.parse(time);
@@ -678,7 +678,7 @@ public class DateUtils {
 	 * @throws ParseException
 	 */
 	public static String formatStringTime(String strTime) throws ParseException {
-		SimpleDateFormat format = new SimpleDateFormat(DateUtils.DATE_FORMAT);
+		SimpleDateFormat format = new SimpleDateFormat(DateUtil.DATE_FORMAT);
 		String formatTime = "";
 		Date date = format.parse(strTime);
 		formatTime = format.format(date);
@@ -693,7 +693,7 @@ public class DateUtils {
 	 * @throws Exception
 	 */
 	public static int getAgeByBirthday(String ageStr) throws Exception {
-		Date birthday = DateUtils.getDateStr(ageStr, DateUtils.DAY_FORMAT);
+		Date birthday = DateUtil.getDateStr(ageStr, DateUtil.DAY_FORMAT);
 		Calendar cal = Calendar.getInstance();
 		if (cal.before(birthday)) {
 			return 0;
@@ -742,8 +742,8 @@ public class DateUtils {
 	 * @return
 	 */
 	public static long getIntervalTime(String strTime) {
-		long time1 = DateUtils.formatStringToMillions(strTime);
-		long time2 = DateUtils.formatStringToMillions(getCurrentDateTimeStr());
+		long time1 = DateUtil.formatStringToMillions(strTime);
+		long time2 = DateUtil.formatStringToMillions(getCurrentDateTimeStr());
 		return time2 - time1;
 	}
 
@@ -845,7 +845,7 @@ public class DateUtils {
 	}
 
 	public static String changeFormat(String dateStr, String orignFormat, String destFormat) {
-		return DateUtils.getDateStr(DateUtils.getDateStr(dateStr, orignFormat), destFormat);
+		return DateUtil.getDateStr(DateUtil.getDateStr(dateStr, orignFormat), destFormat);
 	}
 
 	/**

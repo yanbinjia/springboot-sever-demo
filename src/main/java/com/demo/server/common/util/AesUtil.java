@@ -16,11 +16,7 @@ public class AesUtil {
 	/**
 	 * AES 加密操作
 	 *
-	 * @param content
-	 *            待加密内容
-	 * @param password
-	 *            加密密码
-	 * @return 返回Base64转码后的加密数据
+	 * @return 返回16进制的加密数据
 	 */
 	public static String encrypt(String content) {
 		try {
@@ -36,6 +32,7 @@ public class AesUtil {
 			byte[] result = cipher.doFinal(byteContent);// 加密
 
 			return Hex.encodeHexString(result);// 转为16进制
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -46,9 +43,6 @@ public class AesUtil {
 	/**
 	 * AES 解密操作
 	 *
-	 * @param content
-	 * @param password
-	 * @return
 	 */
 	public static String decrypt(String content) {
 
@@ -76,7 +70,6 @@ public class AesUtil {
 	/**
 	 * 生成加密秘钥
 	 *
-	 * @return
 	 */
 	private static SecretKeySpec getSecretKey(final String password) {
 

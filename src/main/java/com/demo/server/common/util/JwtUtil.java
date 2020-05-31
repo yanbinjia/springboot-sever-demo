@@ -23,7 +23,7 @@ public class JwtUtil {
 	public static String createToken(Map<String, String> claimsMap, String secret, int expireAfterNSecs) {
 		String tokenStr = "";
 		Date issueAtDate = new Date();
-		Date expiresAtDate = DateUtils.getDateBeforeOrAfterSeconds(issueAtDate, expireAfterNSecs);
+		Date expiresAtDate = DateUtil.getDateBeforeOrAfterSeconds(issueAtDate, expireAfterNSecs);
 		try {
 			Algorithm algorithm = Algorithm.HMAC256(secret);
 			Builder jwtBuilder = JWT.create().withIssuedAt(issueAtDate).withExpiresAt(expiresAtDate);
