@@ -10,14 +10,35 @@ import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.demo.server.interceptor.TokenInterceptorAdapter;
 
 @Configuration
 public class AppWebMvcConfig implements WebMvcConfigurer {
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		addTokenInterceptor(registry);
+	}
+
+	public void addTokenInterceptor(InterceptorRegistry registry) {
+		List<String> pathPatterns = new ArrayList<>();
+		List<String> excludePatterns = new ArrayList<>();
+
+		pathPatterns.add("/**");
+
+		excludePatterns.add("/ping");
+		excludePatterns.add("/pingerror");
+
+		registry.addInterceptor(new TokenInterceptorAdapter()).addPathPatterns(pathPatterns)
+				.excludePathPatterns(excludePatterns);
+
+	}
 
 	// ------------------ corsFilter -------------------
 	@Bean

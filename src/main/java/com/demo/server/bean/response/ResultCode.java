@@ -11,7 +11,12 @@ public enum ResultCode {
 	SESSION_INIT_ERROR(303, "建立会话异常"), 
 	STRATEGY_CHECK_ERROR(30001, "检测失败"),
 
-	RESOURCE_NOT_EXIST(50001, "资源不存在"),;
+	RESOURCE_NOT_EXIST(50001, "资源不存在"),
+	
+	USER_TOKEN_BASE(10100,"用户凭证信息错误，无凭证。"),
+	USER_TOKEN_ERROR(10101,"用户凭证信息错误，凭证无效。"),
+	USER_TOKEN_EXPIRE(10102,"用户凭证信息错误，凭证过期。")
+	;
 
 	public final int code;
 	public final String msg;
