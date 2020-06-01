@@ -11,12 +11,6 @@ import com.demo.server.dao.UserInfoDao;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * 用户管理
- *
- * @author xuxinwei
- * @create 2019-07-31
- */
 @Service
 @Slf4j
 public class UserInfoService {
