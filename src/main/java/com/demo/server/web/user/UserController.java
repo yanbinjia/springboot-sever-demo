@@ -1,5 +1,7 @@
 package com.demo.server.web.user;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,28 @@ public class UserController {
 	@GetMapping("/view")
 	@ResponseBody
 	public Result<UserInfo> view(@RequestParam Integer id) {
-		UserInfo result = userInfoService.getUserById(id);
+		UserInfo result = userInfoService.getById(id);
+		return new Result<>(result);
+	}
+
+	@GetMapping("/getAll")
+	@ResponseBody
+	public Result<List<UserInfo>> getAll() {
+		List<UserInfo> result = userInfoService.getAll();
+		return new Result<>(result);
+	}
+
+	@GetMapping("/listAll")
+	@ResponseBody
+	public Result<List<UserInfo>> listAll() {
+		List<UserInfo> result = userInfoService.listAll();
+		return new Result<>(result);
+	}
+
+	@GetMapping("/getByMobile")
+	@ResponseBody
+	public Result<UserInfo> getByMobile(@RequestParam String mobile) {
+		UserInfo result = userInfoService.getByMobile(mobile);
 		return new Result<>(result);
 	}
 

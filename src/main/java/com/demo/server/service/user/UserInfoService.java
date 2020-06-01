@@ -2,6 +2,7 @@ package com.demo.server.service.user;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +24,29 @@ public class UserInfoService {
 	@Autowired
 	private UserInfoDao userInfoDao;
 
+	public List<UserInfo> getAll() {
+		List<UserInfo> userList = userInfoDao.getAll();
+		log.info("listAll");
+		return userList;
+	}
+
 	public List<UserInfo> listAll() {
 		List<UserInfo> userList = userInfoDao.selectAll();
 		log.info("listAll");
 		return userList;
 	}
 
-	public UserInfo getUserById(Integer id) {
+	public UserInfo getById(Integer id) {
 		UserInfo userInfo = userInfoDao.selectByPrimaryKey(id);
 		log.info("getUserById");
+		return userInfo;
+	}
+
+	public UserInfo getByMobile(String mobile) {
+		UserInfo userInfo = null;
+		if (StringUtils.isNotBlank(mobile)) {
+			userInfo = userInfoDao.getByMobile(mobile);
+		}
 		return userInfo;
 	}
 

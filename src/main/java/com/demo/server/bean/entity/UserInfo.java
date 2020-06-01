@@ -24,7 +24,7 @@ import lombok.Data;
  * 
  */
 
-@Table(name = "user_info") // 配置表名与Entity类名映射
+@Table(name = "user_info")
 @Data
 public class UserInfo {
 
@@ -33,10 +33,12 @@ public class UserInfo {
 	private Long id;
 
 	@NotBlank
+	@Column(name = "user_name")
 	private String userName;
 
-	@Column(name = "avatar_url") // 设置表字段与Entity属性映射
-	private String avatarUrl; // 头像地址
+	@NotBlank
+	@Column(name = "password")
+	private String password;
 
 	private String email;
 
@@ -51,6 +53,6 @@ public class UserInfo {
 	private LocalDateTime updateTime;
 
 	@Transient // @Transient, 非数据库表中字段
-	private String otherThings;
+	private String otherInfo;
 
 }
