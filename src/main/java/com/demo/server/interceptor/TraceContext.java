@@ -18,7 +18,7 @@ public class TraceContext {
 
 	public void remove() {
 		threadLocal.remove();
-		TraceIdHolder.remove();
+		TraceMDCHolder.remove();
 	}
 
 	public long getStartTime() {
@@ -35,7 +35,7 @@ public class TraceContext {
 
 	public void setTraceId(String traceId) {
 		this.traceId = traceId;
-		TraceIdHolder.putTraceId(traceId);
+		TraceMDCHolder.putTraceId(traceId);
 	}
 
 	public String getClientIp() {
@@ -44,6 +44,7 @@ public class TraceContext {
 
 	public void setClientIp(String clientIp) {
 		this.clientIp = clientIp;
+		TraceMDCHolder.putClientIp(clientIp);
 	}
 
 }
