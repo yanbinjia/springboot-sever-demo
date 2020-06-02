@@ -13,9 +13,8 @@ public enum ResultCode {
 
 	RESOURCE_NOT_EXIST(50001, "资源不存在"),
 	
-	USER_TOKEN_BASE(10100,"用户凭证信息错误，无凭证。"),
-	USER_TOKEN_ERROR(10101,"用户凭证信息错误，凭证无效。"),
-	USER_TOKEN_EXPIRE(10102,"用户凭证信息错误，凭证过期。")
+	USER_TOKEN_BASE(10100,"用户凭证信息错误，无凭证或凭证无效。"),
+	USER_TOKEN_ERROR(10101,"用户凭证信息错误，凭证无效或已过期。"),
 	;
 
 	public final int code;

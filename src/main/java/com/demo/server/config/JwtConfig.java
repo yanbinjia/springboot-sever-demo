@@ -7,8 +7,8 @@ import org.springframework.context.annotation.PropertySource;
 import lombok.Data;
 
 @Configuration
-@PropertySource("classpath:application.properties")
-@ConfigurationProperties(prefix = "jwt")
+@PropertySource("classpath:token.properties")
+@ConfigurationProperties(prefix = "token.jwt")
 @Data
 public class JwtConfig {
 	// secret key
@@ -16,5 +16,5 @@ public class JwtConfig {
 	// "iss" (Issuer) Claim
 	private String iss = "default";
 	// "exp" (Expiration Time) Claim
-	private long exp = 1000 * 60 * 60 * 12;
+	private long expireAfterNSecs = 1000 * 60 * 60 * 12;
 }

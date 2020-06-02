@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,6 +21,11 @@ import com.demo.server.interceptor.TokenInterceptorAdapter;
 
 @Configuration
 public class AppWebMvcConfig implements WebMvcConfigurer {
+
+	@Bean
+	HandlerInterceptor tokenInterceptorAdapter() {
+		return new TokenInterceptorAdapter();
+	}
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
@@ -35,7 +41,7 @@ public class AppWebMvcConfig implements WebMvcConfigurer {
 		excludePatterns.add("/ping");
 		excludePatterns.add("/pingerror");
 
-		registry.addInterceptor(new TokenInterceptorAdapter()).addPathPatterns(pathPatterns)
+		registry.addInterceptor(tokenInterceptorAdapter()).addPathPatterns(pathPatterns)
 				.excludePathPatterns(excludePatterns);
 
 	}
