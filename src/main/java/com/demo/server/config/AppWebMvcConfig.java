@@ -17,14 +17,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.demo.server.interceptor.TokenInterceptorAdapter;
+import com.demo.server.interceptor.TokenInterceptor;
 
 @Configuration
 public class AppWebMvcConfig implements WebMvcConfigurer {
 
 	@Bean
 	HandlerInterceptor tokenInterceptorAdapter() {
-		return new TokenInterceptorAdapter();
+		return new TokenInterceptor();
 	}
 
 	@Override

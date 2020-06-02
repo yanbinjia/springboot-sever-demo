@@ -21,7 +21,7 @@ import com.demo.server.service.token.TokenService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class TokenInterceptorAdapter extends HandlerInterceptorAdapter {
+public class TokenInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	TokenService tokenService;
 
