@@ -1,16 +1,16 @@
 package com.demo.server.interceptor;
 
-public class Context {
+public class TraceContext {
 
-	private static final ThreadLocal<Context> threadLocal = new ThreadLocal<>();
+	private static final ThreadLocal<TraceContext> threadLocal = new ThreadLocal<>();
 
 	private long startTime;
 	private String traceId;
 	private String clientIp;
 
-	public static Context getOrNewInstance() {
+	public static TraceContext getInstance() {
 		if (threadLocal.get() == null) {
-			Context context = new Context();
+			TraceContext context = new TraceContext();
 			threadLocal.set(context);
 		}
 		return threadLocal.get();

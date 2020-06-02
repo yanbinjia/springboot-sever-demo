@@ -39,7 +39,7 @@ public class AppResponseAdvice implements ResponseBodyAdvice<Object> {
 			Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest req,
 			ServerHttpResponse resp) {
 
-		long cost = System.currentTimeMillis() - Context.getOrNewInstance().getStartTime();
+		long cost = System.currentTimeMillis() - TraceContext.getInstance().getStartTime();
 
 		HttpServletRequest request = ((ServletServerHttpRequest) req).getServletRequest();
 

@@ -38,14 +38,14 @@ public class TraceFilter implements Filter {
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
 		// 设置开始时间
-		Context.getOrNewInstance().setStartTime(System.currentTimeMillis());
+		TraceContext.getInstance().setStartTime(System.currentTimeMillis());
 
 		// 生成并设置 traceId
 		String traceId = UUID.randomUUID().toString();
-		Context.getOrNewInstance().setTraceId(traceId);
+		TraceContext.getInstance().setTraceId(traceId);
 
 		// 设置客户端IP地址
-		Context.getOrNewInstance().setClientIp(RequestUtil.getIp(httpServletRequest));
+		TraceContext.getInstance().setClientIp(RequestUtil.getIp(httpServletRequest));
 
 		// 从请求中获取某个或某些参数,根据需求可以set到Context中
 		// String clientId = httpServletRequest.getParameter("clientId") + "";
@@ -57,12 +57,12 @@ public class TraceFilter implements Filter {
 		try {
 			chain.doFilter(request, response);
 		} finally {
-			Context.getOrNewInstance().remove();
+			TraceContext.getInstance().remove();
 		}
 	}
 
 	@Override
 	public void destroy() {
-		Context.getOrNewInstance().remove();
+		TraceContext.getInstance().remove();
 	}
 }

@@ -69,7 +69,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 				out.print(responseStr);
 
 				// Record access log.
-				long cost = System.currentTimeMillis() - Context.getOrNewInstance().getStartTime();
+				long cost = System.currentTimeMillis() - TraceContext.getInstance().getStartTime();
 				LoggerUtil.accessLog(LogLevel.WARN, request, responseStr, String.valueOf(result.getCode()), cost);
 
 			} catch (IOException e) {
