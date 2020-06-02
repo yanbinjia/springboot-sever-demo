@@ -71,6 +71,10 @@ public class TokenService {
 		return result;
 	}
 
+	/*
+	 * HTTP请求的头信息 Authorization:Bearer <token> , 解析出<token>
+	 * 
+	 */
 	public String tokenStrProcess(String token) {
 		String tokenAferProcess = token;
 		if (StringUtils.isNotBlank(token) && token.startsWith("Bearer")) {

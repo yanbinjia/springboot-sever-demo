@@ -1,14 +1,10 @@
 package com.demo.server.interceptor;
 
-import static com.demo.server.common.constant.AppConstant.LOG_SPLIT;
-
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,11 +13,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.demo.server.bean.response.Result;
 import com.demo.server.bean.response.ResultCode;
 import com.demo.server.common.exception.AppException;
-import com.demo.server.common.util.RequestUtil;
+import com.demo.server.common.util.LoggerUtil;
 
 /**
  * 应用ControllerAdvice全局异常处理,记录请求异常日志
@@ -29,8 +24,6 @@ import com.demo.server.common.util.RequestUtil;
  */
 @ControllerAdvice
 public class AppExceptionAdvice {
-
-	private static final Logger logger = LoggerFactory.getLogger(AppExceptionAdvice.class);
 
 	private static String buildMessage(ObjectError error) {
 		if (error instanceof FieldError) {
@@ -47,7 +40,8 @@ public class AppExceptionAdvice {
 		result.setCode(e.getCode());
 		result.setMsg(e.getMsg());
 
-		recordLog(request, result, e);
+		// Record exception log.
+		LoggerUtil.exceptionLog(request, result, e);
 
 		return result;
 	}
@@ -64,7 +58,8 @@ public class AppExceptionAdvice {
 		result.setCode(ResultCode.MISS_PARAM.code);
 		result.setMsg(ResultCode.MISS_PARAM.msg);
 
-		recordLog(request, result, e);
+		// Record exception log.
+		LoggerUtil.exceptionLog(request, result, e);
 
 		return result;
 	}
@@ -77,7 +72,9 @@ public class AppExceptionAdvice {
 	public Result<Void> handlerException(Exception e, HttpServletRequest request, HttpServletResponse response) {
 
 		Result<Void> result = new Result<Void>(ResultCode.SERVER_UNKONW_ERROR);
-		recordLog(request, result, e);
+
+		// Record exception log.
+		LoggerUtil.exceptionLog(request, result, e);
 
 		return result;
 	}
@@ -96,20 +93,10 @@ public class AppExceptionAdvice {
 		result.setMsg(e.getBindingResult().getAllErrors().stream().map(AppExceptionAdvice::buildMessage)
 				.collect(Collectors.joining(";")));
 
-		recordLog(request, result, e);
+		// Record exception log.
+		LoggerUtil.exceptionLog(request, result, e);
 
 		return result;
-	}
-
-	public void recordLog(HttpServletRequest request, Result<?> result, Throwable t) {
-
-		String logMsgStr = RequestUtil.getIp(request) + LOG_SPLIT + request.getRequestURI() + LOG_SPLIT
-				+ request.getMethod() + LOG_SPLIT + result.getCode() + LOG_SPLIT
-				+ JSONObject.toJSONString(RequestUtil.getHttpParameter(request)) + LOG_SPLIT
-				+ JSONObject.toJSONString(result);
-
-		logger.error(logMsgStr, t);
-
 	}
 
 }

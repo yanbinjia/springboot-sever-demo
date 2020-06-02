@@ -3,14 +3,15 @@ package com.demo.server.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -22,10 +23,18 @@ import com.demo.server.interceptor.TokenInterceptor;
 @Configuration
 public class AppWebMvcConfig implements WebMvcConfigurer {
 
-	@Bean
-	HandlerInterceptor tokenInterceptorAdapter() {
-		return new TokenInterceptor();
-	}
+	@Autowired
+	private TokenInterceptor tokenInterceptor;
+
+	//
+	// 下面代码与使用@Autowired等价,相当于配置xml注册Bean实例
+	// @Autowired比较简洁清楚，TokenInterceptor需要加@Component注解生成实例
+	// 之前版本使用@Bean方式，后改为@Autowired写法
+	//
+	// @Bean
+	// HandlerInterceptor tokenInterceptor() {
+	// return new TokenInterceptor();
+	// }
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
@@ -39,10 +48,10 @@ public class AppWebMvcConfig implements WebMvcConfigurer {
 		pathPatterns.add("/**");
 
 		excludePatterns.add("/ping");
-		excludePatterns.add("/pingerror");
+		excludePatterns.add("/login");
+		excludePatterns.add("/open/api/**");
 
-		registry.addInterceptor(tokenInterceptorAdapter()).addPathPatterns(pathPatterns)
-				.excludePathPatterns(excludePatterns);
+		registry.addInterceptor(tokenInterceptor).addPathPatterns(pathPatterns).excludePathPatterns(excludePatterns);
 
 	}
 

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.demo.server.bean.response.Result;
 import com.demo.server.common.constant.AppConstant;
 
 public class LoggerUtil {
@@ -16,7 +17,9 @@ public class LoggerUtil {
 		INFO, WARN, ERROR;
 	}
 
-	private static Logger logger = LoggerFactory.getLogger(AppConstant.LOGGER_ACCESS);
+	private static Logger accessLogger = LoggerFactory.getLogger(AppConstant.LOGGER_ACCESS);
+
+	private static Logger exceptionLogger = LoggerFactory.getLogger(LoggerUtil.class);
 
 	public static void accessLog(LogLevel level, HttpServletRequest request, String responseStr, String code,
 			long cost) {
@@ -27,18 +30,29 @@ public class LoggerUtil {
 
 		switch (level) {
 		case INFO:
-			logger.info(logMsgStr);
+			accessLogger.info(logMsgStr);
 			break;
 		case WARN:
-			logger.warn(logMsgStr);
+			accessLogger.warn(logMsgStr);
 			break;
 		case ERROR:
-			logger.error(logMsgStr);
+			accessLogger.error(logMsgStr);
 			break;
 		default:
-			logger.info(logMsgStr);
+			accessLogger.info(logMsgStr);
 			break;
 		}
+
+	}
+
+	public static void exceptionLog(HttpServletRequest request, Result<?> result, Throwable t) {
+
+		String logMsgStr = RequestUtil.getIp(request) + LOG_SPLIT + request.getRequestURI() + LOG_SPLIT
+				+ request.getMethod() + LOG_SPLIT + result.getCode() + LOG_SPLIT
+				+ JSONObject.toJSONString(RequestUtil.getHttpParameter(request)) + LOG_SPLIT
+				+ JSONObject.toJSONString(result);
+
+		exceptionLogger.error(logMsgStr, t);
 
 	}
 
