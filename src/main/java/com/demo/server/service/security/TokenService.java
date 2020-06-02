@@ -1,4 +1,4 @@
-package com.demo.server.service.token;
+package com.demo.server.service.security;
 
 import java.util.Date;
 
@@ -13,10 +13,7 @@ import com.demo.server.common.constant.AppConstant;
 import com.demo.server.common.util.JwtUtil;
 import com.demo.server.config.JwtConfig;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class TokenService {
 	@Autowired
 	JwtConfig jwtConfig;
@@ -29,8 +26,8 @@ public class TokenService {
 
 		if (StringUtils.isBlank(token) || token.length() < tokenLengthMin) {
 			result.setData("");
-			result.setCode(ResultCode.USER_TOKEN_BASE.code);
-			result.setMsg(ResultCode.USER_TOKEN_BASE.msg);
+			result.setCode(ResultCode.SEC_TOKEN_BASE.code);
+			result.setMsg(ResultCode.SEC_TOKEN_BASE.msg);
 			return result;
 		}
 
@@ -53,7 +50,7 @@ public class TokenService {
 		// 验证
 		DecodedJWT jwtForVerify = null;
 		if (jwt != null && StringUtils.isNotBlank(userId)) {
-			jwtForVerify = JwtUtil.verifyToken(token, jwtConfig.getSecret());
+			jwtForVerify = JwtUtil.verifyToken(token, jwtConfig.getSecretKey());
 		}
 
 		if (jwtForVerify != null) {
@@ -64,8 +61,8 @@ public class TokenService {
 		} else {
 			// 验证失败
 			result.setData("");
-			result.setCode(ResultCode.USER_TOKEN_ERROR.code);
-			result.setMsg(ResultCode.USER_TOKEN_ERROR.msg);
+			result.setCode(ResultCode.SEC_TOKEN_ERROR.code);
+			result.setMsg(ResultCode.SEC_TOKEN_ERROR.msg);
 		}
 
 		return result;

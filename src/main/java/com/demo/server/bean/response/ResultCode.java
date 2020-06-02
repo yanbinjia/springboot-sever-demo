@@ -13,8 +13,11 @@ public enum ResultCode {
 
 	RESOURCE_NOT_EXIST(50001, "资源不存在"),
 	
-	USER_TOKEN_BASE(10100,"用户凭证信息错误，无凭证或凭证无效。"),
-	USER_TOKEN_ERROR(10101,"用户凭证信息错误，凭证无效或已过期。"),
+	SEC_TOKEN_BASE(80101,"用户凭证信息错误，无凭证或凭证无效。"),
+	SEC_TOKEN_ERROR(80102,"用户凭证信息错误，凭证无效或已过期。"),
+	
+	SEC_SIGN_ERROR(80201,"签名信息错误，签名验证失败。"),
+	SEC_SIGN_EXPIRE(80202,"签名信息错误，签名时间戳过期。"),
 	;
 
 	public final int code;

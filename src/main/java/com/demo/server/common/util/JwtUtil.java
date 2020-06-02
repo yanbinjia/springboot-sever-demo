@@ -79,7 +79,7 @@ public class JwtUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String secret = "jwt?:+:?JWT";
+		String secret = "53fc4a1e39016bce7444119453e5e346s";
 		Map<String, String> claimsMap = new HashMap<>();
 		claimsMap.put("userId", "10029291");
 		claimsMap.put("userName", "承担_JL");

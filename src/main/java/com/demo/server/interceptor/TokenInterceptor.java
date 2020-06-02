@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.alibaba.fastjson.JSONObject;
@@ -18,7 +17,7 @@ import com.demo.server.bean.response.Result;
 import com.demo.server.bean.response.ResultCode;
 import com.demo.server.common.util.LoggerUtil;
 import com.demo.server.common.util.LoggerUtil.LogLevel;
-import com.demo.server.service.token.TokenService;
+import com.demo.server.service.security.TokenService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,14 +42,14 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 		String token = request.getHeader("Authorization");
 
 		// -----------------------------------------------------
-		// 检查@TokenPass、@TokenRequire注解
+		// 检查注解
 		if (!(handler instanceof HandlerMethod)) {
 			// 如果不是映射到方法直接通过
 			return true;
 		}
 		HandlerMethod handlerMethod = (HandlerMethod) handler;
 		Method method = handlerMethod.getMethod();
-		// 检查是否有@TokenPass注解，有则跳过token校验
+		// 检查是否有@TokenPass注解，有则跳过校验
 		if (method.isAnnotationPresent(TokenPass.class)) {
 			return true;
 		}
@@ -78,26 +77,9 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
 			// return false 拦截，中断后续处理链，返回客户端
 			return false;
-		} else {
-			// 校验成功
-
 		}
 
-		// -----------------------------------------------------
-
 		return true;
-	}
-
-	@Override
-	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-			ModelAndView modelAndView) throws Exception {
-		super.postHandle(request, response, handler, modelAndView);
-	}
-
-	@Override
-	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-			throws Exception {
-		super.afterCompletion(request, response, handler, ex);
 	}
 
 }

@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -18,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.demo.server.interceptor.SignInterceptor;
 import com.demo.server.interceptor.TokenInterceptor;
 
 @Configuration
@@ -25,6 +25,8 @@ public class AppWebMvcConfig implements WebMvcConfigurer {
 
 	@Autowired
 	private TokenInterceptor tokenInterceptor;
+	@Autowired
+	private SignInterceptor signInterceptor;
 
 	//
 	// 下面代码与使用@Autowired等价,相当于配置xml注册Bean实例
@@ -39,6 +41,7 @@ public class AppWebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		addTokenInterceptor(registry);
+		addSignInterceptor(registry);
 	}
 
 	public void addTokenInterceptor(InterceptorRegistry registry) {
@@ -52,6 +55,20 @@ public class AppWebMvcConfig implements WebMvcConfigurer {
 		excludePatterns.add("/open/api/**");
 
 		registry.addInterceptor(tokenInterceptor).addPathPatterns(pathPatterns).excludePathPatterns(excludePatterns);
+
+	}
+
+	public void addSignInterceptor(InterceptorRegistry registry) {
+		List<String> pathPatterns = new ArrayList<>();
+		List<String> excludePatterns = new ArrayList<>();
+
+		pathPatterns.add("/**");
+
+		excludePatterns.add("/ping");
+		excludePatterns.add("/login");
+		excludePatterns.add("/open/api/**");
+
+		registry.addInterceptor(signInterceptor).addPathPatterns(pathPatterns).excludePathPatterns(excludePatterns);
 
 	}
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.server.bean.entity.UserInfo;
 import com.demo.server.bean.response.Result;
+import com.demo.server.interceptor.SignPass;
 import com.demo.server.service.user.UserInfoService;
 
 @RestController
@@ -27,6 +28,7 @@ public class UserController {
 		return new Result<>(result);
 	}
 
+	@SignPass
 	@GetMapping("/getAll")
 	@ResponseBody
 	public Result<List<UserInfo>> getAll() {

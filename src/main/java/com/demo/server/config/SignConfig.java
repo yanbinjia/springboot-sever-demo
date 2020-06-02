@@ -8,13 +8,15 @@ import lombok.Data;
 
 @Configuration
 @PropertySource("classpath:security.properties")
-@ConfigurationProperties(prefix = "jwt")
+@ConfigurationProperties(prefix = "sign")
 @Data
-public class JwtConfig {
+public class SignConfig {
 	// secret key
-	private String secretKey = "c624785c3e137c9c091b6ad2188c423d";
-	// "iss" (Issuer) Claim
-	private String iss = "default";
-	// "exp" (Expiration Time) Claim, 单位秒
-	private int expireAfterNSecs = 60 * 60 * 12;
+	private String secretKey = "fdb2ae47d2505be99f33197a37bb54cb";
+	// 过期时间,单位秒
+	private int timestampExpireSecs = 10 * 60;
+	// 是否打印校验日志信息
+	private boolean printCheckInfo = false;
+	// 是否打开
+	private boolean turnOn = false;
 }
