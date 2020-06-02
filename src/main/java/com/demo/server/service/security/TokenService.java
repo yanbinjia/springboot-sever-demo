@@ -21,6 +21,12 @@ public class TokenService {
 	// token 最小长度
 	private int tokenLengthMin = 20;
 
+	/**
+	 * 本例采用 jwt token
+	 * 
+	 * @param token
+	 * @return
+	 */
 	public Result<String> checkToken(String token) {
 		Result<String> result = new Result<>(-1, "");
 

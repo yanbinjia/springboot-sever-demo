@@ -37,12 +37,15 @@ public class SignService {
 	 * 
 	 * 第二步，在stringA最后拼接上key得到stringSignTemp字符串，并对stringSignTemp进行MD5运算，再将得到的字符串所有字符转换为大写，得到sign值。
 	 * 
-	 * 拼接密钥： stringSignTemp=stringA+"&key=192006250b4c09247ec02edce69f6a2d"
+	 * 拼接密钥：stringSignTemp=stringA+"&key=192006250b4c09247ec02edce69f6a2d"
+	 * 
+	 * 计算签名：sign=MD5(stringSignTemp).toUpperCase()="9A0A8659F005D6984697E2CA0A9CF3B7"
 	 * 
 	 * 
 	 * 1.!注意！ 本例采用固定秘钥，需要把秘钥分发给客户端调用者，可能造成泄漏，更安全的做法是给每个用户生成秘钥，客户端在用户认证后获取秘钥
 	 * 
 	 * 2.!注意！ 在验证签名的服务中，可以利用redis缓存用户请求以及次数，做幂等性拦截，控制重复访问
+	 * 
 	 * 
 	 * @param request
 	 * @return
