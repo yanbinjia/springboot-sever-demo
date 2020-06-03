@@ -27,7 +27,7 @@ public class SignService {
 	 * 
 	 * [API接口防止参数篡改和重放攻击(Replay Attacks)]
 	 * 
-	 * 签名生成的通用步骤如下(参考自微信支付开发文档)：
+	 * 签名生成的通用步骤如下(参考了"微信支付V2版开发文档-安全规范")：
 	 * 
 	 * 第一步，设所有发送或者接收到的数据为集合M，将集合M内非空参数值的参数按照参数名ASCII码从小到大排序（字典序），使用URL键值对的格式（即key1=value1&key2=value2…）拼接成字符串stringA。
 	 * 
@@ -53,7 +53,7 @@ public class SignService {
 	 * @return
 	 */
 	public Result<String> checkSign(HttpServletRequest request) {
-		Result<String> result = new Result<>(-1, "");
+		Result<String> result = new Result<>(ResultCode.FAILED);
 
 		String uri = request.getRequestURI();
 

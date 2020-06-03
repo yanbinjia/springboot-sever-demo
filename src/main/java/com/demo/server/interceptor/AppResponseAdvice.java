@@ -65,7 +65,7 @@ public class AppResponseAdvice implements ResponseBodyAdvice<Object> {
 			return body;
 
 		} catch (Exception e) {
-			codeStr = String.valueOf(ResultCode.SERVER_UNKONW_ERROR.code);
+			codeStr = String.valueOf(ResultCode.SYSTEM_ERROR.code);
 			responseStr = JSONObject.toJSONString(body);
 
 			// Record access log.

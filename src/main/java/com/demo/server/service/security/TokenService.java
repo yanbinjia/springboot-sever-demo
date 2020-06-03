@@ -28,7 +28,7 @@ public class TokenService {
 	 * @return
 	 */
 	public Result<String> checkToken(String token) {
-		Result<String> result = new Result<>(-1, "");
+		Result<String> result = new Result<>(ResultCode.FAILED);
 
 		if (StringUtils.isBlank(token) || token.length() < tokenLengthMin) {
 			result.setData("");

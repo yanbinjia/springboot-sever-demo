@@ -55,8 +55,8 @@ public class AppExceptionAdvice {
 			HttpServletResponse response) {
 
 		Result<Void> result = new Result<Void>();
-		result.setCode(ResultCode.MISS_PARAM.code);
-		result.setMsg(ResultCode.MISS_PARAM.msg);
+		result.setCode(ResultCode.PARAM_ERROR.code);
+		result.setMsg(ResultCode.PARAM_ERROR.msg);
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
@@ -71,7 +71,7 @@ public class AppExceptionAdvice {
 	@ExceptionHandler(Exception.class)
 	public Result<Void> handlerException(Exception e, HttpServletRequest request, HttpServletResponse response) {
 
-		Result<Void> result = new Result<Void>(ResultCode.SERVER_UNKONW_ERROR);
+		Result<Void> result = new Result<Void>(ResultCode.SYSTEM_ERROR);
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
@@ -89,7 +89,7 @@ public class AppExceptionAdvice {
 			HttpServletResponse response) {
 
 		Result<Void> result = new Result<Void>();
-		result.setCode(ResultCode.MISS_PARAM.code);
+		result.setCode(ResultCode.PARAM_ERROR.code);
 		result.setMsg(e.getBindingResult().getAllErrors().stream().map(AppExceptionAdvice::buildMessage)
 				.collect(Collectors.joining(";")));
 
