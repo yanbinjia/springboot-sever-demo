@@ -59,5 +59,16 @@ public class UserInfoProvider {
 			}
 		}.toString();
 	}
+	
+	public static void main(String[] args) {
+		UserInfoProvider userInfoProvider = new UserInfoProvider();
+		UserInfo userInfo = new UserInfo();
+		userInfo.setStatus(1);
+		userInfo.setDeleted(0);
+		
+		String sql  = userInfoProvider.getByCondition(userInfo);
+		
+		System.out.println(sql);
+	}
 
 }

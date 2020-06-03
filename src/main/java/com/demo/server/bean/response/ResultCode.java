@@ -1,6 +1,7 @@
 package com.demo.server.bean.response;
 
 public enum ResultCode {
+	// 基础错误码
 	FAILED(-1, "未知错误"), 
 	SUCCESS(0, "SUCCESS"), 
 	SERVER_UNKONW_ERROR(500, "服务器开小差了,请稍后再试"), 
@@ -13,6 +14,7 @@ public enum ResultCode {
 
 	RESOURCE_NOT_EXIST(50001, "资源不存在"),
 	
+	//80XXX 安全类错误码
 	SEC_TOKEN_BASE(80101,"用户凭证信息错误，无凭证或凭证无效。"),
 	SEC_TOKEN_ERROR(80102,"用户凭证信息错误，凭证无效或已过期。"),
 	

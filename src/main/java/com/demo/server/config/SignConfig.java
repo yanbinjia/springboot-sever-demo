@@ -19,4 +19,6 @@ public class SignConfig {
 	private boolean printCheckInfo = false;
 	// 是否打开
 	private boolean turnOn = false;
+	// 签名算法,support:sha256,md5
+	private String algorithm = "md5";
 }

@@ -41,10 +41,12 @@ public class SignService {
 	 * 
 	 * 计算签名：sign=MD5(stringSignTemp).toUpperCase()="9A0A8659F005D6984697E2CA0A9CF3B7"
 	 * 
+	 * !注意！
+	 * 1.本例采用固定秘钥，需把秘钥分发给客户端调用者，可能造成s泄漏，更安全的做法是给每个用户生成秘钥(每个调用者分配appId和securetKey)，客户端在用户认证后获取秘钥
 	 * 
-	 * 1.!注意！ 本例采用固定秘钥，需要把秘钥分发给客户端调用者，可能造成泄漏，更安全的做法是给每个用户生成秘钥，客户端在用户认证后获取秘钥
+	 * 2.在验证签名的服务中，可以结合redis缓存，处理幂等性拦截，控制重复访问
 	 * 
-	 * 2.!注意！ 在验证签名的服务中，可以结合redis缓存，处理幂等性拦截，控制重复访问
+	 * 3.nonce，随机字符串，不长于32位，主要用来保证签名不可预测，调用随机函数生成，例如:ibuaiVcKdpRxkhJA，可以根据需求在接口协议设计中使用
 	 * 
 	 * 
 	 * @param request
@@ -52,6 +54,8 @@ public class SignService {
 	 */
 	public Result<String> checkSign(HttpServletRequest request) {
 		Result<String> result = new Result<>(-1, "");
+
+		String uri = request.getRequestURI();
 
 		String signStr = request.getParameter("sign");
 		String timestampStr = request.getParameter("timestamp");
@@ -73,16 +77,23 @@ public class SignService {
 		}
 
 		if (Math.abs(System.currentTimeMillis() - timestamp) > signConfig.getTimestampExpireSecs() * 1000) {
-			result.setData("请求时间戳超过" + signConfig.getTimestampExpireSecs() + "s");
+
+			result.setData("时间戳超过" + signConfig.getTimestampExpireSecs() + "s");
 			result.setCode(ResultCode.SEC_SIGN_EXPIRE.code);
 			result.setMsg(ResultCode.SEC_SIGN_EXPIRE.msg);
 
 			if (signConfig.isPrintCheckInfo()) {
-				log.info("ChekSign [{}]. timestamp[{}] expire. ", "Fail", timestamp);
+				log.info("ChekSign Fail. sign={}, timestamp={}, expire over {}s.", "Fail", signStr, timestampStr,
+						signConfig.getTimestampExpireSecs());
 			}
 
 			return result;
 		}
+
+		// -----------------------------------------------------
+		// 检查重放,
+		// 使用redis, key=请求特征(URL&Param),expire设置参考signConfig.getTimestampExpireSecs()
+		// ...
 
 		// -----------------------------------------------------
 		// 检查签名
@@ -109,7 +120,18 @@ public class SignService {
 		paramStrByServer = paramStrSb.toString();
 
 		// 服务端计算签名值
-		String signStrByServer = HashUtil.md5(paramStrByServer).toUpperCase();
+		String signStrByServer = "";
+
+		String algorithm = signConfig.getAlgorithm();
+		algorithm = StringUtils.isBlank(algorithm) ? "md5" : algorithm;
+
+		if (algorithm.equalsIgnoreCase("sha256")) {
+			// SHA256
+			signStrByServer = HashUtil.sha256(paramStrByServer).toUpperCase();
+		} else {
+			// 默认MD5
+			signStrByServer = HashUtil.md5(paramStrByServer).toUpperCase();
+		}
 
 		// 验证签名并构造返回
 		boolean signOk = signStr.equalsIgnoreCase(signStrByServer);
@@ -127,9 +149,9 @@ public class SignService {
 		}
 
 		if (signConfig.isPrintCheckInfo()) {
-			log.info("ChekSign [{}]", signOk ? "Success" : "Fail");
-			log.info("ChekSign paramStrByServer {}", paramStrByServer);
-			log.info("ChekSign timestamp=[{}],signStr=[{}],signStrByServer=[{}]", timestamp, signStr, signStrByServer);
+			log.info("ChekSign {}. URI:{}", signOk ? "Success" : "Fail", uri);
+			log.info("ChekSign paramStrByServer:{}", paramStrByServer);
+			log.info("ChekSign timestamp={},signStr={},signStrByServer={}", timestamp, signStr, signStrByServer);
 		}
 
 		return result;

@@ -16,7 +16,6 @@
 		<include refid="table_name" />
 	</select>
 
-	<!-- mybatis.type-aliases-package=com.demo.server.bean.entity,配置了默认aliase,可直接使用UserInfo -->
 	<select id="getById" resultType="UserInfo">
 		select
 		<include refid="table_column" />
