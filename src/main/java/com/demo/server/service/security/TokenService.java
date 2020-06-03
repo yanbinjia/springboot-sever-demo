@@ -28,12 +28,12 @@ public class TokenService {
 	 * @return
 	 */
 	public Result<String> checkToken(String token) {
-		Result<String> result = new Result<>(ResultCode.FAILED);
+		Result<String> result = new Result<>(ResultCode.SEC_TOKEN_ERROR);
 
 		if (StringUtils.isBlank(token) || token.length() < tokenLengthMin) {
 			result.setData("");
-			result.setCode(ResultCode.SEC_TOKEN_BASE.code);
-			result.setMsg(ResultCode.SEC_TOKEN_BASE.msg);
+			result.setCode(ResultCode.SEC_TOKEN_ERROR.code);
+			result.setMsg(ResultCode.SEC_TOKEN_ERROR.msg);
 			return result;
 		}
 
