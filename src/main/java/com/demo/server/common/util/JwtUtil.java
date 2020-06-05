@@ -13,6 +13,10 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 
+/**
+ * https://tools.ietf.org/html/rfc7519
+ *
+ */
 public class JwtUtil {
 	private static Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
@@ -89,6 +93,15 @@ public class JwtUtil {
 		System.out.println(token);
 
 		Thread.sleep(1000 * 1);
+
+		///
+		token = "" + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
+				+ ".eyJpc3MiOiJkZW1vIiwiZXhwIjoxNTkxMzQwODA4LCJpYXQiOjE1OTEzMzcyMDgsInVzZXJJZCI6InlhbmJpbmppYSIsImp0aSI6ImFhZTNjODE1MDhjODRmYWY4MTE0ZmQ1M2QwMjNhYWM3In0"
+				+ ".ciOXl-WVR_Lbjk6NIS8dFYDw_2Crap5An4KOEFfT6Do";
+
+		DecodedJWT jwtDecoded = JwtUtil.decodeToken(token);
+		
+		System.out.println(jwtDecoded.getExpiresAt());
 
 		DecodedJWT jwt = JwtUtil.verifyToken(token, secret);
 		if (jwt != null) {

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.alibaba.fastjson.JSONObject;
 import com.demo.server.bean.response.Result;
 import com.demo.server.bean.response.ResultCode;
+import com.demo.server.common.constant.AppConstant;
 import com.demo.server.common.util.LoggerUtil;
 import com.demo.server.common.util.LoggerUtil.LogLevel;
 import com.demo.server.service.security.TokenService;
@@ -39,7 +40,10 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 		// String token = request.getHeader("token");
 		// String token = request.getParameter("token");
 
-		String token = request.getHeader("Authorization");
+		// token
+		String token = request.getHeader(AppConstant.AUTH_HEADER_NAME);
+		// 需要验证token的请求参数中必须有userId，用于校验token和userId的关系
+		String userId = request.getParameter(AppConstant.AUTH_UID_PARAM_NAME);
 
 		// -----------------------------------------------------
 		// 检查注解
@@ -56,7 +60,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
 		// -----------------------------------------------------
 		// token 验证
-		Result<String> result = tokenService.checkToken(token);
+		Result<String> result = tokenService.checkToken(token, userId);
 
 		if (result.getCode() != ResultCode.SUCCESS.code) {
 			// 校验失败

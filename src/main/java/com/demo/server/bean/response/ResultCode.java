@@ -20,10 +20,14 @@ public enum ResultCode {
 
 	// -------------安全错误码------------------
 	// 80XXX
-	SEC_TOKEN_ERROR(80101, "用户凭证信息错误，凭证无效或已过期。"), //
+	SEC_TOKEN_ERROR(80101, "凭证错误，凭证无效。"), //
+	SEC_TOKEN_MISSUID(80102, "凭证错误，凭证与UID不匹配。"), //
+	SEC_TOKEN_EXPIRE(80103, "凭证错误，凭证过期。"), //
+	SEC_TOKEN_CREATE(80104, "生成凭证错误。"), //
+	SEC_TOKEN_REFRESH(80105, "刷新凭证错误。"), //
 
-	SEC_SIGN_ERROR(80201, "签名信息错误，签名验证失败。"), //
-	SEC_SIGN_EXPIRE(80202, "签名信息错误，签名时间戳过期。"),//
+	SEC_SIGN_ERROR(80201, "签名错误，签名验证失败。"), //
+	SEC_SIGN_EXPIRE(80202, "签名错误，签名时间戳过期。"),//
 	;
 
 	public final int code;

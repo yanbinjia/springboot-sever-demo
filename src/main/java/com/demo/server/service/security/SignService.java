@@ -42,7 +42,7 @@ public class SignService {
 	 * 计算签名：sign=MD5(stringSignTemp).toUpperCase()="9A0A8659F005D6984697E2CA0A9CF3B7"
 	 * 
 	 * !注意！
-	 * 1.本例采用固定秘钥，需把秘钥分发给客户端调用者，可能造成s泄漏，更安全的做法是给每个用户生成秘钥(每个调用者分配appId和securetKey)，客户端在用户认证后获取秘钥
+	 * 1.本例采用固定秘钥，需把秘钥分发给客户端调用者，可能造成泄漏，更安全的做法是给每个用户生成秘钥(每个调用者分配appId和securetKey)，客户端在用户认证后获取秘钥
 	 * 
 	 * 2.在验证签名的服务中，可以结合redis缓存，处理幂等性拦截，控制重复访问
 	 * 
@@ -53,7 +53,7 @@ public class SignService {
 	 * @return
 	 */
 	public Result<String> checkSign(HttpServletRequest request) {
-		Result<String> result = new Result<>(ResultCode.FAILED);
+		Result<String> result = new Result<>(ResultCode.SEC_SIGN_ERROR);
 
 		String uri = request.getRequestURI();
 
@@ -61,9 +61,7 @@ public class SignService {
 		String timestampStr = request.getParameter("timestamp");
 
 		if (StringUtils.isBlank(signStr) || StringUtils.isBlank(timestampStr) || !StringUtils.isNumeric(timestampStr)) {
-			result.setData("");
-			result.setCode(ResultCode.SEC_SIGN_ERROR.code);
-			result.setMsg(ResultCode.SEC_SIGN_ERROR.msg);
+			result.setResultCode(ResultCode.SEC_SIGN_ERROR);
 			return result;
 		}
 
@@ -79,8 +77,7 @@ public class SignService {
 		if (Math.abs(System.currentTimeMillis() - timestamp) > signConfig.getTimestampExpireSecs() * 1000) {
 
 			result.setData("时间戳超过" + signConfig.getTimestampExpireSecs() + "s");
-			result.setCode(ResultCode.SEC_SIGN_EXPIRE.code);
-			result.setMsg(ResultCode.SEC_SIGN_EXPIRE.msg);
+			result.setResultCode(ResultCode.SEC_SIGN_EXPIRE);
 
 			if (signConfig.isPrintCheckInfo()) {
 				log.info("ChekSign Fail. sign={}, timestamp={}, expire over {}s.", "Fail", signStr, timestampStr,
@@ -138,14 +135,10 @@ public class SignService {
 
 		if (signOk) {
 			// 签名成功
-			result.setData("");
-			result.setCode(ResultCode.SUCCESS.code);
-			result.setMsg(ResultCode.SUCCESS.msg);
+			result.setResultCode(ResultCode.SUCCESS);
 		} else {
 			// 签名失败
-			result.setData("");
-			result.setCode(ResultCode.SEC_SIGN_ERROR.code);
-			result.setMsg(ResultCode.SEC_SIGN_ERROR.msg);
+			result.setResultCode(ResultCode.SEC_SIGN_ERROR);
 		}
 
 		if (signConfig.isPrintCheckInfo()) {

@@ -5,6 +5,10 @@ public class AppConstant {
 	public static final String LOGGER_ACCESS = "stat";
 	public static final String LOGGER_ERROR = "ERROR";
 
-	public static final String JWT_CLAIM_USER_ID = "userId";
+	public static final String JWT_CLAIM_USER_ID = "uid";
+
+	public static final String AUTH_HEADER_NAME = "Authorization";
+
+	public static final String AUTH_UID_PARAM_NAME = "userId";
 
 }

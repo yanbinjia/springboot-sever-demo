@@ -191,6 +191,7 @@
 			<version>2.8.4</version>
 		</dependency>
 
+		<!-- https://github.com/jhy/jsoup/ -->
 		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
 		<dependency>
 			<groupId>org.jsoup</groupId>

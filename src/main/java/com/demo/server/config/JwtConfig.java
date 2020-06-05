@@ -16,5 +16,7 @@ public class JwtConfig {
 	// "iss" (Issuer) Claim
 	private String iss = "default";
 	// "exp" (Expiration Time) Claim, 单位秒
-	private int expireAfterNSecs = 60 * 60 * 12;
+	private int expireAfterSecs = 60 * 60 * 12;
+	//
+	private int refreshExpireAfterSecs = 60 * 60 * 24 * 15;
 }
