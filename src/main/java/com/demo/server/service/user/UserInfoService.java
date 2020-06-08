@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.server.bean.entity.UserInfo;
-import com.demo.server.bean.enumer.UserDeleted;
-import com.demo.server.bean.enumer.UserStatus;
+import com.demo.server.bean.enums.UserDeleted;
+import com.demo.server.bean.enums.UserStatus;
 import com.demo.server.bean.vo.UserInfoParam;
 import com.demo.server.bean.vo.UserInfoResult;
 import com.demo.server.dao.UserInfoDao;

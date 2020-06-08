@@ -1,21 +1,21 @@
-package com.demo.server.bean.enumer;
+package com.demo.server.bean.enums;
 
-public enum UserDeleted {
+public enum UserStatus {
 	NULL(-1, "未知"), //
-	NORMAL(0, "正常"), //
-	DELETED(1, "删除");//
+	INVALID(0, "禁用"), //
+	VALID(1, "有效");//
 
 	private Integer code;
 	private String msg;
 
-	UserDeleted(Integer code, String msg) {
+	UserStatus(Integer code, String msg) {
 		this.code = code;
 		this.msg = msg;
 	}
 
 	public static String findMsgByCode(Integer code) {
 		String msg = "未知";
-		for (UserDeleted element : UserDeleted.values()) {
+		for (UserStatus element : UserStatus.values()) {
 			if (element.code == code) {
 				msg = element.getMsg();
 			}
