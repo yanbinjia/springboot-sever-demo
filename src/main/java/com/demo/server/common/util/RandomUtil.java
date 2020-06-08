@@ -75,15 +75,5 @@ public class RandomUtil {
 		System.out.println(RandomStringUtils.randomAscii(10));
 		System.out.println(RandomStringUtils.randomGraph(10));// all visible ASCII characters
 
-		/**
-		 * 可移植操作系统接口（Portable Operating System Interface，缩写为POSIX）
-		 * 
-		 * POSIX字符类型
-		 * 
-		 * [:alnum:] 字母与数字 [:alpha:] 字母 [:blank:] 空格与制表符 [:cntrl:] 控制字符 [:digit:] 数字
-		 * [:graph:] 可打印的与可见的（不包括空格）字符 [:lower:] 小写字符 [:print:] 可打印的字符（包括空白） [:punct:]
-		 * 标点 [:space:] 空白 [:upper:] 大写字符 [:xdigit:] 十六进制字符
-		 */
-
 	}
 }
