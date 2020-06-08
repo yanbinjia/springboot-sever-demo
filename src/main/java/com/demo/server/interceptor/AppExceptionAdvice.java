@@ -60,8 +60,8 @@ public class AppExceptionAdvice {
 		String detailMsg = " Detail:" + e.getMessage();
 
 		Result<Void> result = new Result<Void>();
-		result.setCode(ResultCode.NOT_ALLOWED.code);
-		result.setMsg(ResultCode.NOT_ALLOWED.msg + detailMsg);
+		result.setCode(ResultCode.METHOD_NOT_ALLOWED.code);
+		result.setMsg(ResultCode.METHOD_NOT_ALLOWED.msg + detailMsg);
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
@@ -76,10 +76,11 @@ public class AppExceptionAdvice {
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public Result<Void> handlerMissParamException(MissingServletRequestParameterException e, HttpServletRequest request,
 			HttpServletResponse response) {
+		String detailMsg = " Detail:" + e.getMessage();
 
 		Result<Void> result = new Result<Void>();
 		result.setCode(ResultCode.PARAM_ERROR.code);
-		result.setMsg(ResultCode.PARAM_ERROR.msg);
+		result.setMsg(ResultCode.PARAM_ERROR.msg + detailMsg);
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
