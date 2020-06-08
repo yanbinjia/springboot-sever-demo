@@ -42,7 +42,8 @@ public class TokenService {
 		Result<String> result = new Result<>(ResultCode.SEC_TOKEN_ERROR);
 
 		if (StringUtils.isBlank(token) || token.length() < tokenLengthMin || StringUtils.isBlank(userId)) {
-			log.warn("checkToken param error, token={},userId={}", token, userId);
+			log.warn("checkToken, param error,userId={},token={},", userId, token);
+			result.setResultCode(ResultCode.SEC_TOKEN_PARAM);
 			return result;
 		}
 
@@ -61,7 +62,7 @@ public class TokenService {
 		// token中uid与请求参数userId不匹配! 防止越权
 		if (!StringUtils.equals(userId, userIdInToken) || StringUtils.isBlank(userId)) {
 			result.setResultCode(ResultCode.SEC_TOKEN_MISSUID);
-			log.warn("checkToken, token中uid与请求参数userId不匹配, userId={},userIdInToken={}", userId, userIdInToken);
+			log.warn("checkToken, token中uid与请求参数中uid不匹配, userId={},userIdInToken={}", userId, userIdInToken);
 			return result;
 		}
 
@@ -79,7 +80,7 @@ public class TokenService {
 				return result;
 			} catch (Exception e) {
 				// 验证失败
-				log.warn("JWT verifyToken fail : {}", token, e);
+				log.warn("checkToken JWT verifyToken fail : {}", token, e);
 			}
 		}
 

@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.server.dao.UserInfoDao">
-	<!-- sql元素可以用来定义可重用的SQL代码片段 -->
+	<!-- sql元素定义可重用的SQL代码片段 -->
 	<sql id="table_column">
 		id,user_name,password,email,mobile,status,deleted,create_time,update_time
 	</sql>
 	<sql id="table_name">
 		user_info
 	</sql>
+	<!-- resultMap define -->
+	<resultMap id="BaseResult"
+		type="com.demo.server.bean.entity.UserInfo">
+	</resultMap>
 
-	<select id="getAll" resultType="com.demo.server.bean.entity.UserInfo">
+	<resultMap id="UserInfoResult"
+		type="com.demo.server.bean.vo.UserInfoResult" extends="BaseResult">
+		<result column="group_name" property="groupName" />
+	</resultMap>
+
+	<!-- business sql -->
+	<select id="getAll"
+		resultType="com.demo.server.bean.entity.UserInfo">
 		select
 		<include refid="table_column" />
 		from
@@ -29,5 +40,19 @@
 		<include refid="table_name" />
 		where id = #{id}
 	</delete>
-
+	
+	<select id="listByCondition" resultMap="UserInfoResult">
+		select
+		id,user_name,email,mobile,status,deleted,create_time,update_time, '默认组' as group_name
+		from
+		user_info u
+		where 1 = 1
+		<if test="mobile !=null and mobile != ''">
+			AND u.mobile=#{mobile}
+		</if>
+		<if test="nameOrEmail !=null and nameOrEmail != '' ">
+			AND (u.user_name like CONCAT('%', #{nameOrEmail}, '%') or u.email like CONCAT('%', #{nameOrEmail}, '%'))
+		</if>
+		order by u.id desc
+	</select>
 </mapper>

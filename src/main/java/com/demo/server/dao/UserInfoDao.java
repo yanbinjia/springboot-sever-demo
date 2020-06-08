@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.springframework.stereotype.Repository;
 
 import com.demo.server.bean.entity.UserInfo;
+import com.demo.server.bean.vo.UserInfoResult;
 import com.demo.server.dao.provider.UserInfoProvider;
 
 import tk.mybatis.mapper.common.Mapper;
@@ -56,5 +57,8 @@ public interface UserInfoDao extends Mapper<UserInfo> {
 
 	// xmlSQL
 	UserInfo deleteById(Integer id);
+
+	// xmlSQL 动态 SQL, 结果映射
+	List<UserInfoResult> listByCondition(@Param("mobile") String mobile, @Param("nameOrEmail") String nameOrEmail);
 
 }

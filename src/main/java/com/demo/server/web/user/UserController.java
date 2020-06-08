@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.entity.UserInfo;
+import com.demo.server.bean.vo.UserInfoParam;
+import com.demo.server.bean.vo.UserInfoResult;
 import com.demo.server.interceptor.SignPass;
 import com.demo.server.service.user.UserInfoService;
+import com.github.pagehelper.PageInfo;
 
 @RestController
 @RequestMapping("/user")
@@ -20,6 +23,14 @@ public class UserController {
 
 	@Autowired
 	private UserInfoService userInfoService;
+
+	// 条件查询,分页列表
+	@GetMapping("/page")
+	@ResponseBody
+	public Result<PageInfo<UserInfoResult>> list(UserInfoParam userInfoParam) {
+		PageInfo<UserInfoResult> result = userInfoService.listByCondition(userInfoParam);
+		return new Result<>(result);
+	}
 
 	@GetMapping("/view")
 	@ResponseBody
