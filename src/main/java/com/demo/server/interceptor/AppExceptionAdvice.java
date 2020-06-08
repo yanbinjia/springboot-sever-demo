@@ -26,6 +26,8 @@ import com.demo.server.common.util.LoggerUtil;
 @ControllerAdvice
 public class AppExceptionAdvice {
 
+	public static String DETAIL_TITLE = " Detail: ";
+
 	private static String buildMessage(ObjectError error) {
 		if (error instanceof FieldError) {
 			return ((FieldError) error).getField() + error.getDefaultMessage();
@@ -57,7 +59,7 @@ public class AppExceptionAdvice {
 	public Result<Void> handlerMissParamException(HttpRequestMethodNotSupportedException e, HttpServletRequest request,
 			HttpServletResponse response) {
 
-		String detailMsg = " Detail:" + e.getMessage();
+		String detailMsg = DETAIL_TITLE + e.getMessage();
 
 		Result<Void> result = new Result<Void>();
 		result.setCode(ResultCode.METHOD_NOT_ALLOWED.code);
@@ -76,7 +78,7 @@ public class AppExceptionAdvice {
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public Result<Void> handlerMissParamException(MissingServletRequestParameterException e, HttpServletRequest request,
 			HttpServletResponse response) {
-		String detailMsg = " Detail:" + e.getMessage();
+		String detailMsg = DETAIL_TITLE + e.getMessage();
 
 		Result<Void> result = new Result<Void>();
 		result.setCode(ResultCode.PARAM_ERROR.code);
