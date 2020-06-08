@@ -1,4 +1,4 @@
-package com.demo.server.bean.response;
+package com.demo.server.bean.base;
 
 public enum ResultCode {
 	// -------------基础错误码------------------

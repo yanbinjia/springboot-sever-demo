@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.demo.server.bean.response.Result;
+import com.demo.server.bean.base.Result;
 import com.demo.server.common.constant.AppConstant;
 
 public class LoggerUtil {

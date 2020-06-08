@@ -13,8 +13,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.alibaba.fastjson.JSONObject;
-import com.demo.server.bean.response.Result;
-import com.demo.server.bean.response.ResultCode;
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.constant.AppConstant;
 import com.demo.server.common.util.LoggerUtil;
 import com.demo.server.common.util.LoggerUtil.LogLevel;

@@ -13,8 +13,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.demo.server.bean.response.Result;
-import com.demo.server.bean.response.ResultCode;
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.util.LoggerUtil;
 import com.demo.server.common.util.LoggerUtil.LogLevel;
 

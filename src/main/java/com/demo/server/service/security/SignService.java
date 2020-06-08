@@ -9,8 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.demo.server.bean.response.Result;
-import com.demo.server.bean.response.ResultCode;
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.util.HashUtil;
 import com.demo.server.common.util.RequestUtil;
 import com.demo.server.config.SignConfig;

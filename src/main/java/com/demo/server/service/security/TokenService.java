@@ -2,7 +2,6 @@ package com.demo.server.service.security;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +13,12 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.impl.PublicClaims;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
-import com.demo.server.bean.response.Result;
-import com.demo.server.bean.response.ResultCode;
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
 import com.demo.server.bean.vo.Token;
 import com.demo.server.common.constant.AppConstant;
 import com.demo.server.common.util.JwtUtil;
+import com.demo.server.common.util.RandomUtil;
 import com.demo.server.config.JwtConfig;
 
 import lombok.extern.slf4j.Slf4j;
@@ -205,11 +205,11 @@ public class TokenService {
 	}
 
 	private String generateJwtId() {
-		return UUID.randomUUID().toString().replace("-", "").toLowerCase();
+		return RandomUtil.uuidWithoutSeparator();
 	}
 
 	private String generateRefreshToken() {
-		return UUID.randomUUID().toString().replace("-", "").toLowerCase();
+		return RandomUtil.uuidWithoutSeparator();
 	}
 
 	private long getMillisBeforeOrAfterSeconds(int seconds) {

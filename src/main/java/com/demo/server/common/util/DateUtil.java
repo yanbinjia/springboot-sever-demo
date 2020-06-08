@@ -861,4 +861,9 @@ public class DateUtil {
 		last = last + " 59:59:59";
 		return last;
 	}
+
+	public static long getMillisBeforeOrAfterSeconds(int seconds) {
+		return System.currentTimeMillis() + seconds * 1000L; // 一定加L
+	}
+
 }

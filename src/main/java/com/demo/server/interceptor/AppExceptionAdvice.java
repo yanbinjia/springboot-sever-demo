@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.demo.server.bean.response.Result;
-import com.demo.server.bean.response.ResultCode;
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.exception.AppException;
 import com.demo.server.common.util.LoggerUtil;
 
