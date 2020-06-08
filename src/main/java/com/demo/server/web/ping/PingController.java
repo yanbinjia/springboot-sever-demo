@@ -7,12 +7,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.common.exception.AppException;
+import com.demo.server.interceptor.SignPass;
 import com.demo.server.interceptor.TokenPass;
 
 @RestController
 @RequestMapping("/")
 public class PingController {
 
+	@SignPass
+	@TokenPass()
 	@GetMapping("/ping")
 	@ResponseBody
 	public Result<String> ping() {
@@ -20,6 +23,7 @@ public class PingController {
 		return result;
 	}
 
+	@SignPass
 	@TokenPass()
 	@GetMapping("/pingerror")
 	@ResponseBody

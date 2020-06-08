@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.server.bean.entity.UserInfo;
 import com.demo.server.bean.enumer.UserDeleted;
@@ -36,7 +37,7 @@ public class UserInfoService {
 		return userList;
 	}
 
-	public UserInfo getById(Integer id) {
+	public UserInfo getById(Long id) {
 		UserInfo userInfo = userInfoDao.selectByPrimaryKey(id);
 		log.info("getUserById");
 		return userInfo;
@@ -65,4 +66,22 @@ public class UserInfoService {
 		return result;
 	}
 
+	@Transactional
+	public Boolean saveUser(UserInfo bean) {
+		bean.setId(null);
+		return userInfoDao.insertSelective(bean) > 0;
+	}
+
+	@Transactional
+	public Boolean updateUser(UserInfo bean) {
+		return userInfoDao.updateByPrimaryKeySelective(bean) > 0;
+	}
+
+	@Transactional
+	public Boolean deleteUserById(Long id) {
+		UserInfo param = new UserInfo();
+		param.setId(id);
+		param.setDeleted(UserDeleted.DELETED.getCode());
+		return userInfoDao.updateByPrimaryKeySelective(param) > 0;
+	}
 }

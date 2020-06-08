@@ -12,6 +12,7 @@ public enum ResultCode {
 	SIGN_ERROR(401, "签名验证失败"), //
 	NO_AUTH(403, "认证信息错误"), //
 	NOT_EXIST(404, "资源不存在"), //
+	NOT_ALLOWED(405, "方法不被允许"), //
 	RATE_LIMITED(429, "频率超限"), //
 
 	// -------------基础错误码------------------
@@ -20,15 +21,15 @@ public enum ResultCode {
 
 	// -------------安全错误码------------------
 	// 80XXX
-	SEC_TOKEN_ERROR(80101, "凭证错误，token无效。"), //
-	SEC_TOKEN_PARAM(80102, "凭证错误，token与userId不能为空。"), //
-	SEC_TOKEN_MISSUID(80103, "凭证错误，token与userId不匹配。"), //
-	SEC_TOKEN_EXPIRE(80104, "凭证错误，token过期。"), //
-	SEC_TOKEN_CREATE(80105, "生成token错误。"), //
-	SEC_TOKEN_REFRESH(80106, "刷新token错误。"), //
+	SEC_TOKEN_ERROR(80101, "凭证错误,token无效"), //
+	SEC_TOKEN_PARAM(80102, "凭证错误,token与userId不能为空"), //
+	SEC_TOKEN_MISSUID(80103, "凭证错误,token与userId不匹配"), //
+	SEC_TOKEN_EXPIRE(80104, "凭证错误,token过期"), //
+	SEC_TOKEN_CREATE(80105, "生成token错误"), //
+	SEC_TOKEN_REFRESH(80106, "刷新token错误"), //
 
-	SEC_SIGN_ERROR(80201, "签名错误，签名验证失败。"), //
-	SEC_SIGN_EXPIRE(80202, "签名错误，签名时间戳过期。"),//
+	SEC_SIGN_ERROR(80201, "签名错误,签名验证失败"), //
+	SEC_SIGN_EXPIRE(80202, "签名错误,签名时间戳过期"),//
 	;
 
 	public final int code;

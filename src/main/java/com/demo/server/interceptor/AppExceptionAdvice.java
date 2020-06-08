@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -47,6 +48,28 @@ public class AppExceptionAdvice {
 	}
 
 	/**
+	 * HttpRequestMethodNotSupportedException
+	 * 
+	 * Request method 'POST'/'GET' not supported
+	 */
+	@ResponseBody
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public Result<Void> handlerMissParamException(HttpRequestMethodNotSupportedException e, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		String detailMsg = " Detail:" + e.getMessage();
+
+		Result<Void> result = new Result<Void>();
+		result.setCode(ResultCode.NOT_ALLOWED.code);
+		result.setMsg(ResultCode.NOT_ALLOWED.msg + detailMsg);
+
+		// Record exception log.
+		LoggerUtil.exceptionLog(request, result, e);
+
+		return result;
+	}
+
+	/**
 	 * spring 参数缺失，框架默认异常
 	 */
 	@ResponseBody
@@ -57,21 +80,6 @@ public class AppExceptionAdvice {
 		Result<Void> result = new Result<Void>();
 		result.setCode(ResultCode.PARAM_ERROR.code);
 		result.setMsg(ResultCode.PARAM_ERROR.msg);
-
-		// Record exception log.
-		LoggerUtil.exceptionLog(request, result, e);
-
-		return result;
-	}
-
-	/**
-	 * 拦截服务器未知异常
-	 */
-	@ResponseBody
-	@ExceptionHandler(Exception.class)
-	public Result<Void> handlerException(Exception e, HttpServletRequest request, HttpServletResponse response) {
-
-		Result<Void> result = new Result<Void>(ResultCode.SYSTEM_ERROR);
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
@@ -92,6 +100,21 @@ public class AppExceptionAdvice {
 		result.setCode(ResultCode.PARAM_ERROR.code);
 		result.setMsg(e.getBindingResult().getAllErrors().stream().map(AppExceptionAdvice::buildMessage)
 				.collect(Collectors.joining(";")));
+
+		// Record exception log.
+		LoggerUtil.exceptionLog(request, result, e);
+
+		return result;
+	}
+
+	/**
+	 * 拦截服务器未知异常
+	 */
+	@ResponseBody
+	@ExceptionHandler(Exception.class)
+	public Result<Void> handlerException(Exception e, HttpServletRequest request, HttpServletResponse response) {
+
+		Result<Void> result = new Result<Void>(ResultCode.SYSTEM_ERROR);
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
