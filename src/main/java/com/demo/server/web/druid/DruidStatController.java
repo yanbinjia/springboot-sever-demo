@@ -9,11 +9,11 @@ import com.demo.server.interceptor.SignPass;
 import com.demo.server.interceptor.TokenPass;
 
 @RestController
-@RequestMapping("/druid")
+@RequestMapping("/druidstat/")
 public class DruidStatController {
 	@SignPass
 	@TokenPass
-	@GetMapping("/stat")
+	@GetMapping("/ds")
 	public Object druidStat() {
 		return DruidStatManagerFacade.getInstance().getDataSourceStatDataList();
 	}

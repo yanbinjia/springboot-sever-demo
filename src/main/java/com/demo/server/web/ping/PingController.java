@@ -39,7 +39,7 @@ public class PingController {
 	@ResponseBody
 	public Result<String> pingError() {
 		// Controller异常捕获和日志记录
-		throw new AppException("pingerror.");
+		throw new AppException("pingerror for test.");
 
 	}
 
