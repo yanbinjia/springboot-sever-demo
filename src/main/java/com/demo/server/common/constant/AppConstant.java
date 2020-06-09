@@ -11,7 +11,7 @@ public class AppConstant {
 	public static final String JWT_CLAIM_FOR_REF = "refresh";
 
 	public static final String AUTH_HEADER_NAME = "Authorization";
-
 	public static final String AUTH_UID_PARAM_NAME = "userId";
+	
 
 }

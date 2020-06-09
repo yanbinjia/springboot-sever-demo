@@ -27,7 +27,7 @@ import com.demo.server.common.util.LoggerUtil;
 @ControllerAdvice
 public class AppExceptionAdvice {
 
-	public static String DETAIL_TITLE = " Detail: ";
+	public static String DETAIL_TITLE = " ";
 
 	private static String buildMessage(ObjectError error) {
 		if (error instanceof FieldError) {
@@ -142,7 +142,7 @@ public class AppExceptionAdvice {
 	@ExceptionHandler(Exception.class)
 	public Result<Void> handlerException(Exception e, HttpServletRequest request, HttpServletResponse response) {
 
-		Result<Void> result = new Result<Void>(ResultCode.SYSTEM_ERROR);
+		Result<Void> result = new Result<Void>(ResultCode.SYS_ERROR);
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);

@@ -28,6 +28,12 @@ public class AppException extends RuntimeException {
 		this.msg = resultCode.msg;
 	}
 
+	public AppException(ResultCode resultCode, String extMsg) {
+		super(resultCode.msg + " (" + extMsg + ")");
+		this.code = resultCode.code;
+		this.msg = resultCode.msg + " (" + extMsg + ")";
+	}
+
 	public AppException(String msg) {
 		super(msg);
 		this.code = ResultCode.FAILED.code;

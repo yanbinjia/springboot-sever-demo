@@ -59,7 +59,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
 		// -----------------------------------------------------
 		// token 验证
-		Result<String> result = tokenService.checkToken(token, userId);
+		Result<String> result = tokenService.checkToken(userId, token);
 
 		if (result.getCode() != ResultCode.SUCCESS.code) {
 			// 校验失败
