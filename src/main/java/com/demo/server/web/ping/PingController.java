@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.exception.AppException;
 import com.demo.server.interceptor.SignPass;
 import com.demo.server.interceptor.TokenPass;
@@ -20,6 +21,16 @@ public class PingController {
 	@ResponseBody
 	public String ping() {
 		return "pong";
+	}
+
+	@SignPass
+	@TokenPass
+	@GetMapping("/ping2")
+	@ResponseBody
+	public Result<String> ping2() {
+		Result<String> result = new Result<>(ResultCode.SUCCESS);
+		result.setData("pong");
+		return result;
 	}
 
 	@SignPass
