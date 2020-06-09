@@ -15,20 +15,19 @@ import com.demo.server.interceptor.TokenPass;
 public class PingController {
 
 	@SignPass
-	@TokenPass()
+	@TokenPass
 	@GetMapping("/ping")
 	@ResponseBody
-	public Result<String> ping() {
-		Result<String> result = new Result<>("pong");
-		return result;
+	public String ping() {
+		return "pong";
 	}
 
 	@SignPass
-	@TokenPass()
+	@TokenPass
 	@GetMapping("/pingerror")
 	@ResponseBody
 	public Result<String> pingError() {
-		// 测试Controller异常捕获和日志记录
+		// Controller异常捕获和日志记录
 		throw new AppException("pingerror.");
 
 	}

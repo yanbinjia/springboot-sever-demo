@@ -101,8 +101,8 @@ public class AppExceptionAdvice {
 
 		Result<Void> result = new Result<Void>();
 		result.setCode(ResultCode.PARAM_ERROR.code);
-		result.setMsg(e.getBindingResult().getAllErrors().stream().map(AppExceptionAdvice::buildMessage)
-				.collect(Collectors.joining(";")));
+		result.setMsg(ResultCode.PARAM_ERROR.msg + " " + e.getBindingResult().getAllErrors().stream()
+				.map(AppExceptionAdvice::buildMessage).collect(Collectors.joining(";")));
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
