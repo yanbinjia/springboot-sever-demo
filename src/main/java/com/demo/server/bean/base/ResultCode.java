@@ -13,6 +13,7 @@ public enum ResultCode {
 	NO_AUTH(403, "认证信息错误."), //
 	NOT_EXIST(404, "资源不存在."), //
 	METHOD_NOT_ALLOWED(405, "方法不被允许."), //
+	NOT_ACCEPTABLE(406, "请求无法接受."), //
 	RATE_LIMITED(429, "频率超限."), //
 
 	// -------------基础错误码------------------
@@ -21,7 +22,7 @@ public enum ResultCode {
 	// -------------安全错误码------------------
 	// 80XXX
 	SEC_TOKEN_ERROR(80101, "凭证错误,token无效."), //
-	SEC_TOKEN_PARAM(80102, "凭证错误,token与userId不能为空."), //
+	SEC_TOKEN_PARAM(80102, "凭证错误,token与userId参数异常."), //
 	SEC_TOKEN_MISSUID(80103, "凭证错误,token与userId不匹配."), //
 	SEC_TOKEN_EXPIRE(80104, "凭证错误,token过期."), //
 	SEC_TOKEN_CREATE(80105, "生成token错误."), //

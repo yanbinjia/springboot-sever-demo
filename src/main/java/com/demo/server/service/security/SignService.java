@@ -74,7 +74,7 @@ public class SignService {
 			log.error("", e);
 		}
 
-		if (Math.abs(System.currentTimeMillis() - timestamp) > signConfig.getTimestampExpireSecs() * 1000) {
+		if (Math.abs(System.currentTimeMillis() - timestamp) > signConfig.getTimestampExpireSecs() * 1000L) {
 
 			result.setData("时间戳超过" + signConfig.getTimestampExpireSecs() + "s");
 			result.setResultCode(ResultCode.SEC_SIGN_EXPIRE);

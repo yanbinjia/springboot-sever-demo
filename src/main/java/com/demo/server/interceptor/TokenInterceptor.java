@@ -1,6 +1,5 @@
 package com.demo.server.interceptor;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
@@ -75,7 +74,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 				long cost = System.currentTimeMillis() - TraceContext.getInstance().getStartTime();
 				LoggerUtil.accessLog(LogLevel.WARN, request, responseStr, String.valueOf(result.getCode()), cost);
 
-			} catch (IOException e) {
+			} catch (Exception e) {
 				log.error("", e);
 			}
 

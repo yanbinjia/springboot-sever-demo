@@ -17,6 +17,7 @@ import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
 import com.demo.server.bean.vo.Token;
 import com.demo.server.common.constant.AppConstant;
+import com.demo.server.common.exception.AppException;
 import com.demo.server.common.util.JwtUtil;
 import com.demo.server.common.util.RandomUtil;
 import com.demo.server.config.JwtConfig;
@@ -29,11 +30,8 @@ public class TokenService {
 	@Autowired
 	JwtConfig jwtConfig;
 
-	// token 最小长度
-	private int tokenLengthMin = 20;
-
 	/**
-	 * 本例采用 jwt token
+	 * 校验token
 	 * 
 	 * @param token
 	 * @return
@@ -41,8 +39,8 @@ public class TokenService {
 	public Result<String> checkToken(String token, String userId) {
 		Result<String> result = new Result<>(ResultCode.SEC_TOKEN_ERROR);
 
-		if (StringUtils.isBlank(token) || token.length() < tokenLengthMin || StringUtils.isBlank(userId)) {
-			log.warn("checkToken, param error,userId={},token={},", userId, token);
+		if (StringUtils.isBlank(token) || StringUtils.isBlank(userId)) {
+			log.warn("checkToken, param error, userId={},token={},", userId, token);
 			result.setResultCode(ResultCode.SEC_TOKEN_PARAM);
 			return result;
 		}
@@ -52,15 +50,28 @@ public class TokenService {
 		// 基本解析
 		DecodedJWT jwt = null;
 		String userIdInToken = "";
+		String tokenFor = "";
 
 		jwt = JwtUtil.decodeToken(token);
 
 		if (jwt != null) {
 			userIdInToken = jwt.getClaim(AppConstant.JWT_CLAIM_USER_ID).asString();
+			tokenFor = jwt.getClaim(AppConstant.JWT_CLAIM_FOR).asString();
+		} else {
+			result.setResultCode(ResultCode.SEC_TOKEN_ERROR);
+			log.warn("checkToken, decodeToken error, userId={},token={}", userId, token);
+			return result;
+		}
+
+		// tokenFor校验,是否为access
+		if (!StringUtils.equals(tokenFor, AppConstant.JWT_CLAIM_FOR_ACC)) {
+			result.setResultCode(ResultCode.SEC_TOKEN_ERROR);
+			log.warn("checkToken, token中tokenFor不匹配, userId={},tokenFor={}", userId, tokenFor);
+			return result;
 		}
 
 		// token中uid与请求参数userId不匹配! 防止越权
-		if (!StringUtils.equals(userId, userIdInToken) || StringUtils.isBlank(userId)) {
+		if (!StringUtils.equals(userId, userIdInToken)) {
 			result.setResultCode(ResultCode.SEC_TOKEN_MISSUID);
 			log.warn("checkToken, token中uid与请求参数中uid不匹配, userId={},userIdInToken={}", userId, userIdInToken);
 			return result;
@@ -69,7 +80,6 @@ public class TokenService {
 		// 验证
 		DecodedJWT jwtForVerify = null;
 		if (jwt != null && StringUtils.isNotBlank(userId)) {
-			// jwtForVerify = JwtUtil.verifyToken(token, jwtConfig.getSecretKey());
 			try {
 				Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecretKey());
 				JWTVerifier verifier = JWT.require(algorithm).build();
@@ -87,47 +97,100 @@ public class TokenService {
 		if (jwtForVerify != null) {
 			// 验证成功
 			result.setResultCode(ResultCode.SUCCESS);
-		} else {
-			// 验证失败
-			result.setResultCode(ResultCode.SEC_TOKEN_ERROR);
 		}
 
 		return result;
 	}
 
+	/**
+	 * 登录成功后，生成Token(accessToken&refreshToken)
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	public Token createToken(String userId) {
+		Token token = null;
 
 		if (StringUtils.isBlank(userId)) {
 			return null;
 		}
 
-		Token token = this.buildNewToken(userId);
+		token = this.buildNewToken(userId);
 
 		return token;
 	}
 
+	/**
+	 * 使用refreshToken，刷新生成新的accessToken
+	 * 
+	 * @param userId
+	 * @param refreshToken
+	 * @return
+	 */
 	public Token refreshToken(String userId, String refreshToken) {
 
 		if (StringUtils.isBlank(userId) || StringUtils.isBlank(refreshToken)) {
-			return null;
+			throw new AppException(ResultCode.SEC_TOKEN_PARAM);
 		}
 
 		// -----------------------------------------------
 		// 校验refreshToken
 		boolean refreshIsValid = true;
 		// TODO: 存储中检查refreshToken是否存在？是否过期？是否禁用？
-		// ... ...
+		// 基本解析
+		DecodedJWT jwt = null;
+		String userIdInToken = "";
+		String tokenFor = "";
 
-		if (!refreshIsValid) {
-			return null;
+		jwt = JwtUtil.decodeToken(refreshToken);
+
+		if (jwt != null) {
+			userIdInToken = jwt.getClaim(AppConstant.JWT_CLAIM_USER_ID).asString();
+			tokenFor = jwt.getClaim(AppConstant.JWT_CLAIM_FOR).asString();
+		} else {
+			log.warn("refreshToken, decodeToken error, userId={},token={}", userId, refreshToken);
+			throw new AppException(ResultCode.SEC_TOKEN_PARAM);
 		}
 
-		// TODO: 校验refreshToken时，从存储中取出过期时间refreshTokenExpireAt
-		long refreshTokenExpireAt = this.getMillisBeforeOrAfterSeconds(jwtConfig.getRefreshExpireAfterSecs());
+		// tokenFor校验,是否为access
+		if (!StringUtils.equals(tokenFor, AppConstant.JWT_CLAIM_FOR_REF)) {
+			log.warn("refreshToken, token中tokenFor不匹配, userId={},tokenFor={}", userId, tokenFor);
+			throw new AppException(ResultCode.SEC_TOKEN_PARAM);
+		}
+
+		// token中uid与请求参数userId不匹配! 防止越权
+		if (!StringUtils.equals(userId, userIdInToken)) {
+			log.warn("refreshToken, token中uid与请求参数中uid不匹配, userId={},userIdInToken={}", userId, userIdInToken);
+			throw new AppException(ResultCode.SEC_TOKEN_MISSUID);
+		}
+
+		// 验证
+		DecodedJWT jwtForVerify = null;
+		if (jwt != null && StringUtils.isNotBlank(userId)) {
+			try {
+				Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecretKey());
+				JWTVerifier verifier = JWT.require(algorithm).build();
+				jwtForVerify = verifier.verify(refreshToken);
+			} catch (TokenExpiredException e) {
+				// 过期
+				log.warn("refreshToken JWT verifyToken fail : {}", refreshToken, e);
+				throw new AppException(ResultCode.SEC_TOKEN_EXPIRE);
+			} catch (Exception e) {
+				// 验证失败
+				log.warn("refreshToken JWT verifyToken fail : {}", refreshToken, e);
+				throw new AppException(ResultCode.SEC_TOKEN_ERROR);
+			}
+		}
+
+		if (jwtForVerify != null) {
+			refreshIsValid = true;
+		}
+
+		// TODO: 校验refreshToken时，refreshToken的状态以及过期时间等可以对用户有更多操作
 
 		// -----------------------------------------------
 		// 重新生成Token
-		Token token = this.buildNewTokenRefresh(userId, refreshToken, refreshTokenExpireAt);
+		Token token = this.buildNewTokenRefresh(userId, refreshToken);
 
 		return token;
 	}
@@ -150,48 +213,46 @@ public class TokenService {
 	private Token buildNewToken(String userId) {
 		Token token = null;
 
-		String jwtStr = this.createJwtToken(userId);
-
-		String refreshTokenStr = this.generateRefreshToken();
+		String accessTokenStr = this.createAccessToken(userId);
+		String refreshTokenStr = this.createRefreshToken(userId);
 
 		token = new Token();
-		long accessTokenExpireAt = this.getMillisBeforeOrAfterSeconds(jwtConfig.getExpireAfterSecs());
-		long refreshTokenExpireAt = this.getMillisBeforeOrAfterSeconds(jwtConfig.getRefreshExpireAfterSecs());
 		token.setUserId(userId);
-		token.setAccessToken(jwtStr);
+		token.setAccessToken(accessTokenStr);
 		token.setRefreshToken(refreshTokenStr);
-		token.setAccessTokenExpireAt(accessTokenExpireAt);
-		token.setRefreshTokenExpireAt(refreshTokenExpireAt);
 
 		// TODO: 更新token存储,包括jwtId,refreshToken,refreshTokenExpireAt
 
 		return token;
 	}
 
-	private Token buildNewTokenRefresh(String userId, String refreshToken, long refreshTokenExpireAt) {
+	private Token buildNewTokenRefresh(String userId, String refreshToken) {
 		Token token = null;
 
-		String jwtStr = this.createJwtToken(userId);
-
-		String refreshTokenStr = refreshToken;
+		String accessToken = this.createAccessToken(userId);
 
 		token = new Token();
-		long accessTokenExpireAt = this.getMillisBeforeOrAfterSeconds(jwtConfig.getExpireAfterSecs());
-		token.setAccessToken(jwtStr);
-		token.setRefreshToken(refreshTokenStr);
-		token.setAccessTokenExpireAt(accessTokenExpireAt);
-		token.setRefreshTokenExpireAt(refreshTokenExpireAt);// 使用原refreshToken的过期时间
+		token.setAccessToken(accessToken);
+		token.setRefreshToken(refreshToken);
 
 		// TODO: 更新token存储,包括jwtId,refreshToken,refreshTokenExpireAt
 
 		return token;
 	}
 
-	private String createJwtToken(String userId) {
+	private String createAccessToken(String userId) {
+		return this.createJwtToken(userId, 1);
+	}
+
+	private String createRefreshToken(String userId) {
+		return this.createJwtToken(userId, 2);
+	}
+
+	private String createJwtToken(String userId, int type) {
 		String jwtStr = "";
 
-		// The "jti" (JWT ID) claim provides a unique identifier for the JWT.
-		// The "jti" claim can be used to prevent the JWT from being replayed.
+		// The "jti" (JWT ID) claim provides a unique identifier for the JWT. The "jti"
+		// claim can be used to prevent the JWT from being replayed.
 		// 可以用来标识和记录颁发的jwt
 		String jwtId = this.generateJwtId();
 
@@ -200,20 +261,24 @@ public class TokenService {
 		claimsMap.put(PublicClaims.JWT_ID, jwtId);
 		claimsMap.put(PublicClaims.ISSUER, jwtConfig.getIss());
 
-		jwtStr = JwtUtil.createToken(claimsMap, jwtConfig.getSecretKey(), jwtConfig.getExpireAfterSecs());
+		int expireAfterNSecs = 3600;
+
+		if (type == 1) {
+			// access token
+			claimsMap.put(AppConstant.JWT_CLAIM_FOR, AppConstant.JWT_CLAIM_FOR_ACC);
+			expireAfterNSecs = jwtConfig.getExpireAfterSecs();
+		} else if (type == 2) {
+			// refresh token
+			claimsMap.put(AppConstant.JWT_CLAIM_FOR, AppConstant.JWT_CLAIM_FOR_REF);
+			expireAfterNSecs = jwtConfig.getRefreshExpireAfterSecs();
+		}
+
+		jwtStr = JwtUtil.createToken(claimsMap, jwtConfig.getSecretKey(), expireAfterNSecs);
 
 		return jwtStr;
 	}
 
 	private String generateJwtId() {
 		return RandomUtil.uuidWithoutSeparator();
-	}
-
-	private String generateRefreshToken() {
-		return RandomUtil.uuidWithoutSeparator();
-	}
-
-	private long getMillisBeforeOrAfterSeconds(int seconds) {
-		return System.currentTimeMillis() + seconds * 1000L; // 记得加L
 	}
 }

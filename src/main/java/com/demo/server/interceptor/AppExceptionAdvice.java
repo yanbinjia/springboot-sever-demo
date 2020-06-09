@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -64,6 +65,30 @@ public class AppExceptionAdvice {
 		Result<Void> result = new Result<Void>();
 		result.setCode(ResultCode.METHOD_NOT_ALLOWED.code);
 		result.setMsg(ResultCode.METHOD_NOT_ALLOWED.msg + detailMsg);
+
+		// Record exception log.
+		LoggerUtil.exceptionLog(request, result, e);
+
+		return result;
+	}
+
+	/**
+	 * 
+	 * HttpMediaTypeException
+	 * 
+	 * Content type 'text/plain;charset=UTF-8' not supported
+	 * 
+	 */
+	@ResponseBody
+	@ExceptionHandler(HttpMediaTypeException.class)
+	public Result<Void> handlerMissParamException(HttpMediaTypeException e, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		String detailMsg = DETAIL_TITLE + e.getMessage();
+
+		Result<Void> result = new Result<Void>();
+		result.setCode(ResultCode.NOT_ACCEPTABLE.code);
+		result.setMsg(ResultCode.NOT_ACCEPTABLE.msg + detailMsg);
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
