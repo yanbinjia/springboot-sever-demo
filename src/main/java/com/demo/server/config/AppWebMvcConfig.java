@@ -14,6 +14,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
@@ -108,6 +109,8 @@ public class AppWebMvcConfig implements WebMvcConfigurer {
 
 		// 将转换规则应用于转换对象
 		fastConverter.setFastJsonConfig(fastJsonConfig);
+
+		ParserConfig.getGlobalInstance().setSafeMode(true);
 
 		return new HttpMessageConverters(fastConverter);
 	}

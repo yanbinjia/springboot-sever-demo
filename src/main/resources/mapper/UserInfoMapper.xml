@@ -3,7 +3,7 @@
 <mapper namespace="com.demo.server.dao.UserInfoDao">
 	<!-- sql元素定义可重用的SQL代码片段 -->
 	<sql id="table_column">
-		id,user_name,password,email,mobile,status,deleted,create_time,update_time
+		id,user_name,email,mobile,status,deleted,create_time,update_time
 	</sql>
 	<sql id="table_name">
 		user_info
@@ -11,6 +11,7 @@
 	<!-- resultMap define -->
 	<resultMap id="BaseResult"
 		type="com.demo.server.bean.entity.UserInfo">
+		<!-- 不配置result映射,默认下划线转驼峰策略映射 -->
 	</resultMap>
 
 	<resultMap id="UserInfoResult"
@@ -40,10 +41,11 @@
 		<include refid="table_name" />
 		where id = #{id}
 	</delete>
-	
+
 	<select id="listByCondition" resultMap="UserInfoResult">
 		select
-		id,user_name,email,mobile,status,deleted,create_time,update_time, '默认组' as group_name
+		id,user_name,email,mobile,status,deleted,create_time,update_time,
+		'默认组' as group_name
 		from
 		user_info u
 		where 1 = 1
@@ -51,8 +53,10 @@
 			AND u.mobile=#{mobile}
 		</if>
 		<if test="nameOrEmail !=null and nameOrEmail != '' ">
-			AND (u.user_name like CONCAT('%', #{nameOrEmail}, '%') or u.email like CONCAT('%', #{nameOrEmail}, '%'))
+			AND (u.user_name like CONCAT('%', #{nameOrEmail}, '%') or
+			u.email like CONCAT('%', #{nameOrEmail}, '%'))
 		</if>
 		order by u.id desc
 	</select>
+
 </mapper>

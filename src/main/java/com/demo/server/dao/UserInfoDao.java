@@ -29,16 +29,16 @@ import tk.mybatis.mapper.common.Mapper;
 public interface UserInfoDao extends Mapper<UserInfo> {
 
 	// 注解SQL
-	@Select("select id,user_name,password,email,mobile,status,deleted,create_time,update_time from user_info where email=#{email}")
+	@Select("select id,user_name,email,mobile,status,deleted,create_time,update_time from user_info where email=#{email}")
 	UserInfo getByEmail(String email);
 
 	// 注解SQL
-	@Select("select id,user_name,password,email,mobile,status,deleted,create_time,update_time from user_info where user_name=#{user_name}")
+	@Select("select id,user_name,email,mobile,status,deleted,create_time,update_time from user_info where user_name=#{user_name}")
 	UserInfo getByUserName(String userName);
 
 	// ${参数}和#{参数}的应用, ${column} 会被直接替换，而 #{value} 会使用 ? 预处理
 	// @Param("column") 用来映射方法的变量名称和sql中的参数名称, 不配置的话默认相同
-	@Select("select id,user_name,password,email,mobile,status,deleted,create_time,update_time ususer_infoer where ${column} = #{value}")
+	@Select("select id,user_name,email,mobile,status,deleted,create_time,update_time ususer_infoer where ${column} = #{value}")
 	UserInfo getByColumn(@Param("column") String column, @Param("value") String value);
 
 	// 使用Provider构造复杂SQL，Provider:
