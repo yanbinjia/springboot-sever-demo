@@ -55,8 +55,7 @@ public class UserInfoService {
 		// PageHelper 分页查询
 		PageInfo<UserInfoResult> result = PageHelper.startPage(userInfoParam.getPageNum(), userInfoParam.getPageSize())
 				.doSelectPageInfo(() -> {
-					List<UserInfoResult> data = userInfoDao.listByCondition(userInfoParam.getMobile(),
-							userInfoParam.getNameOrEmail());
+					List<UserInfoResult> data = userInfoDao.listByCondition(userInfoParam.getMobile(), userInfoParam.getNameOrEmail());
 					// 补充状态字段显示值
 					data.stream().forEach(userInfo -> {
 						userInfo.setDeletedName(UserDeleted.findMsgByCode(userInfo.getDeleted()));
