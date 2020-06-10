@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 public class RandomUtil {
 
@@ -57,6 +58,14 @@ public class RandomUtil {
 		return UUID.randomUUID().toString().toLowerCase();
 	}
 
+	public static int randomInt(int startInclusive, int endExclusive) {
+		return RandomUtils.nextInt(startInclusive, endExclusive);
+	}
+
+	public static long randomLong(long startInclusive, long endExclusive) {
+		return RandomUtils.nextLong(startInclusive, endExclusive);
+	}
+
 	public static void main(String[] args) {
 		System.out.println("=======RandomUtil===========");
 		System.out.println(RandomUtil.randomNumeric(10));
@@ -65,6 +74,8 @@ public class RandomUtil {
 		System.out.println(RandomUtil.randomGraph(10));
 		System.out.println(RandomUtil.uuid());
 		System.out.println(RandomUtil.uuidWithoutSeparator());
+		System.out.println(RandomUtil.randomInt(1, 100));
+		System.out.println(RandomUtil.randomLong(2000000, 3000000));
 
 		System.out.println("=======Apache Commons-Lang===========");
 		// Apache Commons-Lang 包中的 RandomStringUtils 类

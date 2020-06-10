@@ -17,7 +17,7 @@ import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.constant.AppConstant;
 import com.demo.server.common.util.LoggerUtil;
 import com.demo.server.common.util.LoggerUtil.LogLevel;
-import com.demo.server.service.security.TokenService;
+import com.demo.server.service.base.security.TokenService;
 
 import lombok.extern.slf4j.Slf4j;
 

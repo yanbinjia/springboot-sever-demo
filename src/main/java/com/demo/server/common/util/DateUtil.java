@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 public class DateUtil {
 
@@ -862,8 +863,12 @@ public class DateUtil {
 		return last;
 	}
 
-	public static long getMillisBeforeOrAfterSeconds(int seconds) {
+	public static long getMillisAfterSeconds(int seconds) {
 		return System.currentTimeMillis() + seconds * 1000L; // 一定加L
+	}
+
+	public static Date addDays(Date date, int amount) {
+		return DateUtils.addDays(date, amount);
 	}
 
 }

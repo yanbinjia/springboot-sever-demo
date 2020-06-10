@@ -41,6 +41,9 @@ public class AppWebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		// 拦截顺序:
+		// 1.加入(注册)的顺序就是拦截器执行的顺序;
+		// 2.按顺序执行所有拦截器的preHandle,所有的preHandle执行完再执行全部postHandle,最后是afterCompletion;
 		addTokenInterceptor(registry);
 		addSignInterceptor(registry);
 	}

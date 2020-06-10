@@ -11,7 +11,7 @@ import com.demo.server.bean.base.Result;
 import com.demo.server.bean.vo.Token;
 import com.demo.server.interceptor.SignPass;
 import com.demo.server.interceptor.TokenPass;
-import com.demo.server.service.security.TokenService;
+import com.demo.server.service.base.security.TokenService;
 
 @RestController
 @RequestMapping("/user")

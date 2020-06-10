@@ -11,7 +11,7 @@
 	<!-- resultMap define -->
 	<resultMap id="BaseResult"
 		type="com.demo.server.bean.entity.UserInfo">
-		<!-- 不配置result映射,默认下划线转驼峰策略映射 -->
+		<!-- 不配置result映射,默认 [下划线转驼峰] 策略映射 -->
 	</resultMap>
 
 	<resultMap id="UserInfoResult"
@@ -48,14 +48,16 @@
 		'默认组' as group_name
 		from
 		user_info u
-		where 1 = 1
-		<if test="mobile !=null and mobile != ''">
-			AND u.mobile=#{mobile}
-		</if>
-		<if test="nameOrEmail !=null and nameOrEmail != '' ">
-			AND (u.user_name like CONCAT('%', #{nameOrEmail}, '%') or
-			u.email like CONCAT('%', #{nameOrEmail}, '%'))
-		</if>
+		<!-- where 1 = 1 //使用<where>标签,去除掉 where 1 = 1 的写法;也可参考<trim>标签用法,去除多余字符; -->
+		<where>
+			<if test="mobile !=null and mobile != ''">
+				AND u.mobile=#{mobile}
+			</if>
+			<if test="nameOrEmail !=null and nameOrEmail != '' ">
+				AND (u.user_name like CONCAT('%', #{nameOrEmail}, '%') or
+				u.email like CONCAT('%', #{nameOrEmail}, '%'))
+			</if>
+		</where>
 		order by u.id desc
 	</select>
 

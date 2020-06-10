@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.ui.Model;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demo.server.bean.base.Result;
@@ -28,13 +30,6 @@ import com.demo.server.common.util.LoggerUtil;
 public class AppExceptionAdvice {
 
 	public static String DETAIL_TITLE = " ";
-
-	private static String buildMessage(ObjectError error) {
-		if (error instanceof FieldError) {
-			return ((FieldError) error).getField() + error.getDefaultMessage();
-		}
-		return error.getDefaultMessage();
-	}
 
 	@ResponseBody
 	@ExceptionHandler(AppException.class)
@@ -148,6 +143,13 @@ public class AppExceptionAdvice {
 		LoggerUtil.exceptionLog(request, result, e);
 
 		return result;
+	}
+
+	private static String buildMessage(ObjectError error) {
+		if (error instanceof FieldError) {
+			return ((FieldError) error).getField() + error.getDefaultMessage();
+		}
+		return error.getDefaultMessage();
 	}
 
 }

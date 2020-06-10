@@ -18,7 +18,7 @@ import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.util.LoggerUtil;
 import com.demo.server.common.util.LoggerUtil.LogLevel;
 import com.demo.server.config.SignConfig;
-import com.demo.server.service.security.SignService;
+import com.demo.server.service.base.security.SignService;
 
 import lombok.extern.slf4j.Slf4j;
 

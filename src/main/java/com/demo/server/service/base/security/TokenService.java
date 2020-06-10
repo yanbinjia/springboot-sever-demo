@@ -1,4 +1,4 @@
-package com.demo.server.service.security;
+package com.demo.server.service.base.security;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,8 +33,6 @@ public class TokenService {
 	/**
 	 * 校验token
 	 * 
-	 * @param token
-	 * @return
 	 */
 	public Result<String> checkToken(String userId, String token) {
 		Result<String> result = new Result<>(ResultCode.SEC_TOKEN_ERROR);
@@ -64,14 +62,14 @@ public class TokenService {
 
 		// tokenFor校验,是否为access
 		if (!StringUtils.equals(tokenFor, AppConstant.JWT_CLAIM_FOR_ACC)) {
-			result.setResultCode(ResultCode.SEC_TOKEN_ERROR);
+			result.setResultCode(ResultCode.SEC_TOKEN_MISS_TYPE);
 			log.warn("checkToken, token中tokenFor不匹配, userId={},tokenFor={}", userId, tokenFor);
 			return result;
 		}
 
 		// token中uid与请求参数userId不匹配! 防止越权
 		if (!StringUtils.equals(userId, userIdInToken)) {
-			result.setResultCode(ResultCode.SEC_TOKEN_MISSUID);
+			result.setResultCode(ResultCode.SEC_TOKEN_MISS_UID);
 			log.warn("checkToken, token中uid与请求参数中uid不匹配, userId={},userIdInToken={}", userId, userIdInToken);
 			return result;
 		}
@@ -102,8 +100,6 @@ public class TokenService {
 	/**
 	 * 登录成功后，生成Token(accessToken&refreshToken)
 	 * 
-	 * @param userId
-	 * @return
 	 */
 	public Token createToken(String userId) {
 
@@ -119,9 +115,6 @@ public class TokenService {
 	/**
 	 * 使用refreshToken，刷新生成新的accessToken
 	 * 
-	 * @param userId
-	 * @param refreshToken
-	 * @return
 	 */
 	public Token refreshToken(String userId, String refreshToken) {
 
@@ -133,13 +126,14 @@ public class TokenService {
 		// 校验refreshToken
 		// 基本解析
 		DecodedJWT jwt = null;
-		String userIdInToken = "", tokenFor = "";
+		String userIdInToken = "", tokenFor = "", sign = "";
 
 		jwt = JwtUtil.decodeToken(refreshToken);
 
 		if (jwt != null) {
 			userIdInToken = jwt.getClaim(AppConstant.JWT_CLAIM_USER_ID).asString();
 			tokenFor = jwt.getClaim(AppConstant.JWT_CLAIM_FOR).asString();
+			sign = jwt.getSignature();
 		} else {
 			log.warn("refreshToken, decodeToken error, userId={},token={}", userId, refreshToken);
 			throw new AppException(ResultCode.SEC_TOKEN_PARAM);
@@ -148,13 +142,13 @@ public class TokenService {
 		// tokenFor校验,是否为refresh
 		if (!StringUtils.equals(tokenFor, AppConstant.JWT_CLAIM_FOR_REF)) {
 			log.warn("refreshToken, token中tokenFor不匹配, userId={},tokenFor={}", userId, tokenFor);
-			throw new AppException(ResultCode.SEC_TOKEN_PARAM);
+			throw new AppException(ResultCode.SEC_TOKEN_MISS_TYPE);
 		}
 
 		// token中uid与请求参数userId不匹配! 防止越权
 		if (!StringUtils.equals(userId, userIdInToken)) {
 			log.warn("refreshToken, token中uid与请求参数中uid不匹配, userId={},userIdInToken={}", userId, userIdInToken);
-			throw new AppException(ResultCode.SEC_TOKEN_MISSUID);
+			throw new AppException(ResultCode.SEC_TOKEN_MISS_UID);
 		}
 
 		// 验证
@@ -174,10 +168,8 @@ public class TokenService {
 		}
 
 		// TODO: 存储中检查refreshToken是否存在？是否过期？是否禁用？
-		boolean verifyOk = false;
 		if (jwtForVerify != null) {
-			
-			verifyOk = true;
+			sign = sign + "";
 		}
 		// -----------------------------------------------
 		// 检查通过后生成,重新生成Token

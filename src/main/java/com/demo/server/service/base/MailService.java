@@ -11,17 +11,17 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service
+@Component
 @Slf4j
 public class MailService {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	public boolean sendSimpleMail(String from, String to, String subject, String content) throws Exception {
+	public boolean sendSimpleMail(String from, String to, String subject, String content) {
 		boolean result = false;
 		try {
 			SimpleMailMessage message = new SimpleMailMessage();
@@ -40,7 +40,7 @@ public class MailService {
 	}
 
 	public boolean sendAttachmentsMail(String from, String to, String subject, String content,
-			Map<String, File> attachmentMap) throws Exception {
+			Map<String, File> attachmentMap) {
 		boolean result = false;
 		try {
 			MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -70,7 +70,7 @@ public class MailService {
 		return result;
 	}
 
-	public boolean sendHtmlMail(String from, String to, String subject, String content) throws Exception {
+	public boolean sendHtmlMail(String from, String to, String subject, String content) {
 		boolean result = false;
 		try {
 			MimeMessage mimeMessage = mailSender.createMimeMessage();
