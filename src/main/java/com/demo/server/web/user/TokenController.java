@@ -1,7 +1,7 @@
 package com.demo.server.web.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,7 +22,7 @@ public class TokenController {
 
 	@SignPass
 	@TokenPass
-	@GetMapping("/createToken")
+	@PostMapping("/createToken")
 	@ResponseBody
 	public Result<Token> createToken(@RequestParam String userId) {
 
@@ -33,7 +33,7 @@ public class TokenController {
 
 	@SignPass
 	@TokenPass
-	@GetMapping("/refreshToken")
+	@PostMapping("/refreshToken")
 	@ResponseBody
 	public Result<Token> refreshToken(@RequestParam String userId, @RequestParam String refreshToken) {
 
