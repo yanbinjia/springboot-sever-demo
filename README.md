@@ -1,7 +1,7 @@
 ## springboot-sever-demo
-Web server demo with springboot and some common functions.
-It is a simple work,just put the pieces together for developing application faster.
-(Spring boot version:2.1.4.RELEASE; Jdk version: 1.8)
+Web server demo with springboot and some common functions.  
+It is a simple work,just put the pieces together for developing application faster.  
+(Spring boot version:2.1.4.RELEASE; Jdk version: 1.8)  
 ## 工程结构
 - bean: entity,vo,dto等java bean
 - common: 通用工具:工具类,异常,常量等
