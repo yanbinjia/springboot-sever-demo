@@ -1,6 +1,6 @@
 # springboot-sever-demo
 Web server application demo with springboot and some common functions.  
-It is a simple work,just put the pieces together for developing application faster.  
+It is a simple work,just put the pieces together for developing faster and personal study.  
 (Spring boot: 2.1.4; Jdk: 1.8)  
 
 ## 工程结构
