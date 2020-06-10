@@ -1,6 +1,6 @@
 ## springboot-sever-demo
 Web server demo with springboot and some common functions.
-It is a simple work,just put the pieces together. For develop application faster.
+It is a simple work,just put the pieces together for developing application faster.
 (Spring boot version:2.1.4.RELEASE; Jdk version: 1.8)
 ## 工程结构
 --bean: entity,vo,dto等java bean
@@ -13,12 +13,12 @@ It is a simple work,just put the pieces together. For develop application faster
 --web层: RestController
 
 ## 集成功能
-- [日志打印 logback](http://logback.qos.ch/)
+- [logback](http://logback.qos.ch/)
 - [mybatis-3](https://mybatis.org/mybatis-3/)
 - [tk.mybatis, 通用Mapper](https://github.com/abel533/Mapper )
 - [Mybatis-PageHelper, Mybatis通用分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
 - [druid连接池](https://github.com/alibaba/druid)
-- schedule with quartz
+- schedule quartz
 - [本地缓存 caffeine cache](https://github.com/ben-manes/caffeine)
 - jwt token认证实现(access&refresh)
 - sign 接口参数签名和验证实现
