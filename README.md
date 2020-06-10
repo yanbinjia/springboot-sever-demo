@@ -9,7 +9,7 @@ It is a simple work,just put the pieces together for developing application fast
 - config: spring web config 和一些应用配置
 - dao: 数据访问层，与底层DB数据交互
 - interceptor: 拦截器以及相关实现
-- manager: 通用业务处理层，三方封装、Service通用能力下沉、组合dao
+- manager: 通用业务处理层，三方封装、Service通用能力下沉、组合dao (来源于Alibaba《Java开发手册》)
 - service: 相对具体的业务逻辑服务
 - web: RestController
 
