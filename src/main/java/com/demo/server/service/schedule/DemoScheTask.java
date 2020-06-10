@@ -1,15 +1,11 @@
 package com.demo.server.service.schedule;
 
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.demo.server.bean.entity.UserInfo;
 import com.demo.server.common.util.DateUtil;
-import com.demo.server.dao.UserInfoDao;
+import com.demo.server.manager.UserInfoManager;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,14 +13,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DemoScheTask {
 	@Autowired
-	UserInfoDao userInfoDao;
+	UserInfoManager userInfoManager;
 
 	// cron表达式配置方式，(0 5 3 * * ?)每天3点5份执行
 	@Scheduled(cron = "0 5 3 * * ?")
 	public void printTime() {
-		List<UserInfo> userList = userInfoDao.getAll();
 		log.info("Task={},RunAt={},CurrentUserCount={}", "printTime", DateUtil.getCurrentDateTimeStr(),
-				CollectionUtils.size(userList));
+				userInfoManager.getUserCount());
 	}
 
 	// @Scheduled(fixedRate = 6000)：上一次开始执行时间点之后 6 秒再执行。

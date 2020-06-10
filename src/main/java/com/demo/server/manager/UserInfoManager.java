@@ -10,7 +10,7 @@ public class UserInfoManager {
 	@Autowired
 	UserInfoDao userInfoDao;
 
-	public void name() {
-
+	public long getUserCount() {
+		return userInfoDao.selectCount(null);
 	}
 }
