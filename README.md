@@ -21,8 +21,8 @@ It is a simple work,just put the pieces together for developing application fast
 - [druid连接池](https://github.com/alibaba/druid)
 - schedule quartz
 - [本地缓存 caffeine cache](https://github.com/ben-manes/caffeine)
-- jwt token认证实现(access&refresh)
-- 接口参数签名和验证实现
+- 基于HandlerInterceptorAdapter和jwt，实现token签发和验证(access&refresh)
+- 基于HandlerInterceptorAdapter，实现接口参数签名和验证
 - 基于@ControllerAdvice，异常处理和日志打印，Controller请求和响应日志打印
 - 常用工具类:EnumUtil、HashUtil、RandomUtil、RequestUtil、DateUtil、Base64Util等
 
