@@ -3,6 +3,8 @@ package com.demo.server.service.base.security;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 public class TokenService {
 	@Autowired
 	JwtConfig jwtConfig;
+
+	@PostConstruct // 初始化执行顺序:构造方法->@Autowired->@PostConstruct
+	public void init() {
+	}
 
 	/**
 	 * 校验token

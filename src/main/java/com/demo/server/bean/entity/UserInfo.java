@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 
+import com.demo.server.bean.base.EncryptStr;
+
 import lombok.Data;
 
 /**
@@ -43,6 +45,9 @@ public class UserInfo {
 	private String email;
 
 	private String mobile;
+
+	@Column(name = "mobile_x")
+	private EncryptStr mobileX;
 
 	private Integer status;
 

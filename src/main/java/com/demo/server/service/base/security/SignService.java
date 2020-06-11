@@ -3,6 +3,7 @@ package com.demo.server.service.base.security;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 public class SignService {
 	@Autowired
 	SignConfig signConfig;
+
+	@PostConstruct // 初始化执行顺序:构造方法->@Autowired->@PostConstruct
+	public void init() {
+	}
 
 	/**
 	 * 

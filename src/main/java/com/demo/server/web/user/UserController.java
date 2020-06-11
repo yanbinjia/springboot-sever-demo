@@ -43,7 +43,7 @@ public class UserController {
 	}
 
 	@PostMapping("/add")
-	@ResponseBody // 请求body {"userName":"121231323","password":"ssssss","email":"ssss@ssss.com","mobile":"456"}
+	@ResponseBody // @RequestBody 请求body {"userName":"121231323","password":"ssssss","email":"ssss@ssss.com","mobile":"456"}
 	public Result<Boolean> add(@RequestBody @Validated UserInfo userInfo) {
 		Boolean result = userInfoService.saveUser(userInfo);
 		return new Result<>(result);

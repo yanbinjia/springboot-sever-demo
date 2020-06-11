@@ -2,6 +2,8 @@ package com.demo.server.service.base.cache;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Component;
@@ -12,10 +14,9 @@ import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.github.benmanes.caffeine.cache.RemovalListener;
 import com.github.benmanes.caffeine.cache.stats.CacheStats;
 
-// 
 // @Component、@Repository、@Service默认单例,@Controller默认多例
-// 如果想声明成多例对象可以使用@Scope("prototype")
-@Component("basicCache")
+// 如想声明成多例可以使用@Scope("prototype")
+@Component("basicCache") // ("basicCache") 定义beanName
 public class BasicCache {
 	private long maximumSize = 10000 * 10;
 	private long durationSec = 60 * 60; // expireAfterAccess从上次读或写发生后,经过durationSec条目过期
@@ -29,6 +30,10 @@ public class BasicCache {
 				.recordStats()//
 				.removalListener(new BasicRemovalListener())//
 				.build();//
+	}
+
+	@PostConstruct // 初始化执行顺序:构造方法->@Autowired->@PostConstruct
+	public void init() {
 	}
 
 	public class BasicRemovalListener implements RemovalListener<String, String> {

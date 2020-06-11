@@ -12,6 +12,7 @@
 	<resultMap id="BaseResult"
 		type="com.demo.server.bean.entity.UserInfo">
 		<!-- 不配置result映射,默认 [下划线转驼峰] 策略映射 -->
+		<!-- <result column="mobile" property="mobile" typeHandler="com.demo.server.dao.typehandler.column.EncryptTypeHandler"/> -->
 	</resultMap>
 
 	<resultMap id="UserInfoResult"
@@ -45,7 +46,8 @@
 	<select id="listByCondition" resultMap="UserInfoResult">
 		select
 		id,user_name,email,mobile,status,deleted,create_time,update_time,
-		'默认组' as group_name
+		mobile as mobile_x,    <!-- 测试全局typeHandler -->
+		'默认组' as group_name  <!-- 测试resultMap映射配置 -->
 		from
 		user_info u
 		<!-- where 1 = 1 //使用<where>标签,去除掉 where 1 = 1 的写法;也可参考<trim>标签用法,去除多余字符; -->

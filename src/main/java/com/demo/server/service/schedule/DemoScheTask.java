@@ -1,5 +1,7 @@
 package com.demo.server.service.schedule;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 public class DemoScheTask {
 	@Autowired
 	UserInfoManager userInfoManager;
+
+	@PostConstruct // 初始化执行顺序:构造方法->@Autowired->@PostConstruct
+	public void init() {
+	}
 
 	// cron表达式配置方式，(0 5 3 * * ?)每天3点5份执行
 	@Scheduled(cron = "0 5 3 * * ?")

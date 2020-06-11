@@ -3,6 +3,7 @@ package com.demo.server.service.base;
 import java.io.File;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -20,6 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 public class MailService {
 	@Autowired
 	private JavaMailSender mailSender;
+
+	@PostConstruct // 初始化执行顺序:构造方法->@Autowired->@PostConstruct
+	public void init() {
+	}
 
 	public boolean sendSimpleMail(String from, String to, String subject, String content) {
 		boolean result = false;
