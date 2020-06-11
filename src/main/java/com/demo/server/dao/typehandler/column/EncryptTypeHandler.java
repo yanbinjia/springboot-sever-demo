@@ -14,6 +14,7 @@ public class EncryptTypeHandler extends BaseTypeHandler<String> {
 	// xml写法: typeHandler="com.x.typehandler.column.EncryptTypeHandler"
 	// sql写法: #{mobile, typeHandler=com.x.typehandler.column.EncryptTypeHandler}
 	// resultMap 字段映射上配置 typeHandler 属性，针对该字段进行处理
+	// column 的 typeHandler，比较灵活，建议字段加解密使用
 
 	String password = "fdb2ae47d2505be9";
 
