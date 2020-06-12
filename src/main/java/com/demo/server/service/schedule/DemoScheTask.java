@@ -33,6 +33,6 @@ public class DemoScheTask {
 	// @Scheduled(initialDelay=1000, fixedRate=6000)：第一次延迟1秒执行，之后按fixedRate每6秒执行一次。
 	@Scheduled(fixedDelay = 30 * 60 * 1000)
 	public void fixedDelayTask() {
-		log.info("Task={},RunAt={},UserCount={}", "fixedDelayTask", DateUtil.getCurrentDateTimeStr());
+		log.info("Task={},RunAt={}", "fixedDelayTask", DateUtil.getCurrentDateTimeStr());
 	}
 }

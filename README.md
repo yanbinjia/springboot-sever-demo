@@ -24,6 +24,7 @@ It is a simple work,just put the pieces together for developing faster and perso
 - 基于HandlerInterceptorAdapter和jwt，实现token签发和验证(access&refresh)
 - 基于HandlerInterceptorAdapter，实现接口参数签名和验证
 - 基于@ControllerAdvice，异常处理和日志打印，Controller请求和响应日志打印
+- RateLimitAspect, 基于guava RateLimiter接口限流，Controller方法注解 @RateLimit(qps = 50)
 - 工具封装:EnumUtil、HashUtil、RandomUtil、RequestUtil、DateUtil、Base64Util等
 - 好用工具:guava、commons-lang3、commons-collections4、commons-codec、jsoup、lombok
 
