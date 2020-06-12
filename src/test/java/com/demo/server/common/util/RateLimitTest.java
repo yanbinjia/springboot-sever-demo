@@ -1,6 +1,5 @@
 package com.demo.server.common.util;
 
-import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -30,17 +29,21 @@ public class RateLimitTest {
 
 	@Test
 	public void testMultiThread() {
-		int threadNum = 10;
-		CountDownLatch countDownLatch = new CountDownLatch(threadNum);
+		String url = "http://127.0.0.1:6673/test/rate/test";
+
+		int threadNum = 20;
 		long startTime = System.currentTimeMillis();
+
+		CountDownLatch countDownLatch = new CountDownLatch(threadNum);
 
 		for (int i = 0; i < threadNum; i++) {
 			Thread thread = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					try {
-						Response response = Jsoup.connect("http://127.0.0.1:6673/test/rate/test")
-								.ignoreContentType(true).execute();
+						Thread.sleep(RandomUtil.randomLong(100, 990));
+
+						Response response = Jsoup.connect(url).ignoreContentType(true).execute();
 						String jsonStr = response.body();
 
 						JSONObject jsonObject = JSON.parseObject(jsonStr);
@@ -49,11 +52,10 @@ public class RateLimitTest {
 							successCount.addAndGet(1);
 						} else {
 							rateLimitCount.addAndGet(1);
+							System.out.println("response: " + jsonObject.toJSONString());
 						}
 
-						System.out.println("response: " + jsonObject.toJSONString());
-
-					} catch (IOException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 
@@ -73,6 +75,8 @@ public class RateLimitTest {
 		System.out.println("cost: " + (endTime - startTime) + "ms");
 		System.out.println("successCount: " + successCount.intValue());
 		System.out.println("rateLimitCount: " + rateLimitCount.intValue());
+		double rate = Double.valueOf(successCount.intValue()) / (successCount.intValue() + rateLimitCount.intValue());
+		System.out.println("successRate: " + String.format("%.2f", rate * 100) + "%");
 
 	}
 

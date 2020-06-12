@@ -59,8 +59,8 @@ public class ImageUtil {
 		boolean result = false;
 
 		try (FileOutputStream out = new FileOutputStream(new File(filePath));) {
-			Response responseUrl = Jsoup.connect(url).ignoreContentType(true).execute();
-			out.write(responseUrl.bodyAsBytes());
+			Response response = Jsoup.connect(url).ignoreContentType(true).execute();
+			out.write(response.bodyAsBytes());
 			out.flush();
 			result = true;
 		} catch (IOException e) {

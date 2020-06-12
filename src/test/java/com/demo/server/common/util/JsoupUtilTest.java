@@ -27,11 +27,11 @@ public class JsoupUtilTest {
 		String filePathLocal = "./tmp/readFileFromUrl.png";
 		String url = "https://www.baidu.com/img/flexible/logo/pc/result@2.png";
 
-		Response responseUrl = Jsoup.connect(url).ignoreContentType(true).execute();
+		Response response = Jsoup.connect(url).ignoreContentType(true).execute();
 
 		// output here
 		FileOutputStream out = new FileOutputStream(new File(filePathLocal));
-		out.write(responseUrl.bodyAsBytes());
+		out.write(response.bodyAsBytes());
 		// resultImageResponse.body() is where the image's contents are.
 		out.close();
 	}
