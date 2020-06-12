@@ -22,8 +22,8 @@ It is a simple work,just put the pieces together for developing faster and perso
 - [本地缓存 caffeine cache](https://github.com/ben-manes/caffeine)
 - spring schedule, quartz
 - token签发和验证(access&refresh), 基于HandlerInterceptorAdapter和jwt实现
-- 接口参数签名和验证, 基于HandlerInterceptorAdapter实现
-- 异常处理和日志打印, Controller请求和响应日志打印, 基于@ControllerAdvice实现
+- 接口参数签名和验证(md5/sha256), 基于HandlerInterceptorAdapter实现
+- 异常处理和日志打印(error log), Controller请求和响应日志打印(access log), 基于@ControllerAdvice实现
 - RateLimitAspect, 基于guava RateLimiter接口限流，Controller方法注解 @RateLimit(qps = 50)
 - 工具封装:EnumUtil、HashUtil、RandomUtil、RequestUtil、DateUtil、Base64Util等
 - 好用工具:guava、commons-lang3、commons-collections4、commons-codec、jsoup、lombok

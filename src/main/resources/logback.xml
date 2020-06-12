@@ -35,7 +35,7 @@
     </appender>
 
     <appender name="STAT" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${log.path}/stat.log</File>
+        <File>${log.path}/access.log</File>
         <encoder>
             <pattern>%-5level^|%d{yyyy-MM-dd HH:mm:ss.SSS}^|%m^|%X{traceId}^|%X{userId}%n</pattern>
         </encoder>

@@ -53,11 +53,11 @@ public class RateLimitAspect {
 			boolean acquireSuccess = limiter.tryAcquire(rateLimitAnnotation.timeout(), rateLimitAnnotation.timeUnit());
 
 			if (!acquireSuccess) {
-				// 获取另外失败,返回错误信息
+				// 获取失败,返回错误信息
 				return new Result<String>(ResultCode.RATE_LIMITED);
 			}
 		}
-		// 获得令牌，继续执行
+		// 继续执行
 		return joinPoint.proceed();
 	}
 

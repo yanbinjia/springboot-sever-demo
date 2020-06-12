@@ -82,8 +82,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 			return false;
 		} else {
 			// 校验成功
-			// TraceHoder中设置userId
-			TraceContext.getInstance().setUserId(userId);
+			
 		}
 
 		return true;

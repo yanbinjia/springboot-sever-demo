@@ -41,7 +41,7 @@ public class RateLimitTest {
 				@Override
 				public void run() {
 					try {
-						Thread.sleep(RandomUtil.randomLong(100, 990));
+						Thread.sleep(RandomUtil.randomLong(100, 800));
 
 						Response response = Jsoup.connect(url).ignoreContentType(true).execute();
 						String jsonStr = response.body();
