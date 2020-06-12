@@ -11,10 +11,16 @@ import org.apache.ibatis.type.JdbcType;
 import com.demo.server.common.util.AesUtil;
 
 public class EncryptTypeHandler extends BaseTypeHandler<String> {
-	// xml写法: typeHandler="com.x.typehandler.column.EncryptTypeHandler"
-	// sql写法: #{mobile, typeHandler=com.x.typehandler.column.EncryptTypeHandler}
-	// resultMap 字段映射上配置 typeHandler 属性，针对该字段进行处理
-	// column 的 typeHandler，比较灵活，建议字段加解密使用
+
+	/**
+	 * 
+	 * 1.select:<br/>
+	 * <resultMap><result typeHandler="com.x.EncryptTypeHandler"/></resultMap><br/>
+	 * resultMap 字段映射上配置 typeHandler 属性，针对该字段进行处理<br/>
+	 * 2.where/insert/update:<br/>
+	 * 在#{}中，指定#{javaField,typeHandler=com.x.EncryptTypeHandler},注意无引号
+	 * 
+	 */
 
 	String password = "fdb2ae47d2505be9";
 

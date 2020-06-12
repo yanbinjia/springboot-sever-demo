@@ -42,7 +42,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 		// token
 		String token = request.getHeader(AppConstant.AUTH_HEADER_NAME);
 		// 需要验证token的请求参数中必须有userId，用于校验token和userId的关系
-		String userId = request.getParameter(AppConstant.AUTH_UID_PARAM_NAME);
+		String userId = request.getHeader(AppConstant.AUTH_UID_PARAM_NAME);
 
 		// -----------------------------------------------------
 		// 检查注解
@@ -80,6 +80,10 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
 			// return false 拦截，中断后续处理链，返回客户端
 			return false;
+		} else {
+			// 校验成功
+			// TraceHoder中设置userId
+			TraceContext.getInstance().setUserId(userId);
 		}
 
 		return true;

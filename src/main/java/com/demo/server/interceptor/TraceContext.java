@@ -7,6 +7,7 @@ public class TraceContext {
 	private long startTime;
 	private String traceId;
 	private String clientIp;
+	private String userId;
 
 	public static TraceContext getInstance() {
 		if (threadLocal.get() == null) {
@@ -45,6 +46,15 @@ public class TraceContext {
 	public void setClientIp(String clientIp) {
 		this.clientIp = clientIp;
 		TraceMDCHolder.putClientIp(clientIp);
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+		TraceMDCHolder.putUserId(userId);
 	}
 
 }

@@ -2,10 +2,10 @@ package com.demo.server.interceptor;
 
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.ui.Model;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeException;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demo.server.bean.base.Result;
@@ -123,6 +122,26 @@ public class AppExceptionAdvice {
 		result.setCode(ResultCode.PARAM_ERROR.code);
 		result.setMsg(ResultCode.PARAM_ERROR.msg + " " + e.getBindingResult().getAllErrors().stream()
 				.map(AppExceptionAdvice::buildMessage).collect(Collectors.joining(";")));
+
+		// Record exception log.
+		LoggerUtil.exceptionLog(request, result, e);
+
+		return result;
+	}
+
+	/**
+	 * 拦截其他未知的 Http(Servlet) Exception
+	 */
+	@ResponseBody
+	@ExceptionHandler(ServletException.class)
+	public Result<Void> handlerMissParamException(ServletException e, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		String detailMsg = DETAIL_TITLE + e.getMessage();
+
+		Result<Void> result = new Result<Void>();
+		result.setCode(ResultCode.PARAM_ERROR.code);
+		result.setMsg(ResultCode.PARAM_ERROR.msg + detailMsg);
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);

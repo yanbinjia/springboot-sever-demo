@@ -44,6 +44,7 @@ public class EncryptTypeHandler extends BaseTypeHandler<EncryptStr> {
 	public EncryptStr getNullableResult(ResultSet rs, String columnName) throws SQLException {
 		String columnValue = rs.getString(columnName);
 		EncryptStr encryptStr = new EncryptStr(AesUtil.decrypt(columnValue, password));
+		encryptStr.setEncrypt(columnValue);
 		return encryptStr;
 	}
 
@@ -51,6 +52,7 @@ public class EncryptTypeHandler extends BaseTypeHandler<EncryptStr> {
 	public EncryptStr getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
 		String columnValue = rs.getString(columnIndex);
 		EncryptStr encryptStr = new EncryptStr(AesUtil.decrypt(columnValue, password));
+		encryptStr.setEncrypt(columnValue);
 		return encryptStr;
 	}
 
@@ -58,6 +60,7 @@ public class EncryptTypeHandler extends BaseTypeHandler<EncryptStr> {
 	public EncryptStr getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
 		String columnValue = cs.getString(columnIndex);
 		EncryptStr encryptStr = new EncryptStr(AesUtil.decrypt(columnValue, password));
+		encryptStr.setEncrypt(columnValue);
 		return encryptStr;
 	}
 

@@ -6,6 +6,9 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class AesUtil {
 
 	public static final String KEY_ALGORITHM = "AES";
@@ -19,11 +22,9 @@ public class AesUtil {
 	 */
 	public static String encrypt(final String content, final String password) {
 		String encryptStr = content;
-
-		if (StringUtils.isBlank(content) || StringUtils.isBlank(password)) {
+		if (StringUtils.isAnyBlank(content, password)) {
 			return encryptStr;
 		}
-
 		try {
 			// 创建密码器
 			Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
@@ -35,7 +36,7 @@ public class AesUtil {
 			// 转为16进制
 			encryptStr = Hex.encodeHexString(result);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("AES encrypt error.", ex);
 		}
 
 		return encryptStr;
@@ -46,13 +47,10 @@ public class AesUtil {
 	 *
 	 */
 	public static String decrypt(final String content, final String password) {
-
 		String decryptStr = content;
-
-		if (StringUtils.isBlank(content) || StringUtils.isBlank(password)) {
+		if (StringUtils.isAnyBlank(content, password)) {
 			return decryptStr;
 		}
-
 		try {
 			// 实例化
 			Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
@@ -63,9 +61,8 @@ public class AesUtil {
 			// 转为16进制
 			decryptStr = new String(result, CHARSET_UTF8);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("AES decrypt error.", ex);
 		}
-
 		return decryptStr;
 	}
 
@@ -75,11 +72,10 @@ public class AesUtil {
 
 	public static void main(String[] args) {
 		String content = "123445666666";
-		String password = "fdb2ae47d2505be9"; // 秘钥长度为16(AES128) 或 32(AES256)
+		String password = "fdb2ae47d2505be9"; // 秘钥长度为16(AES128)或32(AES256)
 		String encrypt = AesUtil.encrypt(content, password);
 		System.out.println("content =" + content);
 		System.out.println("encrypt =" + encrypt);
-
 		String decrypt = AesUtil.decrypt(encrypt, password);
 		System.out.println("decrypt =" + decrypt);
 

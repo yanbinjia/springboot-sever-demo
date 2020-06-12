@@ -43,7 +43,7 @@ public class TokenService {
 	public Result<String> checkToken(String userId, String token) {
 		Result<String> result = new Result<>(ResultCode.SEC_TOKEN_ERROR);
 
-		if (StringUtils.isBlank(userId) || StringUtils.isBlank(token)) {
+		if (StringUtils.isAnyBlank(userId, token)) {
 			log.warn("checkToken, param error, userId={},token={},", userId, token);
 			result.setResultCode(ResultCode.SEC_TOKEN_PARAM);
 			return result;
@@ -124,7 +124,7 @@ public class TokenService {
 	 */
 	public Token refreshToken(String userId, String refreshToken) {
 
-		if (StringUtils.isBlank(userId) || StringUtils.isBlank(refreshToken)) {
+		if (StringUtils.isAnyBlank(userId, refreshToken)) {
 			throw new AppException(ResultCode.SEC_TOKEN_PARAM);
 		}
 

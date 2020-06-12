@@ -36,7 +36,7 @@ public class TraceFilter implements Filter {
 
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-
+		
 		// 设置开始时间
 		TraceContext.getInstance().setStartTime(System.currentTimeMillis());
 

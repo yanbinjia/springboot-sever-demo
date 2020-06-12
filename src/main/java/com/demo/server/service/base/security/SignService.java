@@ -65,7 +65,7 @@ public class SignService {
 		String signStr = request.getParameter("sign");
 		String timestampStr = request.getParameter("timestamp");
 
-		if (StringUtils.isBlank(signStr) || StringUtils.isBlank(timestampStr) || !StringUtils.isNumeric(timestampStr)) {
+		if (StringUtils.isAnyBlank(signStr, timestampStr) || !StringUtils.isNumeric(timestampStr)) {
 			result.setResultCode(ResultCode.SEC_SIGN_ERROR);
 			return result;
 		}

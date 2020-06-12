@@ -12,7 +12,7 @@
 	<resultMap id="BaseResult"
 		type="com.demo.server.bean.entity.UserInfo">
 		<!-- 不配置result映射,默认 [下划线转驼峰] 策略映射 -->
-		<!-- <result column="mobile" property="mobile" typeHandler="com.demo.server.dao.typehandler.column.EncryptTypeHandler"/> -->
+		<result column="mobile" property="mobile" typeHandler="com.demo.server.dao.typehandler.column.EncryptTypeHandler"/>
 	</resultMap>
 
 	<resultMap id="UserInfoResult"
