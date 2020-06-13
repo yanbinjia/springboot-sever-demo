@@ -2,7 +2,6 @@ package com.demo.server.interceptor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,16 +38,26 @@ public class SignInterceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 
+		log.debug(">>>>>>> Handler type [{}]", handler.getClass().getName());
+
 		// -----------------------------------------------------
-		// 检查注解
+		// 检查HandlerMethod
 		if (!(handler instanceof HandlerMethod)) {
 			// 如果不是映射到方法直接通过
 			return true;
 		}
+
 		HandlerMethod handlerMethod = (HandlerMethod) handler;
-		Method method = handlerMethod.getMethod();
+
+		log.debug(">>>>>>> HandlerMethod [{}]", HandlerInterceptorUtil.handlerMethodToStr(handlerMethod));
+
+		// 检查是否是自定义Controller
+		if (!HandlerInterceptorUtil.isNeedIntercept(handlerMethod)) {
+			return true;
+		}
+
 		// 检查是否有@SignPass注解，有则跳过校验
-		if (method.isAnnotationPresent(SignPass.class)) {
+		if (handlerMethod.getMethod().isAnnotationPresent(SignPass.class)) {
 			return true;
 		}
 

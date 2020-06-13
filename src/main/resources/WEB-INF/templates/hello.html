@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>springboot-thymeleaf demo</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+</head>
+
+<body>
+	<p th:text="'hello, ' + ${user.name} + '!' " />
+
+	<p th:text="'ip: ' + ${#httpServletRequest.getRemoteAddr()}" />
+	<p th:text="'user: ' + ${#httpServletRequest.getAttribute('user')}" />
+	<p th:text="'url: ' + ${#httpServletRequest.requestURL}" />
+	<p th:text="${#httpServletRequest.getContextPath()}" />
+
+	
+	<p th:text="${#httpServletReqest.getContextPath()}" />
+
+
+</body>
+
+</html>

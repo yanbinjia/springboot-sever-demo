@@ -1,7 +1,6 @@
 package com.demo.server.interceptor;
 
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,16 +43,26 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 		// 需要验证token的请求参数中必须有userId，用于校验token和userId的关系
 		String userId = request.getHeader(AppConstant.AUTH_UID_PARAM_NAME);
 
+		log.debug(">>>>>>> token=[{}],userId=[{}]", token, userId);
+		log.debug(">>>>>>> Handler type [{}]", handler.getClass().getName());
+
 		// -----------------------------------------------------
-		// 检查注解
+		// 检查HandlerMethod
 		if (!(handler instanceof HandlerMethod)) {
-			// 如果不是映射到方法直接通过
 			return true;
 		}
+
 		HandlerMethod handlerMethod = (HandlerMethod) handler;
-		Method method = handlerMethod.getMethod();
+
+		log.debug(">>>>>>> HandlerMethod [{}]", HandlerInterceptorUtil.handlerMethodToStr(handlerMethod));
+
+		// 检查是否是自定义Controller
+		if (!HandlerInterceptorUtil.isNeedIntercept(handlerMethod)) {
+			return true;
+		}
+
 		// 检查是否有@TokenPass注解，有则跳过校验
-		if (method.isAnnotationPresent(TokenPass.class)) {
+		if (handlerMethod.getMethod().isAnnotationPresent(TokenPass.class)) {
 			return true;
 		}
 
@@ -82,7 +91,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 			return false;
 		} else {
 			// 校验成功
-			
+
 		}
 
 		return true;
