@@ -7,7 +7,7 @@ It is a simple work,just put the pieces together for developing faster and perso
 - bean: entity,vo,dto等java bean
 - common: 通用工具类,异常,常量等
 - config: spring web config 和一些应用配置
-- dao: 数据访问层
+- dao: 数据访问层相关实现
 - interceptor: 拦截器相关实现
 - manager: 通用业务处理层: 三方封装、Service通用能力下沉、组合dao操作 (来源于Alibaba《Java开发手册》)
 - service: 具体业务逻辑服务
@@ -22,9 +22,9 @@ It is a simple work,just put the pieces together for developing faster and perso
 - [本地缓存 caffeine cache](https://github.com/ben-manes/caffeine)
 - spring schedule, quartz
 - Java template engine:Thymeleaf
-- token签发和验证(access&refresh), 基于HandlerInterceptorAdapter和jwt实现
-- 接口参数签名和验证(md5/sha256), 基于HandlerInterceptorAdapter实现
-- 异常处理和日志打印(error log), Controller请求和响应日志打印(access log), 基于@ControllerAdvice实现
+- token签发和验证(access&refresh), HandlerInterceptorAdapter和jwt实现
+- 接口参数签名和验证(md5/sha256), HandlerInterceptorAdapter实现
+- 异常处理和日志打印(error log), Controller请求和响应日志打印(access log), @ControllerAdvice实现
 - RateLimitAspect, 基于guava RateLimiter接口限流，Controller方法注解 @RateLimit(qps = 50)
 - 工具封装:EnumUtil、HashUtil、RandomUtil、RequestUtil、DateUtil、Base64Util等
 - 好用工具:guava、commons-lang3、commons-collections4、commons-codec、jsoup、lombok
