@@ -87,8 +87,7 @@ public class RateLimitAspect {
 					rateLimiter = RateLimiter.create(rateLimitAnnotation.qps(), warmupPeriod, TimeUnit.MILLISECONDS);
 					rateLimiterMap.put(uri, rateLimiter);
 
-					log.info(">>>RateLimitAspect create RateLimiter: uri={},QPS(permitsPerSecond)={}", uri,
-							rateLimitAnnotation.qps());
+					log.info(">>> create RateLimiter: uri={},QPS(permitsPerSecond)={}", uri, rateLimitAnnotation.qps());
 				}
 			}
 		}

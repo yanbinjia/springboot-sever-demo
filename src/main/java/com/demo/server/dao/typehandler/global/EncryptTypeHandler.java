@@ -28,7 +28,7 @@ public class EncryptTypeHandler extends BaseTypeHandler<EncryptStr> {
 	 * 
 	 */
 	public EncryptTypeHandler() {
-		log.info(">>>>> Mybatis global TypeHandler -> EncryptTypeHandler init. ");
+		log.info(">>> Mybatis global TypeHandler -> EncryptTypeHandler init. ");
 	}
 
 	String password = "fdb2ae47d2505be9";
