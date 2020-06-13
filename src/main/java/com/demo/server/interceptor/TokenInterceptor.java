@@ -91,7 +91,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 			return false;
 		} else {
 			// 校验成功
-
+			TraceContext.getInstance().setUserId(userId);
 		}
 
 		return true;
