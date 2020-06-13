@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
@@ -154,6 +156,7 @@ public class AppExceptionAdvice {
 	 */
 	@ResponseBody
 	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public Result<Void> handlerException(Exception e, HttpServletRequest request, HttpServletResponse response) {
 
 		Result<Void> result = new Result<Void>(ResultCode.SYS_ERROR);
