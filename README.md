@@ -21,6 +21,7 @@ It is a simple work,just put the pieces together for developing faster and perso
 - [druid连接池](https://github.com/alibaba/druid)
 - [本地缓存 caffeine cache](https://github.com/ben-manes/caffeine)
 - spring schedule, quartz
+- Java template engine:Thymeleaf
 - token签发和验证(access&refresh), 基于HandlerInterceptorAdapter和jwt实现
 - 接口参数签名和验证(md5/sha256), 基于HandlerInterceptorAdapter实现
 - 异常处理和日志打印(error log), Controller请求和响应日志打印(access log), 基于@ControllerAdvice实现
