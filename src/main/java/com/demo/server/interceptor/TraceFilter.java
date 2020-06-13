@@ -17,8 +17,11 @@ import org.springframework.context.annotation.Configuration;
 
 import com.demo.server.common.util.RequestUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Configuration
 @WebFilter(urlPatterns = "/*", filterName = "TraceFilter")
+@Slf4j
 public class TraceFilter implements Filter {
 
 	private static final String TRACE_HEADER_NAME = "traceId";
@@ -28,6 +31,7 @@ public class TraceFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
+		log.info("[{}] init ok.", this.filterConfig.getFilterName());
 	}
 
 	@Override
@@ -36,7 +40,7 @@ public class TraceFilter implements Filter {
 
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-		
+
 		// 设置开始时间
 		TraceContext.getInstance().setStartTime(System.currentTimeMillis());
 
@@ -59,6 +63,7 @@ public class TraceFilter implements Filter {
 		} finally {
 			TraceContext.getInstance().remove();
 		}
+
 	}
 
 	@Override
