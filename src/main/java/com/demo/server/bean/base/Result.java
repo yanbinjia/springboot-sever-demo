@@ -1,7 +1,6 @@
 package com.demo.server.bean.base;
 
 import com.demo.server.common.exception.AppException;
-import com.demo.server.common.util.DateUtil;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,10 @@ public class Result<T> {
 	private String msg = ResultCode.FAILED.msg;
 
 	// 服务器unix时间戳(秒)
-	private String timestamp = DateUtil.getCurrentDateTimeStr();
+	private long timestamp = System.currentTimeMillis() / 1000;
+
+	// timestamp 可读时间
+	// private String timestamp = DateUtil.getCurrentDateTimeStr();
 
 	public Result(ResultCode responseCode) {
 		super();
@@ -55,4 +57,7 @@ public class Result<T> {
 		this.msg = e.getMsg();
 	}
 
+	public void setExtMsg(String extMsg) {
+		this.msg += "(" + extMsg + ")";
+	}
 }

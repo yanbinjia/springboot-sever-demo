@@ -26,6 +26,13 @@ import com.demo.server.common.util.LoggerUtil;
 /**
  * 应用ControllerAdvice全局异常处理,记录请求异常日志
  * 
+ * 注意:</br>
+ * 进入Controller层的错误才会由@ControllerAdvice处理,</br>
+ * 拦截器抛出的错误以及访问错误地址的情况@ControllerAdvice处理不了,</br>
+ * 由SpringBoot默认的异常处理机制处理(例如404由x.error.BasicErrorController处理).</br>
+ * 
+ * 如果要处理404这类异常,统一异常格式,可以扩展BasicErrorController,重写error和errorHtml方法
+ * 
  */
 @ControllerAdvice
 public class AppExceptionAdvice {
@@ -56,11 +63,8 @@ public class AppExceptionAdvice {
 	public Result<Void> handlerMissParamException(HttpRequestMethodNotSupportedException e, HttpServletRequest request,
 			HttpServletResponse response) {
 
-		String detailMsg = DETAIL_TITLE + e.getMessage();
-
-		Result<Void> result = new Result<Void>();
-		result.setCode(ResultCode.METHOD_NOT_ALLOWED.code);
-		result.setMsg(ResultCode.METHOD_NOT_ALLOWED.msg + detailMsg);
+		Result<Void> result = new Result<Void>(ResultCode.METHOD_NOT_ALLOWED);
+		result.setExtMsg(e.getMessage());
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
@@ -80,11 +84,8 @@ public class AppExceptionAdvice {
 	public Result<Void> handlerMissParamException(HttpMediaTypeException e, HttpServletRequest request,
 			HttpServletResponse response) {
 
-		String detailMsg = DETAIL_TITLE + e.getMessage();
-
-		Result<Void> result = new Result<Void>();
-		result.setCode(ResultCode.NOT_ACCEPTABLE.code);
-		result.setMsg(ResultCode.NOT_ACCEPTABLE.msg + detailMsg);
+		Result<Void> result = new Result<Void>(ResultCode.NOT_ACCEPTABLE);
+		result.setExtMsg(e.getMessage());
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
@@ -99,11 +100,9 @@ public class AppExceptionAdvice {
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public Result<Void> handlerMissParamException(MissingServletRequestParameterException e, HttpServletRequest request,
 			HttpServletResponse response) {
-		String detailMsg = DETAIL_TITLE + e.getMessage();
 
-		Result<Void> result = new Result<Void>();
-		result.setCode(ResultCode.PARAM_ERROR.code);
-		result.setMsg(ResultCode.PARAM_ERROR.msg + detailMsg);
+		Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
+		result.setExtMsg(e.getMessage());
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
@@ -120,10 +119,10 @@ public class AppExceptionAdvice {
 	public Result<?> handleValidation(MethodArgumentNotValidException e, HttpServletRequest request,
 			HttpServletResponse response) {
 
-		Result<Void> result = new Result<Void>();
-		result.setCode(ResultCode.PARAM_ERROR.code);
-		result.setMsg(ResultCode.PARAM_ERROR.msg + " " + e.getBindingResult().getAllErrors().stream()
-				.map(AppExceptionAdvice::buildMessage).collect(Collectors.joining(";")));
+		Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
+
+		result.setExtMsg(e.getBindingResult().getAllErrors().stream().map(AppExceptionAdvice::buildMessage)
+				.collect(Collectors.joining(";")));
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
@@ -139,11 +138,8 @@ public class AppExceptionAdvice {
 	public Result<Void> handlerMissParamException(ServletException e, HttpServletRequest request,
 			HttpServletResponse response) {
 
-		String detailMsg = DETAIL_TITLE + e.getMessage();
-
-		Result<Void> result = new Result<Void>();
-		result.setCode(ResultCode.PARAM_ERROR.code);
-		result.setMsg(ResultCode.PARAM_ERROR.msg + detailMsg);
+		Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
+		result.setExtMsg(e.getMessage());
 
 		// Record exception log.
 		LoggerUtil.exceptionLog(request, result, e);
