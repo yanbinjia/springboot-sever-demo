@@ -19,7 +19,7 @@ import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
 
 @RestController
-public class AppExceptionExtErrorController implements ErrorController {
+public class ExceptionErrorController implements ErrorController {
 
 	final String errorDefaultPath = "/error";
 

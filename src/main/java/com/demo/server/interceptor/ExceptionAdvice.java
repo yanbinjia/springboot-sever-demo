@@ -35,7 +35,7 @@ import com.demo.server.common.util.LoggerUtil;
  * 
  */
 @ControllerAdvice
-public class AppExceptionAdvice {
+public class ExceptionAdvice {
 
 	public static String DETAIL_TITLE = " ";
 
@@ -121,7 +121,7 @@ public class AppExceptionAdvice {
 
 		Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
 
-		result.setExtMsg(e.getBindingResult().getAllErrors().stream().map(AppExceptionAdvice::buildMessage)
+		result.setExtMsg(e.getBindingResult().getAllErrors().stream().map(ExceptionAdvice::buildMessage)
 				.collect(Collectors.joining(";")));
 
 		// Record exception log.

@@ -27,7 +27,7 @@ import com.demo.server.common.util.LoggerUtil.LogLevel;
  *
  */
 @ControllerAdvice
-public class AppResponseAdvice implements ResponseBodyAdvice<Object> {
+public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
