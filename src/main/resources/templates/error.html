@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>404 | Page not found.</title>
+<title>500 | Internal server error.</title>
 
 <style type="text/css">
 body {
@@ -78,15 +78,11 @@ p {
 		<a href="#" class="brand"><img src="/resources/favicon.ico"
 			width="25"></a>
 
-		<h2>404</h2>
-		<h1>Page not found.</h1>
+		<h2>500</h2>
+		<h1>Internal Server Error.</h1>
 
-		<p>We’re sorry but it appears that we can’t find the page you were
-			looking for. Usually this occurs because of a page that previously
-			existed was removed or you’ve mistyped the address.</p>
-
-		<p th:text="${#httpServletRequest.getAttribute('message')}" />
-
+		<p>Something went wrong. Our technical team have been notified of
+			the issue and we are looking into it. Please try again shortly.</p>
 
 		<span class="go-back"><a href="#">Go back</a></span>
 	</div>

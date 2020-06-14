@@ -41,6 +41,11 @@ public class AppResponseAdvice implements ResponseBodyAdvice<Object> {
 
 		long cost = System.currentTimeMillis() - TraceContext.getInstance().getStartTime();
 
+		if (TraceContext.getInstance().getStartTime() <= 0) {
+			// 内部Controller(ErrorController),不经过TraceFilter,无法获取开始时间,采用默认值
+			cost = 10;
+		}
+
 		HttpServletRequest request = ((ServletServerHttpRequest) req).getServletRequest();
 
 		String codeStr = "";
