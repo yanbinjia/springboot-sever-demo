@@ -28,16 +28,14 @@ import com.demo.server.common.util.LoggerUtil;
  * 
  * 注意:</br>
  * 进入Controller层的错误才会由@ControllerAdvice处理,</br>
- * 拦截器抛出的错误以及访问错误地址的情况@ControllerAdvice处理不了,</br>
+ * 拦截器抛出的错误以及访问无效地址的情况@ControllerAdvice处理不了,</br>
  * 由SpringBoot默认的异常处理机制处理(例如404由x.error.BasicErrorController处理).</br>
  * 
- * 如果要处理404这类异常,统一异常格式,可以扩展BasicErrorController,重写error和errorHtml方法
+ * 如要处理404这类异常,统一响应格式,可以实现ErrorController接口做统一处理,例如ExceptionErrorController
  * 
  */
 @ControllerAdvice
 public class ExceptionAdvice {
-
-	public static String DETAIL_TITLE = " ";
 
 	@ResponseBody
 	@ExceptionHandler(AppException.class)

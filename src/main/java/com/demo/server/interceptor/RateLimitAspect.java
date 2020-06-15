@@ -47,16 +47,22 @@ public class RateLimitAspect {
 		RateLimit rateLimitAnnotation = this.getRateLimitAnnotation(joinPoint);
 
 		if (Objects.nonNull(rateLimitAnnotation)) {
-			// 获取 google RateLimiter
+			// 处理注解中uri标记
+			if (StringUtils.isNotBlank(rateLimitAnnotation.uri())) {
+				uri = rateLimitAnnotation.uri();
+			}
+
+			// 获取RateLimiter
 			RateLimiter limiter = getRateLimiter(uri, rateLimitAnnotation);
 			// 尝试获取令牌
-			boolean acquireSuccess = limiter.tryAcquire(rateLimitAnnotation.timeout(), rateLimitAnnotation.timeUnit());
+			boolean acquired = limiter.tryAcquire(rateLimitAnnotation.timeout(), rateLimitAnnotation.timeUnit());
 
-			if (!acquireSuccess) {
+			if (!acquired) {
 				// 获取失败,返回错误信息
 				return new Result<String>(ResultCode.RATE_LIMITED);
 			}
 		}
+
 		// 继续执行
 		return joinPoint.proceed();
 	}
@@ -83,7 +89,7 @@ public class RateLimitAspect {
 				if (Objects.isNull(rateLimiter)) {
 					// warmupPeriod the duration of the period where the {@code RateLimiter} ramps
 					// up its rate, before reaching its stable (maximum) rate
-					long warmupPeriod = 2000;
+					long warmupPeriod = 10 * 1000;
 					rateLimiter = RateLimiter.create(rateLimitAnnotation.qps(), warmupPeriod, TimeUnit.MILLISECONDS);
 					rateLimiterMap.put(uri, rateLimiter);
 
