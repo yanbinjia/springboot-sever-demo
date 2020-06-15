@@ -64,6 +64,12 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- thymeleaf -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
 		<!-- mail -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -204,13 +210,6 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.12.2</version>
 		</dependency>
-
-		<!-- thymeleaf -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-
 
 	</dependencies>
 
