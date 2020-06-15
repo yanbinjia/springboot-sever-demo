@@ -16,10 +16,10 @@ It is a simple work,just put the pieces together for developing faster and perso
 ## 集成功能
 - [logback](http://logback.qos.ch/)
 - [mybatis-3](https://mybatis.org/mybatis-3/)
-- [tk.mybatis, 通用Mapper](https://github.com/abel533/Mapper )
-- [Mybatis-PageHelper, Mybatis通用分页插件](https://github.com/pagehelper/Mybatis-PageHelper)
-- [druid连接池](https://github.com/alibaba/druid)
-- [本地缓存 caffeine cache](https://github.com/ben-manes/caffeine)
+- [tk.mybatis Mapper](https://github.com/abel533/Mapper )
+- [Mybatis-PageHelper](https://github.com/pagehelper/Mybatis-PageHelper)
+- [druid 连接池](https://github.com/alibaba/druid)
+- [caffeine cache](https://github.com/ben-manes/caffeine)
 - spring schedule, quartz
 - Java template engine:Thymeleaf
 - token签发和验证(access&refresh), HandlerInterceptorAdapter和jwt实现
@@ -28,8 +28,6 @@ It is a simple work,just put the pieces together for developing faster and perso
 - RateLimitAspect, 基于guava RateLimiter接口限流，Controller方法注解 @RateLimit(qps = 50)
 - 工具封装:EnumUtil、HashUtil、RandomUtil、RequestUtil、DateUtil、Base64Util等
 - 好用工具:guava、commons-lang3、commons-io、commons-collections4、commons-codec、jsoup、lombok
-
-
 
 
 
