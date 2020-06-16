@@ -2,7 +2,7 @@
 <configuration>
     
     <!-- <property name="log.path" value="${catalina.base}/logs"/> -->
-    <property name="log.path" value="./log/app" />
+    <property name="log.path" value="./logs" />
     
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

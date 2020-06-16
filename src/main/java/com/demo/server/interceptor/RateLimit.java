@@ -14,10 +14,10 @@ import org.springframework.core.annotation.AliasFor;
 @Documented
 public @interface RateLimit {
 	@AliasFor("qps")
-	long permitsPerSecond() default 10000;
+	long permitsPerSecond() default 5000;
 
 	@AliasFor("permitsPerSecond")
-	long qps() default 10000;
+	long qps() default 5000;
 
 	long timeout() default 20;
 
