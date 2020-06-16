@@ -31,8 +31,12 @@ public class RateLimitTest {
 	public void testMultiThread() {
 		String url = "http://127.0.0.1:6673/test/rate/test";
 
-		int threadNum = 20;
+		int threadNum = 4;
+		int loopInThreadSize = 500;
+
 		long startTime = System.currentTimeMillis();
+
+		System.out.println(">>> Task start at " + DateUtil.getCurrentDateTimeStr());
 
 		CountDownLatch countDownLatch = new CountDownLatch(threadNum);
 
@@ -40,30 +44,41 @@ public class RateLimitTest {
 			Thread thread = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					try {
-						Thread.sleep(RandomUtil.randomLong(100, 800));
+					long start = System.currentTimeMillis();
+					int currentLoop = 0;
 
-						Response response = Jsoup.connect(url).ignoreContentType(true).execute();
-						String jsonStr = response.body();
+					System.out.printf("%s run loop start. %n", Thread.currentThread().getName(), currentLoop);
 
-						JSONObject jsonObject = JSON.parseObject(jsonStr);
-						int code = jsonObject.getInteger("code");
-						if (code == 0) {
-							successCount.addAndGet(1);
-						} else {
-							rateLimitCount.addAndGet(1);
-							System.out.println("response: " + jsonObject.toJSONString());
+					while (currentLoop < loopInThreadSize) {
+						currentLoop++;
+						try {
+							Response response = Jsoup.connect(url).ignoreContentType(true).execute();
+							String jsonStr = response.body();
+
+							JSONObject jsonObject = JSON.parseObject(jsonStr);
+							int code = jsonObject.getInteger("code");
+							if (code == 0) {
+								successCount.addAndGet(1);
+							} else {
+								rateLimitCount.addAndGet(1);
+								// System.out.println("limit response: " + jsonObject.toJSONString());
+							}
+
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
-
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
+					long end = System.currentTimeMillis();
+
+					System.out.printf("%s run [%d] loop done. cost [%d] ms %n", Thread.currentThread().getName(),
+							currentLoop, (end - start));
 
 					countDownLatch.countDown();
 				}
 			});
 			thread.start();
 		}
+
 		try {
 			countDownLatch.await();
 		} catch (Exception e) {
@@ -71,12 +86,19 @@ public class RateLimitTest {
 		}
 
 		long endTime = System.currentTimeMillis();
+		long successNum = successCount.intValue();
+		long limitNum = rateLimitCount.intValue();
 
-		System.out.println("cost: " + (endTime - startTime) + "ms");
-		System.out.println("successCount: " + successCount.intValue());
-		System.out.println("rateLimitCount: " + rateLimitCount.intValue());
-		double rate = Double.valueOf(successCount.intValue()) / (successCount.intValue() + rateLimitCount.intValue());
-		System.out.println("successRate: " + String.format("%.2f", rate * 100) + "%");
+		long totalCost = endTime - startTime;
+		double successRate = Double.valueOf(successNum) / (limitNum + successNum);
+		double throughput = Double.valueOf(limitNum + successNum) / (totalCost / 1000d);
+
+		System.out.println(">>> Task end at " + DateUtil.getCurrentDateTimeStr());
+		System.out.println("cost: " + totalCost + "ms");
+		System.out.println("throughput: " + String.format("%.2f", throughput) + "/sec");
+		System.out.println("successCount: " + successNum);
+		System.out.println("limitCount: " + limitNum);
+		System.out.println("successRate: " + String.format("%.2f", successRate * 100) + "%");
 
 	}
 
