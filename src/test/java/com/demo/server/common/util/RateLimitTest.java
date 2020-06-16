@@ -28,11 +28,11 @@ public class RateLimitTest {
 	}
 
 	@Test
-	public void testMultiThread() {
+	public void rateLimitTest() {
 		String url = "http://127.0.0.1:6673/test/rate/test";
 
 		int threadNum = 4;
-		int loopInThreadSize = 500;
+		int loopInThreadSize = 100;
 
 		long startTime = System.currentTimeMillis();
 
@@ -90,7 +90,7 @@ public class RateLimitTest {
 		long limitNum = rateLimitCount.intValue();
 
 		long totalCost = endTime - startTime;
-		double successRate = Double.valueOf(successNum) / (limitNum + successNum);
+		double successRate = successNum <= 0 ? 0 : Double.valueOf(successNum) / (limitNum + successNum);
 		double throughput = Double.valueOf(limitNum + successNum) / (totalCost / 1000d);
 
 		System.out.println(">>> Task end at " + DateUtil.getCurrentDateTimeStr());
