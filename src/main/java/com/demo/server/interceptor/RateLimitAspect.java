@@ -13,6 +13,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -72,7 +73,10 @@ public class RateLimitAspect {
 		String name = joinPoint.getSignature().getName();
 		if (StringUtils.isNotBlank(name)) {
 			for (Method method : methods) {
-				RateLimit rateLimitAnnotation = method.getAnnotation(RateLimit.class);
+				// method.getAnnotation无法获取到Spring Annotation @AliasFor的预期值
+				// RateLimit rateLimitAnnotation = method.getAnnotation(RateLimit.class);
+				// 使用Spring的AnnotationUtils工具, Spring Annotation 才会生效，例如 @AliasFor
+				RateLimit rateLimitAnnotation = AnnotationUtils.findAnnotation(method, RateLimit.class);
 				if (rateLimitAnnotation != null && name.equals(method.getName())) {
 					return rateLimitAnnotation;
 				}
@@ -83,6 +87,7 @@ public class RateLimitAspect {
 
 	private RateLimiter getRateLimiter(String uri, RateLimit rateLimitAnnotation) {
 		RateLimiter rateLimiter = rateLimiterMap.get(uri);
+
 		if (Objects.isNull(rateLimiter)) {
 			synchronized (this) {
 				rateLimiter = rateLimiterMap.get(uri);
@@ -93,7 +98,8 @@ public class RateLimitAspect {
 					rateLimiter = RateLimiter.create(rateLimitAnnotation.qps(), warmupPeriod, TimeUnit.MILLISECONDS);
 					rateLimiterMap.put(uri, rateLimiter);
 
-					log.info(">>> create RateLimiter: uri={},qps(permitsPerSecond)={}", uri, rateLimitAnnotation.qps());
+					log.info(">>> create RateLimiter: uri={},qps={},permitsPerSecond={}", uri,
+							rateLimitAnnotation.qps(), rateLimitAnnotation.permitsPerSecond());
 				}
 			}
 		}
