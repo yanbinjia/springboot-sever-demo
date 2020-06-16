@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="log.path" value="${catalina.base}/logs"/>
+    
+    <!-- <property name="log.path" value="${catalina.base}/logs"/> -->
+    <property name="log.path" value="./log/app" />
+    
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m^|%X{traceId}^|%X{userId}%n</pattern>
@@ -40,7 +43,7 @@
             <pattern>%-5level^|%d{yyyy-MM-dd HH:mm:ss.SSS}^|%m^|%X{traceId}^|%X{userId}%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
+            <level>INFO</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/stat.log.%d{yyyy-MM-dd}</fileNamePattern>

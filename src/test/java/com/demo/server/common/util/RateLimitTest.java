@@ -31,7 +31,7 @@ public class RateLimitTest {
 	public void testMultiThread() {
 		String url = "http://127.0.0.1:6673/test/rate/test";
 
-		int threadNum = 20;
+		int threadNum = 100;
 		long startTime = System.currentTimeMillis();
 
 		CountDownLatch countDownLatch = new CountDownLatch(threadNum);
@@ -41,7 +41,7 @@ public class RateLimitTest {
 				@Override
 				public void run() {
 					try {
-						Thread.sleep(RandomUtil.randomLong(100, 800));
+						Thread.sleep(RandomUtil.randomLong(100, 1000));
 
 						Response response = Jsoup.connect(url).ignoreContentType(true).execute();
 						String jsonStr = response.body();

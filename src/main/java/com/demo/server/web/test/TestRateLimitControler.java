@@ -20,4 +20,5 @@ public class TestRateLimitControler {
 		result.setData("RateLimit test ok.");
 		return result;
 	}
+
 }

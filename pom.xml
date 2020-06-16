@@ -7,16 +7,16 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.14.RELEASE</version>
+		<version>2.2.8.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>com.demo</groupId>
-	<artifactId>simple-server</artifactId>
+	<artifactId>demo-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>simple-server</name>
-	<description>simple-server</description>
+	<name>demo-server</name>
+	<description>demo-server,a SpringBoot demo for study.</description>
 
 	<repositories>
 		<repository>
@@ -28,10 +28,8 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<spring.boot.version>2.1.4.RELEASE</spring.boot.version>
-		<spring.boot.mybatis>2.0.0</spring.boot.mybatis>
-		<druid.starter.version>1.1.18</druid.starter.version>
-		<quartz.version>2.2.1</quartz.version>
+		<spring.boot.version>2.2.8.RELEASE</spring.boot.version>
+		<spring.boot.mybatis>2.0.1</spring.boot.mybatis>
 	</properties>
 
 	<dependencies>
@@ -89,6 +87,7 @@
 		</dependency>
 
 		<!-- mybatis springboot integration -->
+		<!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
@@ -96,6 +95,7 @@
 		</dependency>
 
 		<!-- mybatis typehandlers -->
+		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-typehandlers-jsr310 -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis-typehandlers-jsr310</artifactId>
@@ -111,92 +111,110 @@
 			<version>2.1.5</version>
 		</dependency>
 
-		<!-- mybatis pagehelper -->
 		<!-- https://github.com/pagehelper/pagehelper-spring-boot -->
+		<!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper-spring-boot-starter</artifactId>
-			<version>1.2.12</version>
+			<version>1.2.13</version>
 		</dependency>
 
-		<!-- druid https://github.com/alibaba/druid -->
+		<!-- https://github.com/alibaba/druid -->
+		<!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid-spring-boot-starter</artifactId>
-			<version>${druid.starter.version}</version>
+			<version>1.1.22</version>
 		</dependency>
 
-		<!-- Project Lombok https://projectlombok.org/ -->
+		<!-- https://projectlombok.org/ -->
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.12</version>
 			<optional>true</optional>
 		</dependency>
 
-		<!-- fastjson https://github.com/alibaba/fastjson -->
+		<!-- https://github.com/alibaba/fastjson -->
+		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.70</version>
+			<version>1.2.71</version>
 		</dependency>
 
 		<!-- mysql driver -->
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.15</version>
+			<version>8.0.19</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.9.9</version>
+			<version>2.10.4</version>
 		</dependency>
 
 		<!-- apache commons -->
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.10</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
-			<version>4.1</version>
+			<version>4.4</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.14</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.7</version>
 		</dependency>
 
-		<!-- guava https://github.com/google/guava -->
+		<!-- https://github.com/google/guava -->
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>25.0-jre</version>
+			<version>28.2-jre</version>
 		</dependency>
 
-		<!-- auth0 jwt https://github.com/auth0/java-jwt -->
+		<!-- https://github.com/auth0/java-jwt -->
+		<!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
 		<dependency>
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
 			<version>3.10.3</version>
 		</dependency>
 
-		<!-- pinyin4j https://github.com/belerweb/pinyin4j -->
+		<!-- https://github.com/belerweb/pinyin4j -->
+		<!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
 		<dependency>
 			<groupId>com.belerweb</groupId>
 			<artifactId>pinyin4j</artifactId>
-			<version>2.5.0</version>
+			<version>2.5.1</version>
 		</dependency>
 
-		<!-- caffeine cache https://github.com/ben-manes/caffeine -->
+		<!-- caffeine cache -->
+		<!-- https://github.com/ben-manes/caffeine -->
+		<!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
 		<dependency>
 			<groupId>com.github.ben-manes.caffeine</groupId>
 			<artifactId>caffeine</artifactId>
@@ -210,6 +228,13 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.12.2</version>
 		</dependency>
+
+		<!-- https://github.com/alibaba/Sentinel -->
+		<!-- <dependency> <groupId>com.alibaba.csp</groupId> <artifactId>sentinel-core</artifactId> 
+			<version>1.7.2</version> </dependency> <dependency> <groupId>com.alibaba.csp</groupId> 
+			<artifactId>sentinel-annotation-aspectj</artifactId> <version>1.7.2</version> 
+			</dependency> <dependency> <groupId>com.alibaba.csp</groupId> <artifactId>sentinel-transport-simple-http</artifactId> 
+			<version>1.7.2</version> </dependency> -->
 
 	</dependencies>
 
