@@ -12,13 +12,13 @@ import com.demo.server.interceptor.TokenPass;
 @RestController
 @RequestMapping("/test/rate")
 public class TestRateLimitControler {
-	@TokenPass
-	@GetMapping("/test")
-	@RateLimit(qps = 100, timeout = 100)
-	public Result<String> test() {
-		Result<String> result = new Result<>(ResultCode.SUCCESS);
-		result.setData("RateLimit test ok.");
-		return result;
-	}
+    @TokenPass
+    @GetMapping("/test")
+    @RateLimit(qps = 100, timeout = 100)
+    public Result<String> test() {
+        Result<String> result = new Result<>(ResultCode.SUCCESS);
+        result.setData("RateLimit test ok.");
+        return result;
+    }
 
 }
