@@ -21,4 +21,14 @@ public class TestRateLimitControler {
         return result;
     }
 
+
+    @TokenPass
+    @GetMapping("/test1")
+    @RateLimit(qps = 100, timeout = 100)
+    public Result<String> test1() {
+        Result<String> result = new Result<>(ResultCode.SUCCESS);
+        result.setData("RateLimit test ok.");
+        return result;
+    }
+
 }
