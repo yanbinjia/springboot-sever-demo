@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Aspect
 @Slf4j
-@Order(1)
+@Order(-10)
 public class RateLimitAspect {
 
     private Map<String, RateLimiter> rateLimiterMap = Maps.newConcurrentMap();
