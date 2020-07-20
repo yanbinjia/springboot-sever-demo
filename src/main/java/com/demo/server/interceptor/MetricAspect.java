@@ -21,17 +21,10 @@ import java.lang.reflect.Method;
 @Order(-100)
 public class MetricAspect {
 
-    /**
-     * * @see GetMapping
-     * * @see PostMapping
-     * * @see PutMapping
-     * * @see DeleteMapping
-     * * @see PatchMapping
-     */
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.GetMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.PostMapping) " +
-            "|| @annotation(org.springframework.web.bind.annotation.PutMapping) ")
+            "|| @annotation(org.springframework.web.bind.annotation.PutMapping)")
     public void pointCut() {
 
     }

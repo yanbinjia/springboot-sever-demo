@@ -57,7 +57,7 @@ public class MetricUtil {
 
     private static String getRateStr(double inputDouble) {
         // return String.format(locale, "%2.2f", convertRate(inputDouble));
-        return String.format(locale, "%2.2f %s", convertRate(inputDouble), getRateUnit());
+        return String.format(locale, "%2.2f calls/%s", convertRate(inputDouble), getRateUnit());
     }
 
     private static String getDurationStr(double inputDouble) {

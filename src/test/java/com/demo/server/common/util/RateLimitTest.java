@@ -29,7 +29,7 @@ public class RateLimitTest {
 
     @Test
     public void rateLimitTest() throws Exception {
-        MultiTreadTestCase tc = new MultiTreadTestCase(RateLimitTaskMethod.class, 10, 10);
+        MultiTreadTestCase tc = new MultiTreadTestCase(RateLimitTaskMethod.class, 10, 111110);
         tc.runCase();
     }
 

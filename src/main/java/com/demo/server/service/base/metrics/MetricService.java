@@ -42,7 +42,7 @@ public class MetricService {
             MetricService.executor.submit(new Runnable() {
                 @Override
                 public void run() {
-                    log.info("MetricService thread[{}] start.", finalI);
+                    log.info(">>> MetricService thread[{}] start.", finalI);
                     String metricKey = "";
                     Timer timer = null;
                     while (true) {
@@ -53,11 +53,12 @@ public class MetricService {
                                 if (StringUtil.isNotBlank(metricKey)) {
                                     timer = metricRegistry.timer(metricKey);
                                     timer.update(event.getCost(), TimeUnit.MILLISECONDS);
+                                    log.debug(">>> One MetricEvent write to timer ok.");
                                 }
 
                             }
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            log.error("InterruptedException", e);
                         }
                     }
                 }
