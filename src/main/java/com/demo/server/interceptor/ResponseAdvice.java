@@ -15,8 +15,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.util.LoggerUtil;
-import com.demo.server.common.util.LoggerUtil.LogLevel;
+import com.demo.server.common.util.LogUtil;
+import com.demo.server.common.util.LogUtil.LogLevel;
 
 /**
  * ResponseBodyAdvice接口是在Controller执行return之后，在response返回给客户端之前，执行的对response的一些处理。
@@ -57,14 +57,14 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 				responseStr = JSONObject.toJSONString(body);
 
 				// Record access log.
-				LoggerUtil.accessLog(LogLevel.INFO, request, responseStr, codeStr, cost);
+				LogUtil.accessLog(LogLevel.INFO, request, responseStr, codeStr, cost);
 
 			} else {
 				codeStr = "";
 				responseStr = JSONObject.toJSONString(body);
 
 				// Record access log.
-				LoggerUtil.accessLog(LogLevel.WARN, request, responseStr, codeStr, cost);
+				LogUtil.accessLog(LogLevel.WARN, request, responseStr, codeStr, cost);
 			}
 
 			return body;
@@ -74,7 +74,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 			responseStr = JSONObject.toJSONString(body);
 
 			// Record access log.
-			LoggerUtil.accessLog(LogLevel.ERROR, request, responseStr, codeStr, cost);
+			LogUtil.accessLog(LogLevel.ERROR, request, responseStr, codeStr, cost);
 
 			return body;
 		}

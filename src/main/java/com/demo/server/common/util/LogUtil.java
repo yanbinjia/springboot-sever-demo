@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.demo.server.bean.base.Result;
 import com.demo.server.common.constant.AppConstant;
 
-public class LoggerUtil {
+public class LogUtil {
 
 	public static enum LogLevel {
 		INFO, WARN, ERROR;
@@ -19,7 +19,7 @@ public class LoggerUtil {
 
 	private static Logger accessLogger = LoggerFactory.getLogger(AppConstant.LOGGER_ACCESS);
 
-	private static Logger exceptionLogger = LoggerFactory.getLogger(LoggerUtil.class);
+	private static Logger exceptionLogger = LoggerFactory.getLogger(LogUtil.class);
 
 	public static void accessLog(LogLevel level, HttpServletRequest request, String responseStr, String code,
 			long cost) {

@@ -1,5 +1,8 @@
 package com.demo.server.web.test;
 
+import com.codahale.metrics.Timer;
+import com.demo.server.service.base.metrics.MetricBean;
+import com.demo.server.service.base.metrics.MetricService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +12,8 @@ import com.demo.server.bean.base.ResultCode;
 import com.demo.server.interceptor.RateLimit;
 import com.demo.server.interceptor.TokenPass;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/test/rate")
 public class TestRateLimitControler {
@@ -16,16 +21,6 @@ public class TestRateLimitControler {
     @GetMapping("/test")
     @RateLimit(qps = 100, timeout = 100)
     public Result<String> test() {
-        Result<String> result = new Result<>(ResultCode.SUCCESS);
-        result.setData("RateLimit test ok.");
-        return result;
-    }
-
-
-    @TokenPass
-    @GetMapping("/test1")
-    @RateLimit(qps = 100, timeout = 100)
-    public Result<String> test1() {
         Result<String> result = new Result<>(ResultCode.SUCCESS);
         result.setData("RateLimit test ok.");
         return result;

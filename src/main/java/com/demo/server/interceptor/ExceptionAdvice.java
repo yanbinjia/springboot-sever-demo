@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.exception.AppException;
-import com.demo.server.common.util.LoggerUtil;
+import com.demo.server.common.util.LogUtil;
 
 /**
  * 应用ControllerAdvice全局异常处理,记录请求异常日志
@@ -46,7 +46,7 @@ public class ExceptionAdvice {
 		result.setMsg(e.getMsg());
 
 		// Record exception log.
-		LoggerUtil.exceptionLog(request, result, e);
+		LogUtil.exceptionLog(request, result, e);
 
 		return result;
 	}
@@ -65,7 +65,7 @@ public class ExceptionAdvice {
 		result.setExtMsg(e.getMessage());
 
 		// Record exception log.
-		LoggerUtil.exceptionLog(request, result, e);
+		LogUtil.exceptionLog(request, result, e);
 
 		return result;
 	}
@@ -86,7 +86,7 @@ public class ExceptionAdvice {
 		result.setExtMsg(e.getMessage());
 
 		// Record exception log.
-		LoggerUtil.exceptionLog(request, result, e);
+		LogUtil.exceptionLog(request, result, e);
 
 		return result;
 	}
@@ -103,7 +103,7 @@ public class ExceptionAdvice {
 		result.setExtMsg(e.getMessage());
 
 		// Record exception log.
-		LoggerUtil.exceptionLog(request, result, e);
+		LogUtil.exceptionLog(request, result, e);
 
 		return result;
 	}
@@ -123,7 +123,7 @@ public class ExceptionAdvice {
 				.collect(Collectors.joining(";")));
 
 		// Record exception log.
-		LoggerUtil.exceptionLog(request, result, e);
+		LogUtil.exceptionLog(request, result, e);
 
 		return result;
 	}
@@ -140,7 +140,7 @@ public class ExceptionAdvice {
 		result.setExtMsg(e.getMessage());
 
 		// Record exception log.
-		LoggerUtil.exceptionLog(request, result, e);
+		LogUtil.exceptionLog(request, result, e);
 
 		return result;
 	}
@@ -156,7 +156,7 @@ public class ExceptionAdvice {
 		Result<Void> result = new Result<Void>(ResultCode.SYS_ERROR);
 
 		// Record exception log.
-		LoggerUtil.exceptionLog(request, result, e);
+		LogUtil.exceptionLog(request, result, e);
 
 		return result;
 	}

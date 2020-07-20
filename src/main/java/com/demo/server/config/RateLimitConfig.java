@@ -29,6 +29,8 @@ import java.util.Set;
 @Data
 public class RateLimitConfig {
 
+    public static String LIMIT_KEY_SPLIT = "->";
+
     String packageForScan = "com.demo";
 
     @Bean
@@ -39,14 +41,17 @@ public class RateLimitConfig {
     private void scanAnnotationAndInit() {
         log.info(">>> Init RateLimitConfig start at {} .", DateUtil.getCurrentDateTimeStr());
 
-        String hostAddress = "UnknownHost-" + RandomUtil.uuidWithoutSeparator();
+        String randomUnknown = RandomUtil.uuidWithoutSeparator();
+        String hostAddress = "UnknownIp-" + randomUnknown;
+        String hostName = "UnknownHost-" + randomUnknown;
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();
+            hostName = InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
             log.warn(">>> getLocalHost error.", e);
         }
 
-        log.info("hostAddress={}", hostAddress);
+        log.info("hostAddress={},hostName={}", hostAddress, hostName);
 
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .forPackages(packageForScan)
@@ -69,13 +74,13 @@ public class RateLimitConfig {
                 String uri = annotation.uri();
                 String resource = annotation.resource();
 
-                String limitKeyInApp = className + "->" + methodName + "()";
+                String limitKey = className + LIMIT_KEY_SPLIT + methodName + "()";
 
                 log.info("--------------------------");
                 log.info("className={}", className);
                 log.info("methodName={}", methodName);
                 log.info("classLoaderName={}", classLoaderName);
-                log.info("limitKeyInApp={}", limitKeyInApp);
+                log.info("limitKeyInApp={}", limitKey);
                 log.info("RateLimit annotation[msg={},qps={},uri={},resource={}]", msg, qps, uri, resource);
                 log.info("--------------------------");
 

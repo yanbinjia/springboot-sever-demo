@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.LongAdder;
 public class Test {
     public static void main(String[] args) throws Exception {
         int threadNum = ThreadPoolUtil.poolSize(0.2);
-        MultiTreadTestCase tc = new MultiTreadTestCase(TaskMethodApiTest.class, threadNum, 10);
+        MultiTreadTestCase tc = new MultiTreadTestCase(TaskMethodApiTest.class, threadNum, 1000);
         tc.runCase();
     }
 }

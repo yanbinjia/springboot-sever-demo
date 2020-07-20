@@ -14,8 +14,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.alibaba.fastjson.JSONObject;
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.util.LoggerUtil;
-import com.demo.server.common.util.LoggerUtil.LogLevel;
+import com.demo.server.common.util.LogUtil;
+import com.demo.server.common.util.LogUtil.LogLevel;
 import com.demo.server.config.SignConfig;
 import com.demo.server.service.base.security.SignService;
 
@@ -76,7 +76,7 @@ public class SignInterceptor extends HandlerInterceptorAdapter {
 
 				// Record access log.
 				long cost = System.currentTimeMillis() - TraceContext.getInstance().getStartTime();
-				LoggerUtil.accessLog(LogLevel.WARN, request, responseStr, String.valueOf(result.getCode()), cost);
+				LogUtil.accessLog(LogLevel.WARN, request, responseStr, String.valueOf(result.getCode()), cost);
 
 			} catch (IOException e) {
 				log.error("", e);
