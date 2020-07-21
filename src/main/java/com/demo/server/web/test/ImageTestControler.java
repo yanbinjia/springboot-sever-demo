@@ -25,7 +25,7 @@ import java.io.OutputStream;
 public class ImageTestControler {
     @TokenPass
     @SignPass
-    @GetMapping("/get")
+    @GetMapping("/test")
     public void getCaptcha(HttpServletRequest request, HttpServletResponse response,
                            @RequestParam(name = "id", required = false) String id) {
         try (OutputStream os = response.getOutputStream()) {
