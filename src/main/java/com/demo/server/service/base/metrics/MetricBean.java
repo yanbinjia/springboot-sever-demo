@@ -4,22 +4,22 @@ import lombok.Data;
 
 @Data
 public class MetricBean {
-    String method;
-    String count = "";
-    String m1_rate = "";
-    String m5_rate = "";
-    String m15_rate = "";
-    String mean_rate = "";
+    private String method;
+    private String count = "";
+    private String m1_rate = "";
+    private String m5_rate = "";
+    private String m15_rate = "";
+    private String mean_rate = "";
 
-    String min = "";
-    String max = "";
-    String mean = "";
-    String stddev = "";
+    private String min = "";
+    private String max = "";
+    private String mean = "";
+    private String stddev = "";
 
-    String p50 = "";
-    String p75 = "";
-    String p95 = "";
-    String p98 = "";
-    String p99 = "";
-    String p999 = "";
+    private String p50 = "";
+    private String p75 = "";
+    private String p95 = "";
+    private String p98 = "";
+    private String p99 = "";
+    private String p999 = "";
 }

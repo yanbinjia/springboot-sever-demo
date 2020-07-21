@@ -97,7 +97,7 @@ public class RateLimitAspect {
                 if (Objects.isNull(rateLimiter)) {
                     // warmupPeriod the duration of the period where the {@code RateLimiter} ramps
                     // up its rate, before reaching its stable (maximum) rate
-                    long warmupPeriod = 10 * 1000;
+                    long warmupPeriod = 60 * 1000;
                     rateLimiter = RateLimiter.create(rateLimitAnnotation.qps(), warmupPeriod, TimeUnit.MILLISECONDS);
                     rateLimiterMap.put(uri, rateLimiter);
 

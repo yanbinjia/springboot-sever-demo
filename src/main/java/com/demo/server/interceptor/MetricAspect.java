@@ -12,7 +12,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
 @Component
@@ -38,12 +41,12 @@ public class MetricAspect {
         Object object = joinPoint.proceed();
 
         if (StringUtils.isNotBlank(methodStr)) {
-            MetricEvent metircData = new MetricEvent();
-            metircData.setEventType(EventType.NORMAL);
-            metircData.setMetricKey(methodStr);
-            metircData.setCost(System.currentTimeMillis() - startTime);
+            MetricEvent metirc = new MetricEvent();
+            metirc.setEventType(EventType.NORMAL);
+            metirc.setMetricKey(methodStr);
+            metirc.setCost(System.currentTimeMillis() - startTime);
 
-            MetricService.putMetricEvent(metircData);
+            MetricService.putMetricEvent(metirc);
         }
 
         return object;
