@@ -5,3 +5,9 @@ MatchVersion:1.6.2
 Author:https://github.com/whvcse
 License:Apache-2.0 License
 
+code change:
+1.change font path to  "classpath:/captcha/font/"
+easycaptcha/base/Captcha.java
+line36 add public static final String FONT_PATH = "/captcha/font/";
+line278 change getClass().getResourceAsStream(FONT_PATH + FONT_NAMES[font])
+

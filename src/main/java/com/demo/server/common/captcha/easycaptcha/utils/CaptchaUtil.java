@@ -117,8 +117,7 @@ public class CaptchaUtil {
     public static void out(Captcha captcha, HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         setHeader(response);
-        // del set http session code
-        // request.getSession().setAttribute(SESSION_KEY, captcha.text().toLowerCase());
+        request.getSession().setAttribute(SESSION_KEY, captcha.text().toLowerCase());
         captcha.out(response.getOutputStream());
     }
 
