@@ -54,7 +54,8 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
         try {
             if (body instanceof Result<?>) {
-                codeStr = String.valueOf(((Result<?>) body).getCode());
+                Result<?> result = (Result<?>) body;
+                codeStr = String.valueOf(result.getCode());
                 responseStr = JSONObject.toJSONString(body);
 
                 // Record access log.

@@ -66,10 +66,10 @@ public class SpecCaptcha extends Captcha {
             // 抗锯齿
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             // 画干扰圆
-            drawOval(2, g2d);
+            drawOval(drawOvalNum, g2d);
             // 画干扰线
             g2d.setStroke(new BasicStroke(2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
-            drawBesselLine(1, g2d);
+            drawBesselLine(drawBesselLineNum, g2d);
             // 画字符串
             g2d.setFont(getFont());
             FontMetrics fontMetrics = g2d.getFontMetrics();

@@ -7,6 +7,7 @@
 package com.demo.server.common.listener;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+@Configuration
 @WebListener
 @Slf4j
 public class MyServletRequestListener implements ServletRequestListener {
@@ -35,7 +37,6 @@ public class MyServletRequestListener implements ServletRequestListener {
 
         log.debug(">>> requestInitialized uri=[{}],remoteAddr=[{}]", uri, remoteAddr);
     }
-
     /**
      *
      * 需要在 SpringBootApplication 上使用 @ServletComponentScan 注解,
@@ -66,6 +67,4 @@ public class MyServletRequestListener implements ServletRequestListener {
      * }
      *
      */
-
-
 }
