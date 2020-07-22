@@ -1,0 +1,7 @@
+Copy code from EasyCaptcha @2020-07-22T17:25:09
+
+Github:https://github.com/whvcse/EasyCaptcha
+MatchVersion:1.6.2
+Author:https://github.com/whvcse
+License:Apache-2.0 License
+
