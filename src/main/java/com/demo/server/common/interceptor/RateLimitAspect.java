@@ -1,4 +1,4 @@
-package com.demo.server.interceptor;
+package com.demo.server.common.interceptor;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class RateLimitAspect {
 
     private Map<String, RateLimiter> rateLimiterMap = Maps.newConcurrentMap();
 
-    @Pointcut("@annotation(com.demo.server.interceptor.RateLimit)")
+    @Pointcut("@annotation(com.demo.server.common.interceptor.RateLimit)")
     public void pointCut() {
 
     }
@@ -46,6 +46,7 @@ public class RateLimitAspect {
                 .getRequest();
         String uri = request.getRequestURI();
 
+        log.debug(">>> RateLimitAspect doAround before joinPoint.proceed(). Uri=[{}]", uri);
 
         // 获取RateLimit注解
         RateLimit rateLimitAnnotation = this.getRateLimitAnnotation(joinPoint);
@@ -68,7 +69,11 @@ public class RateLimitAspect {
         }
 
         // 执行目标方法，Invoke the method.
-        return joinPoint.proceed();
+        Object object = joinPoint.proceed();
+
+        log.debug(">>> RateLimitAspect doAround after joinPoint.proceed(). Uri=[{}]", uri);
+
+        return object;
     }
 
     private RateLimit getRateLimitAnnotation(final JoinPoint joinPoint) {

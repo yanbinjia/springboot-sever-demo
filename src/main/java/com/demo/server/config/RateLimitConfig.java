@@ -2,23 +2,17 @@ package com.demo.server.config;
 
 import com.demo.server.common.util.DateUtil;
 import com.demo.server.common.util.RandomUtil;
-import com.demo.server.interceptor.RateLimit;
-import com.google.j2objc.annotations.ReflectionSupport;
+import com.demo.server.common.interceptor.RateLimit;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ConfigurationBuilder;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.UnknownHostException;

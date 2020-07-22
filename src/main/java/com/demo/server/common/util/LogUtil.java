@@ -13,47 +13,68 @@ import com.demo.server.common.constant.AppConstant;
 
 public class LogUtil {
 
-	public static enum LogLevel {
-		INFO, WARN, ERROR;
-	}
+    public static final String APP_FLAG = "^-^ ";
 
-	private static Logger accessLogger = LoggerFactory.getLogger(AppConstant.LOGGER_ACCESS);
+    public static enum LogLevel {
+        INFO, WARN, ERROR;
+    }
 
-	private static Logger exceptionLogger = LoggerFactory.getLogger(LogUtil.class);
+    private static Logger accessLogger = LoggerFactory.getLogger(AppConstant.LOGGER_ACCESS);
 
-	public static void accessLog(LogLevel level, HttpServletRequest request, String responseStr, String code,
-			long cost) {
+    private static Logger exceptionLogger = LoggerFactory.getLogger(LogUtil.class);
 
-		String logMsgStr = RequestUtil.getIp(request) + LOG_SPLIT + request.getRequestURI() + LOG_SPLIT
-				+ request.getMethod() + LOG_SPLIT + code + LOG_SPLIT + cost + LOG_SPLIT
-				+ JSONObject.toJSONString(RequestUtil.getHttpParameter(request)) + LOG_SPLIT + responseStr;
+    public static void accessLog(LogLevel level, HttpServletRequest request, String responseStr, String code,
+                                 long cost) {
 
-		switch (level) {
-		case INFO:
-			accessLogger.info(logMsgStr);
-			break;
-		case WARN:
-			accessLogger.warn(logMsgStr);
-			break;
-		case ERROR:
-			accessLogger.error(logMsgStr);
-			break;
-		default:
-			accessLogger.info(logMsgStr);
-			break;
-		}
+        StringBuilder logSb = new StringBuilder();
+        logSb.append(RequestUtil.getIp(request));
+        logSb.append(LOG_SPLIT);
+        logSb.append(request.getRequestURI());
+        logSb.append(LOG_SPLIT);
+        logSb.append(request.getMethod());
+        logSb.append(LOG_SPLIT);
+        logSb.append(code);
+        logSb.append(LOG_SPLIT);
+        logSb.append(JSONObject.toJSONString(RequestUtil.getHttpParameter(request)));
+        logSb.append(LOG_SPLIT);
+        logSb.append(responseStr);
 
-	}
+        String logMsgStr = logSb.toString();
 
-	public static void exceptionLog(HttpServletRequest request, Result<?> result, Throwable t) {
+        switch (level) {
+            case INFO:
+                accessLogger.info(logMsgStr);
+                break;
+            case WARN:
+                accessLogger.warn(logMsgStr);
+                break;
+            case ERROR:
+                accessLogger.error(logMsgStr);
+                break;
+            default:
+                accessLogger.info(logMsgStr);
+                break;
+        }
 
-		String logMsgStr = RequestUtil.getIp(request) + LOG_SPLIT + request.getRequestURI() + LOG_SPLIT
-				+ request.getMethod() + LOG_SPLIT + result.getCode() + LOG_SPLIT
-				+ JSONObject.toJSONString(RequestUtil.getHttpParameter(request)) + LOG_SPLIT
-				+ JSONObject.toJSONString(result);
+    }
 
-		exceptionLogger.error(logMsgStr, t);
+    public static void exceptionLog(HttpServletRequest request, Result<?> result, Throwable t) {
 
-	}
+        StringBuilder logSb = new StringBuilder();
+        logSb.append(RequestUtil.getIp(request));
+        logSb.append(LOG_SPLIT);
+        logSb.append(request.getRequestURI());
+        logSb.append(LOG_SPLIT);
+        logSb.append(request.getMethod());
+        logSb.append(LOG_SPLIT);
+        logSb.append(result.getCode());
+        logSb.append(LOG_SPLIT);
+        logSb.append(JSONObject.toJSONString(RequestUtil.getHttpParameter(request)));
+        logSb.append(LOG_SPLIT);
+        logSb.append(JSONObject.toJSONString(result));
+
+        exceptionLogger.error(logSb.toString(), t);
+
+    }
 
 }

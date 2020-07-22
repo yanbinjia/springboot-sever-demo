@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.exception.AppException;
-import com.demo.server.interceptor.SignPass;
-import com.demo.server.interceptor.TokenPass;
+import com.demo.server.common.interceptor.SignPass;
+import com.demo.server.common.interceptor.TokenPass;
 
 @RestController
 @RequestMapping("/")

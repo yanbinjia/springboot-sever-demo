@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.BufferedImageHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -20,8 +18,8 @@ import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.demo.server.interceptor.SignInterceptor;
-import com.demo.server.interceptor.TokenInterceptor;
+import com.demo.server.common.interceptor.SignInterceptor;
+import com.demo.server.common.interceptor.TokenInterceptor;
 
 @Configuration
 public class AppWebMvcConfig implements WebMvcConfigurer {

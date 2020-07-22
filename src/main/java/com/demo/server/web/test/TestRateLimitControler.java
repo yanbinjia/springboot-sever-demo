@@ -1,18 +1,13 @@
 package com.demo.server.web.test;
 
-import com.codahale.metrics.Timer;
-import com.demo.server.service.base.metrics.MetricBean;
-import com.demo.server.service.base.metrics.MetricService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
-import com.demo.server.interceptor.RateLimit;
-import com.demo.server.interceptor.TokenPass;
-
-import java.util.Map;
+import com.demo.server.common.interceptor.RateLimit;
+import com.demo.server.common.interceptor.TokenPass;
 
 @RestController
 @RequestMapping("/test/rate")

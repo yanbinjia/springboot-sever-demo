@@ -1,4 +1,4 @@
-package com.demo.server.service.base;
+package com.demo.server.service.base.mail;
 
 import java.io.File;
 import java.util.Map;

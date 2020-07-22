@@ -1,11 +1,7 @@
 package com.demo.server.web.test;
 
-import com.alibaba.fastjson.JSONObject;
-import com.demo.server.bean.base.Result;
-import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.util.LogUtil;
-import com.demo.server.interceptor.SignPass;
-import com.demo.server.interceptor.TokenPass;
+import com.demo.server.common.interceptor.SignPass;
+import com.demo.server.common.interceptor.TokenPass;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

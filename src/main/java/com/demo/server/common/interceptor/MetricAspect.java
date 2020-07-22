@@ -1,4 +1,4 @@
-package com.demo.server.interceptor;
+package com.demo.server.common.interceptor;
 
 import com.demo.server.service.base.metrics.EventType;
 import com.demo.server.service.base.metrics.MetricEvent;
@@ -12,10 +12,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
 @Component
@@ -37,6 +34,8 @@ public class MetricAspect {
         long startTime = System.currentTimeMillis();
         String methodStr = this.getMethodStr(joinPoint);
 
+        log.debug(">>> MetricAspect doAround before joinPoint.proceed(). Method=[{}]", methodStr);
+
         // 执行目标方法，Invoke the method.
         Object object = joinPoint.proceed();
 
@@ -48,6 +47,8 @@ public class MetricAspect {
 
             MetricService.putMetricEvent(metirc);
         }
+
+        log.debug(">>> MetricAspect doAround after joinPoint.proceed(). Method=[{}]", methodStr);
 
         return object;
     }
