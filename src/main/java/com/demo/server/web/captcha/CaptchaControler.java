@@ -97,6 +97,38 @@ public class CaptchaControler {
             response.setHeader("Cache-Control", "no-cache");
             response.setDateHeader("Expires", 0);
 
+            // 三个参数分别为宽、高、位数
+            SpecCaptcha captcha = new SpecCaptcha(130, 48, 5);
+
+            // captcha.setFont(Captcha.FONT_1);
+
+            // 设置类型，纯数字、纯字母、字母数字混合
+            captcha.setCharType(Captcha.TYPE_ONLY_NUMBER);
+
+            // 验证码图片的字符
+            String captchaText = captcha.text();
+
+            log.debug("captchaText=[{}]", captchaText);
+
+            // 输出图片流
+            captcha.out(response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @TokenPass
+    @SignPass
+    @GetMapping("/test5")
+    public void test5(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // 设置请求头为输出图片类型
+            response.setContentType("image/gif");
+            response.setHeader("Pragma", "No-cache");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setDateHeader("Expires", 0);
+
             // 算术类型
             ArithmeticCaptcha captcha = new ArithmeticCaptcha(130, 48);
             captcha.setLen(3);  // 几位数运算，默认是两位
@@ -114,5 +146,7 @@ public class CaptchaControler {
             e.printStackTrace();
         }
     }
+
+
 
 }

@@ -19,7 +19,14 @@ import com.demo.server.common.util.RequestUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Configuration
+/**
+ * 注意:
+ *
+ * @Configuration 与Application的@ServletComponentScan同时存在,会导致filter加载2遍.
+ * <p>
+ * 如果开启了@ServletComponentScan，就需要把@Configuration去掉. 否则filter会加载2遍.
+ * 如果未开启@ServletComponentScan, 需要@Configuration/@Component激活@WebFilter
+ */
 @WebFilter(urlPatterns = "/*", filterName = "TraceFilter")
 @Slf4j
 public class TraceFilter implements Filter {
@@ -45,7 +52,7 @@ public class TraceFilter implements Filter {
         TraceContext.getInstance().setStartTime(System.currentTimeMillis());
 
         // 生成并设置 traceId
-        String traceId = UUID.randomUUID().toString().replace("-", "").toLowerCase();
+        String traceId = UUID.randomUUID().toString().toLowerCase();
         TraceContext.getInstance().setTraceId(traceId);
 
         // 设置客户端IP地址
