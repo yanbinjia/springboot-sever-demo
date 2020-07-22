@@ -20,7 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
-import com.demo.server.interceptor.TokenPass;
+import com.demo.server.common.interceptor.TokenPass;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -46,7 +46,7 @@
             <level>INFO</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/stat.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>${log.path}/access.log.%d{yyyy-MM-dd}</fileNamePattern>
         </rollingPolicy>
     </appender>
 

@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.druid.stat.DruidStatManagerFacade;
-import com.demo.server.interceptor.SignPass;
-import com.demo.server.interceptor.TokenPass;
+import com.demo.server.common.interceptor.SignPass;
+import com.demo.server.common.interceptor.TokenPass;
 
 @RestController
 @RequestMapping("/druidstat/")

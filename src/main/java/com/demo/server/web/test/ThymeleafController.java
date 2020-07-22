@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.demo.server.interceptor.TokenPass;
+import com.demo.server.common.interceptor.TokenPass;
 
 @Controller
 @RequestMapping("/test/thym")
