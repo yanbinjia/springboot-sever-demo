@@ -7,11 +7,13 @@
 package com.demo.server.common.listener;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+@Configuration
 @WebListener
 @Slf4j
 public class MyServletContextListener implements ServletContextListener {

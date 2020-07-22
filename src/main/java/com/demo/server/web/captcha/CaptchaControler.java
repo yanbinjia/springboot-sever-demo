@@ -1,5 +1,7 @@
 package com.demo.server.web.captcha;
 
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.captcha.easycaptcha.ArithmeticCaptcha;
 import com.demo.server.common.captcha.easycaptcha.GifCaptcha;
 import com.demo.server.common.captcha.easycaptcha.SpecCaptcha;
@@ -7,6 +9,7 @@ import com.demo.server.common.captcha.easycaptcha.base.Captcha;
 import com.demo.server.common.captcha.easycaptcha.utils.CaptchaUtil;
 import com.demo.server.common.interceptor.SignPass;
 import com.demo.server.common.interceptor.TokenPass;
+import com.demo.server.common.util.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/captcha")
@@ -75,9 +80,9 @@ public class CaptchaControler {
             captcha.setCharType(Captcha.TYPE_ONLY_NUMBER);
 
             // 验证码图片的字符
-            String captchaText = captcha.text();
+            String verifyCode = captcha.text();
 
-            log.debug("captchaText=[{}]", captchaText);
+            log.debug("verifyCode=[{}]", verifyCode);
 
             // 输出图片流
             captcha.out(response.getOutputStream());
@@ -105,10 +110,9 @@ public class CaptchaControler {
             // 设置类型，纯数字、纯字母、字母数字混合
             captcha.setCharType(Captcha.TYPE_ONLY_NUMBER);
 
-            // 验证码图片的字符
-            String captchaText = captcha.text();
+            String verifyCode = captcha.text();
 
-            log.debug("captchaText=[{}]", captchaText);
+            log.debug("verifyCode=[{}]", verifyCode);
 
             // 输出图片流
             captcha.out(response.getOutputStream());
@@ -134,10 +138,9 @@ public class CaptchaControler {
             captcha.setLen(3);  // 几位数运算，默认是两位
             captcha.text();  // 获取运算的结果：5
 
-            // 验证码图片的字符
-            String captchaText = captcha.text();
+            String verifyCode = captcha.text();
 
-            log.debug("captchaText=[{}]", captchaText);
+            log.debug("verifyCode=[{}]", verifyCode);
 
             // 输出图片流
             captcha.out(response.getOutputStream());
@@ -147,6 +150,27 @@ public class CaptchaControler {
         }
     }
 
+    @TokenPass
+    @SignPass
+    @GetMapping("/test6")
+    public Result<Map<String, String>> test6(HttpServletRequest request, HttpServletResponse response) {
+
+        SpecCaptcha captcha = new SpecCaptcha(130, 48, 5);
+        captcha.setCharType(Captcha.TYPE_NUM_AND_UPPER);
+
+        String verifyCode = captcha.text();
+        String key = RandomUtil.uuidWithoutSeparator();
+
+        Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
+        Map<String, String> map = new HashMap<>();
+        map.put("key", key);
+        map.put("image", captcha.toBase64());
+        result.setData(map);
+
+        log.debug("verifyCode=[{}]", verifyCode);
+
+        return result;
+    }
 
 
 }

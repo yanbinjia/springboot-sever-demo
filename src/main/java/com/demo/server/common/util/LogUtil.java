@@ -4,6 +4,7 @@ import static com.demo.server.common.constant.AppConstant.LOG_SPLIT;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +14,6 @@ import com.demo.server.common.constant.AppConstant;
 
 public class LogUtil {
 
-    public static final String APP_FLAG = "^-^ ";
-
     public static enum LogLevel {
         INFO, WARN, ERROR;
     }
@@ -23,8 +22,7 @@ public class LogUtil {
 
     private static Logger exceptionLogger = LoggerFactory.getLogger(LogUtil.class);
 
-    public static void accessLog(LogLevel level, HttpServletRequest request, String responseStr, String code,
-                                 long cost) {
+    public static void accessLog(LogLevel level, HttpServletRequest request, String responseStr, String code, long cost) {
 
         StringBuilder logSb = new StringBuilder();
         logSb.append(RequestUtil.getIp(request));
@@ -37,7 +35,7 @@ public class LogUtil {
         logSb.append(LOG_SPLIT);
         logSb.append(JSONObject.toJSONString(RequestUtil.getHttpParameter(request)));
         logSb.append(LOG_SPLIT);
-        logSb.append(responseStr);
+        logSb.append(responseStr(responseStr));
 
         String logMsgStr = logSb.toString();
 
@@ -71,10 +69,17 @@ public class LogUtil {
         logSb.append(LOG_SPLIT);
         logSb.append(JSONObject.toJSONString(RequestUtil.getHttpParameter(request)));
         logSb.append(LOG_SPLIT);
-        logSb.append(JSONObject.toJSONString(result));
+        logSb.append(responseStr(JSONObject.toJSONString(result)));
 
         exceptionLogger.error(logSb.toString(), t);
 
+    }
+
+    public static String responseStr(String responseStr) {
+        if (StringUtils.isNotBlank(responseStr) && responseStr.length() > 250) {
+            responseStr = responseStr.substring(0, 240) + "...}";
+        }
+        return responseStr;
     }
 
 }
