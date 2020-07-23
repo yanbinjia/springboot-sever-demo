@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @tk.mybatis.spring.annotation.MapperScan(basePackages = {"com.demo.server.dao"})
 /**
- * @ServletComponentScan
- * enable scanning for @WebFilter, @WebListener and @WebServlet.
+ * @ServletComponentScan作用: enable scanning for @WebFilter, @WebListener and @WebServlet.
  * 默认情况下SpringBoot,不启用@WebFilter, @WebListener and @WebServlet.
+ * (可以使用@Component、@Configuration声明单独开启某个实现bean。)
  *
  * @Configuration 与 @ServletComponentScan,同时开启会导致 @WebFilter 加载两次(2.2.8),
  * 所以关闭@ServletComponentScan,使用@Configuration单独开启.
