@@ -105,8 +105,6 @@ public class CaptchaControler {
             // 三个参数分别为宽、高、位数
             SpecCaptcha captcha = new SpecCaptcha(130, 48, 5);
 
-            // captcha.setFont(Captcha.FONT_1);
-
             // 设置类型，纯数字、纯字母、字母数字混合
             captcha.setCharType(Captcha.TYPE_ONLY_NUMBER);
 
@@ -163,7 +161,7 @@ public class CaptchaControler {
 
         Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
         Map<String, String> map = new HashMap<>();
-        map.put("key", key);
+        map.put("key", key);// 与验证码一起提交服务端,用于验证匹配
         map.put("image", captcha.toBase64());
         result.setData(map);
 

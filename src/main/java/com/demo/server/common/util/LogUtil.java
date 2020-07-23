@@ -76,8 +76,8 @@ public class LogUtil {
     }
 
     public static String responseStr(String responseStr) {
-        if (StringUtils.isNotBlank(responseStr) && responseStr.length() > 250) {
-            responseStr = responseStr.substring(0, 240) + "...}";
+        if (StringUtils.isNotBlank(responseStr) && responseStr.length() > 310) {
+            responseStr = responseStr.substring(0, 300) + "...}";
         }
         return responseStr;
     }

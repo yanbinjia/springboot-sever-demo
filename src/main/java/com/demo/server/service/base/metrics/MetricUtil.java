@@ -1,6 +1,5 @@
 package com.demo.server.service.base.metrics;
 
-import com.codahale.metrics.MetricAttribute;
 import com.codahale.metrics.Snapshot;
 import com.codahale.metrics.Timer;
 
@@ -16,55 +15,64 @@ public class MetricUtil {
     private static final long durationFactor = durationUnit.toNanos(1);
     private static final long rateFactor = rateUnit.toSeconds(1);
 
-    public static List<MetricBean> toTimerList(SortedMap<String, Timer> timers) {
-        List<MetricBean> result = null;
+    public static List<Metric> toTimerList(SortedMap<String, Timer> timers) {
+        List<Metric> result = null;
         Timer timer = null;
-        MetricBean metricBean = null;
+        Metric metric = null;
+        MetricQps qps;
+        MetricRt rt;
+
         if (!timers.isEmpty()) {
             result = new ArrayList<>();
             for (Map.Entry<String, Timer> entry : timers.entrySet()) {
-                metricBean = new MetricBean();
+                metric = new Metric();
+                qps = new MetricQps();
+                rt = new MetricRt();
+
                 timer = entry.getValue();
 
-                metricBean.setMethod(entry.getKey());
+                metric.setMethod(entry.getKey());
 
-                metricBean.setCount(String.valueOf(timer.getCount()));
-                metricBean.setM1_rate(getRateStr(timer.getOneMinuteRate()));
-                metricBean.setM5_rate(getRateStr(timer.getFiveMinuteRate()));
-                metricBean.setM15_rate(getRateStr(timer.getFifteenMinuteRate()));
-                metricBean.setMean_rate(getRateStr(timer.getMeanRate()));
+                metric.setCount(timer.getCount());
+                qps.setM1_rate(getRateStr(timer.getOneMinuteRate()));
+                qps.setM5_rate(getRateStr(timer.getFiveMinuteRate()));
+                qps.setM15_rate(getRateStr(timer.getFifteenMinuteRate()));
+                qps.setMean_rate(getRateStr(timer.getMeanRate()));
 
                 Snapshot snapshot = timer.getSnapshot();
 
-                metricBean.setMin(getDurationStr(snapshot.getMin()));
-                metricBean.setMax(getDurationStr(snapshot.getMax()));
-                metricBean.setMean(getDurationStr(snapshot.getMean()));
-                metricBean.setStddev(getDurationStr(snapshot.getStdDev()));
+                rt.setMin(getDurationStr(snapshot.getMin()));
+                rt.setMax(getDurationStr(snapshot.getMax()));
+                rt.setMean(getDurationStr(snapshot.getMean()));
 
-                metricBean.setP50(getDurationStr(snapshot.getMedian()));
-                metricBean.setP75(getDurationStr(snapshot.get75thPercentile()));
-                metricBean.setP95(getDurationStr(snapshot.get95thPercentile()));
-                metricBean.setP98(getDurationStr(snapshot.get98thPercentile()));
-                metricBean.setP99(getDurationStr(snapshot.get99thPercentile()));
-                metricBean.setP999(getDurationStr(snapshot.get999thPercentile()));
+                rt.setP75(getDurationStr(snapshot.get75thPercentile()));
+                rt.setP95(getDurationStr(snapshot.get95thPercentile()));
+                rt.setP99(getDurationStr(snapshot.get99thPercentile()));
 
-                result.add(metricBean);
+                metric.setQps(qps);
+                metric.setRt(rt);
+
+                result.add(metric);
             }
+
+            Collections.sort(result);
+
         }
+
 
         return result;
     }
 
     private static String getRateStr(double inputDouble) {
         // return String.format(locale, "%2.2f", convertRate(inputDouble));
-        return String.format(locale, "%2.2f calls/%s", convertRate(inputDouble), getRateUnit());
+        // return String.format(locale, "%2.2f calls/%s", convertRate(inputDouble), getRateUnit());
+        return String.format(locale, "%2.2f qps", convertRate(inputDouble));
     }
 
     private static String getDurationStr(double inputDouble) {
-        // String.format(locale, "%2.2f %s", convertDuration(inputDouble), getDurationUnit())
         // return String.format(locale, "%2.2f", convertDuration(inputDouble));
-        return String.format(locale, "%2.2f %s", convertDuration(inputDouble), getDurationUnit());
-
+        // return String.format(locale, "%2.2f %s", convertDuration(inputDouble), getDurationUnit());
+        return String.format(locale, "%2.2f ms", convertDuration(inputDouble));
     }
 
     private static String getRateUnit() {
