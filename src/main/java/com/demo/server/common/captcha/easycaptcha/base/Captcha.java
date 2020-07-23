@@ -43,7 +43,7 @@ public abstract class Captcha extends Randoms {
     protected String chars = null; // 当前验证码
 
     protected int drawBesselLineNum = 1;// 干扰线数量
-    protected int drawOvalNum = 2;// 干扰圆圈数量
+    protected int drawOvalNum = 3;// 干扰圆圈数量
 
     /**
      * 生成随机验证码
