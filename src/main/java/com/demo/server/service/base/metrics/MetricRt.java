@@ -15,7 +15,7 @@ public class MetricRt {
     private String mean;
     private String stddev;
 
-    private String p50;
+    private String median;
     private String p75;
     private String p95;
     private String p98;

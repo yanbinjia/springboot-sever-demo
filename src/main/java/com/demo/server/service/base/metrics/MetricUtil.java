@@ -33,7 +33,7 @@ public class MetricUtil {
 
                 metric.setMethod(entry.getKey());
 
-                metric.setCount(String.valueOf(timer.getCount()));
+                metric.setCount(timer.getCount());
                 qps.setM1_rate(getRateStr(timer.getOneMinuteRate()));
                 qps.setM5_rate(getRateStr(timer.getFiveMinuteRate()));
                 qps.setM15_rate(getRateStr(timer.getFifteenMinuteRate()));
@@ -44,16 +44,21 @@ public class MetricUtil {
                 rt.setMin(getDurationStr(snapshot.getMin()));
                 rt.setMax(getDurationStr(snapshot.getMax()));
                 rt.setMean(getDurationStr(snapshot.getMean()));
-                rt.setP50(getDurationStr(snapshot.getMedian()));
+
                 rt.setP75(getDurationStr(snapshot.get75thPercentile()));
                 rt.setP95(getDurationStr(snapshot.get95thPercentile()));
+                rt.setP99(getDurationStr(snapshot.get99thPercentile()));
 
                 metric.setQps(qps);
                 metric.setRt(rt);
 
                 result.add(metric);
             }
+
+            Collections.sort(result);
+
         }
+
 
         return result;
     }

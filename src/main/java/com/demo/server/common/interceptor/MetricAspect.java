@@ -21,10 +21,15 @@ import java.lang.reflect.Method;
 @Order(-100)
 public class MetricAspect {
 
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping) " +
+    /*
+    @Pointcut(" @annotation(org.springframework.web.bind.annotation.RequestMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.GetMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.PostMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.PutMapping)")
+     */
+
+    @Pointcut(" @within(org.springframework.web.bind.annotation.RestController) " +
+            "|| @within(org.springframework.stereotype.Controller) ")
     public void pointCut() {
 
     }
