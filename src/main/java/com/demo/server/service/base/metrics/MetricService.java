@@ -30,7 +30,7 @@ public class MetricService {
         return MetricService.METRIC_EVENT_QUEUE.offer(metirc);
     }
 
-    public static List<MetricBean> getAllMetrics() {
+    public static List<Metric> getAllMetrics() {
         return MetricUtil.toTimerList(metricRegistry.getTimers());
     }
 

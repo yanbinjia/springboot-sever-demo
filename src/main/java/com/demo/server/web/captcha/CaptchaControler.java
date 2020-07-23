@@ -161,7 +161,7 @@ public class CaptchaControler {
 
         Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
         Map<String, String> map = new HashMap<>();
-        map.put("key", key);
+        map.put("key", key);// 与验证码一起提交服务端,用于验证匹配
         map.put("image", captcha.toBase64());
         result.setData(map);
 
