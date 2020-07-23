@@ -25,9 +25,12 @@ public class MetricAspect {
     @Pointcut(" @annotation(org.springframework.web.bind.annotation.RequestMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.GetMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.PostMapping) " +
-            "|| @annotation(org.springframework.web.bind.annotation.PutMapping)")
+            "|| @annotation(org.springframework.web.bind.annotation.PutMapping) ")
      */
 
+    /**
+     * @within: 使用"@within(注解类型)" 匹配所有持有指定注解类型内的方法
+     */
     @Pointcut(" @within(org.springframework.web.bind.annotation.RestController) " +
             "|| @within(org.springframework.stereotype.Controller) ")
     public void pointCut() {
