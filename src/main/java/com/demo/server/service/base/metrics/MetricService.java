@@ -60,6 +60,7 @@ public class MetricService {
                                     timer.update(event.getCost(), TimeUnit.MILLISECONDS);
                                 }
                             }
+                            log.debug(">>> One MetricEvent deal done.");
                         } catch (InterruptedException e) {
                             log.error("InterruptedException", e);
                         }
