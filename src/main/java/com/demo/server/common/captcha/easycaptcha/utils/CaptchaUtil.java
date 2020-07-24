@@ -157,4 +157,12 @@ public class CaptchaUtil {
         response.setDateHeader("Expires", 0);
     }
 
+    public static void setHeader(HttpServletResponse response, String captchaKey) {
+        response.setContentType("image/gif");
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setHeader("Captcha-Key", captchaKey);// captchaKey
+    }
+
 }

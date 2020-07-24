@@ -40,7 +40,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
                                   ServerHttpResponse resp) {
         HttpServletRequest request = ((ServletServerHttpRequest) req).getServletRequest();
 
-        log.debug(">>> ResponseAdvice beforeBodyWrite deal. Uri=[{}]", request.getRequestURI());
+        log.debug(">>> beforeBodyWrite deal. Uri=[{}]", request.getRequestURI());
 
         long cost = System.currentTimeMillis() - TraceContext.getInstance().getStartTime();
 

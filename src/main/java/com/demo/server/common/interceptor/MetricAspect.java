@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 public class MetricAspect {
 
     /*
+     * @annotation: 使用"@annotation(注解)" 匹配持有该注解的方法
     @Pointcut(" @annotation(org.springframework.web.bind.annotation.RequestMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.GetMapping) " +
             "|| @annotation(org.springframework.web.bind.annotation.PostMapping) " +
@@ -29,7 +30,7 @@ public class MetricAspect {
      */
 
     /**
-     * @within: 使用"@within(注解类型)" 匹配所有持有指定注解类型内的方法
+     * @within: 使用"@within(注解)" 匹配持有该注解的类中的所有方法
      */
     @Pointcut(" @within(org.springframework.web.bind.annotation.RestController) " +
             "|| @within(org.springframework.stereotype.Controller) ")
@@ -42,7 +43,7 @@ public class MetricAspect {
         long startTime = System.currentTimeMillis();
         String methodStr = this.getMethodStr(joinPoint);
 
-        log.debug(">>> MetricAspect doAround before joinPoint.proceed(). Method=[{}]", methodStr);
+        log.debug(">>> doAround before joinPoint.proceed(). Method=[{}]", methodStr);
 
         // 执行目标方法，Invoke the method.
         Object object = joinPoint.proceed();
@@ -56,7 +57,7 @@ public class MetricAspect {
             MetricService.putMetricEvent(metirc);
         }
 
-        log.debug(">>> MetricAspect doAround after joinPoint.proceed(). Method=[{}]", methodStr);
+        log.debug(">>> doAround after joinPoint.proceed(). Method=[{}]", methodStr);
 
         return object;
     }

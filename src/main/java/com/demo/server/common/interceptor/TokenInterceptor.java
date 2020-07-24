@@ -43,8 +43,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         // 需要验证token的请求参数中必须有userId，用于校验token和userId的关系
         String userId = request.getHeader(AppConstant.AUTH_UID_PARAM_NAME);
 
-        log.debug(">>> TokenInterceptor token=[{}],userId=[{}]", token, userId);
-        log.debug(">>> TokenInterceptor Handler type [{}]", handler.getClass().getName());
+        log.debug(">>> token=[{}],userId=[{}]", token, userId);
+        log.debug(">>> HandlerType [{}]", handler.getClass().getName());
 
         // -----------------------------------------------------
         // 检查HandlerMethod
@@ -54,7 +54,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
 
-        log.debug(">>> TokenInterceptor HandlerMethod [{}]", HandlerInterceptorUtil.handlerMethodToStr(handlerMethod));
+        log.debug(">>> HandlerMethod [{}]", HandlerInterceptorUtil.handlerMethodToStr(handlerMethod));
 
         // 检查是否是自定义Controller
         if (!HandlerInterceptorUtil.isNeedIntercept(handlerMethod)) {

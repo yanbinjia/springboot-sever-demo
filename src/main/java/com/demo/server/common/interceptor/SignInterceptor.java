@@ -35,10 +35,11 @@ public class SignInterceptor extends HandlerInterceptorAdapter {
         // -----------------------------------------------------
         // 开关
         if (!signConfig.isTurnOn()) {
+            log.debug(">>> signConfig turnOff.");
             return true;
         }
 
-        log.debug(">>> SignInterceptor deal. Handler type [{}]", handler.getClass().getName());
+        log.debug(">>> preHandle HandlerType [{}]", handler.getClass().getName());
 
         // -----------------------------------------------------
         // 检查HandlerMethod
@@ -49,7 +50,7 @@ public class SignInterceptor extends HandlerInterceptorAdapter {
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
 
-        log.debug(">>> SignInterceptor deal. HandlerMethod [{}]", HandlerInterceptorUtil.handlerMethodToStr(handlerMethod));
+        log.debug(">>> preHandle HandlerMethod [{}]", HandlerInterceptorUtil.handlerMethodToStr(handlerMethod));
 
         // 检查是否是自定义Controller
         if (!HandlerInterceptorUtil.isNeedIntercept(handlerMethod)) {

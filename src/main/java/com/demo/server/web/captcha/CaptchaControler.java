@@ -62,12 +62,6 @@ public class CaptchaControler {
     @GetMapping("/test3")
     public void test3(HttpServletRequest request, HttpServletResponse response) {
         try {
-            // 设置请求头为输出图片类型
-            response.setContentType("image/gif");
-            response.setHeader("Pragma", "No-cache");
-            response.setHeader("Cache-Control", "no-cache");
-            response.setDateHeader("Expires", 0);
-
             // 三个参数分别为宽、高、位数
             SpecCaptcha captcha = new SpecCaptcha(130, 48, 5);
             // 设置字体
@@ -79,10 +73,12 @@ public class CaptchaControler {
             // 设置类型，纯数字、纯字母、字母数字混合
             captcha.setCharType(Captcha.TYPE_ONLY_NUMBER);
 
-            // 验证码图片的字符
             String verifyCode = captcha.text();
+            String captchaKey = RandomUtil.uuidWithoutSeparator();
 
             log.debug("verifyCode=[{}]", verifyCode);
+
+            CaptchaUtil.setHeader(response, captchaKey);
 
             // 输出图片流
             captcha.out(response.getOutputStream());
@@ -96,12 +92,6 @@ public class CaptchaControler {
     @GetMapping("/test4")
     public void test4(HttpServletRequest request, HttpServletResponse response) {
         try {
-            // 设置请求头为输出图片类型
-            response.setContentType("image/gif");
-            response.setHeader("Pragma", "No-cache");
-            response.setHeader("Cache-Control", "no-cache");
-            response.setDateHeader("Expires", 0);
-
             // 三个参数分别为宽、高、位数
             SpecCaptcha captcha = new SpecCaptcha(130, 48, 5);
 
@@ -109,8 +99,11 @@ public class CaptchaControler {
             captcha.setCharType(Captcha.TYPE_ONLY_NUMBER);
 
             String verifyCode = captcha.text();
+            String captchaKey = RandomUtil.uuidWithoutSeparator();
 
             log.debug("verifyCode=[{}]", verifyCode);
+
+            CaptchaUtil.setHeader(response, captchaKey);
 
             // 输出图片流
             captcha.out(response.getOutputStream());
@@ -125,20 +118,17 @@ public class CaptchaControler {
     @GetMapping("/test5")
     public void test5(HttpServletRequest request, HttpServletResponse response) {
         try {
-            // 设置请求头为输出图片类型
-            response.setContentType("image/gif");
-            response.setHeader("Pragma", "No-cache");
-            response.setHeader("Cache-Control", "no-cache");
-            response.setDateHeader("Expires", 0);
-
             // 算术类型
             ArithmeticCaptcha captcha = new ArithmeticCaptcha(130, 48);
             captcha.setLen(3);  // 几位数运算，默认是两位
             captcha.text();  // 获取运算的结果：5
 
             String verifyCode = captcha.text();
+            String captchaKey = RandomUtil.uuidWithoutSeparator();
 
             log.debug("verifyCode=[{}]", verifyCode);
+
+            CaptchaUtil.setHeader(response, captchaKey);
 
             // 输出图片流
             captcha.out(response.getOutputStream());
@@ -157,11 +147,11 @@ public class CaptchaControler {
         captcha.setCharType(Captcha.TYPE_NUM_AND_UPPER);
 
         String verifyCode = captcha.text();
-        String key = RandomUtil.uuidWithoutSeparator();
+        String captchaKey = RandomUtil.uuidWithoutSeparator();
 
         Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
         Map<String, String> map = new HashMap<>();
-        map.put("key", key);// 与验证码一起提交服务端,用于验证匹配
+        map.put("key", captchaKey);// 与验证码一起提交服务端,用于验证匹配
         map.put("image", captcha.toBase64());
         result.setData(map);
 
