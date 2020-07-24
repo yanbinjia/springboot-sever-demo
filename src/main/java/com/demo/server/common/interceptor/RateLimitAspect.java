@@ -46,7 +46,7 @@ public class RateLimitAspect {
                 .getRequest();
         String uri = request.getRequestURI();
 
-        log.debug(">>> RateLimitAspect doAround before joinPoint.proceed(). Uri=[{}]", uri);
+        log.debug(">>> doAround before joinPoint.proceed(). Uri=[{}]", uri);
 
         // 获取RateLimit注解
         RateLimit rateLimitAnnotation = this.getRateLimitAnnotation(joinPoint);
@@ -71,7 +71,7 @@ public class RateLimitAspect {
         // 执行目标方法，Invoke the method.
         Object object = joinPoint.proceed();
 
-        log.debug(">>> RateLimitAspect doAround after joinPoint.proceed(). Uri=[{}]", uri);
+        log.debug(">>> doAround after joinPoint.proceed(). Uri=[{}]", uri);
 
         return object;
     }

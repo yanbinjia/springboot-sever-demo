@@ -70,7 +70,7 @@ public class TraceFilter implements Filter {
         // 响应头中设置traceId
         httpServletResponse.addHeader(TRACE_HEADER_NAME, traceId);
 
-        log.debug(">>> TraceFilter deal start. Uri=[{}]", httpServletRequest.getRequestURI());
+        log.debug(">>> deal start. Uri=[{}]", httpServletRequest.getRequestURI());
 
         try {
             chain.doFilter(request, response);
@@ -78,13 +78,13 @@ public class TraceFilter implements Filter {
             TraceContext.getInstance().remove();
         }
 
-        log.debug(">>> TraceFilter after chain.doFilter(). Uri=[{}]", httpServletRequest.getRequestURI());
+        log.debug(">>> after chain.doFilter(). Uri=[{}]", httpServletRequest.getRequestURI());
 
     }
 
     @Override
     public void destroy() {
-        log.debug(">>> TraceFilter destroy.");
         TraceContext.getInstance().remove();
+        log.debug(">>> destroy.");
     }
 }
