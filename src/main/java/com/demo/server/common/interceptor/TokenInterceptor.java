@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.demo.server.common.interceptor.filter.TraceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -54,10 +55,10 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
 
-        log.debug(">>> HandlerMethod [{}]", HandlerInterceptorUtil.handlerMethodToStr(handlerMethod));
+        log.debug(">>> HandlerMethod [{}]", InterceptorUtil.handlerMethodToStr(handlerMethod));
 
         // 检查是否是自定义Controller
-        if (!HandlerInterceptorUtil.isNeedIntercept(handlerMethod)) {
+        if (!InterceptorUtil.isNeedIntercept(handlerMethod)) {
             return true;
         }
 

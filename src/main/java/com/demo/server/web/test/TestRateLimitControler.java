@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.interceptor.RateLimit;
+import com.demo.server.common.interceptor.aspect.RateLimit;
 import com.demo.server.common.interceptor.TokenPass;
 
 @RestController

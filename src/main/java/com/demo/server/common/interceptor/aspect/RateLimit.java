@@ -1,4 +1,10 @@
-package com.demo.server.common.interceptor;
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-24T14:34:15.010+08:00
+ */
+
+package com.demo.server.common.interceptor.aspect;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

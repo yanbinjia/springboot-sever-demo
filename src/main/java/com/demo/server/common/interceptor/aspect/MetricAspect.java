@@ -1,4 +1,10 @@
-package com.demo.server.common.interceptor;
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-24T14:34:15.015+08:00
+ */
+
+package com.demo.server.common.interceptor.aspect;
 
 import com.demo.server.service.base.metrics.EventType;
 import com.demo.server.service.base.metrics.MetricEvent;
@@ -18,7 +24,7 @@ import java.lang.reflect.Method;
 @Component
 @Aspect
 @Slf4j
-@Order(-100)
+@Order(1)
 public class MetricAspect {
 
     /*

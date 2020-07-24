@@ -1,10 +1,18 @@
-package com.demo.server.common.interceptor;
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-24T14:40:16.679+08:00
+ */
+
+package com.demo.server.common.interceptor.advice;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.demo.server.common.interceptor.SignPass;
+import com.demo.server.common.interceptor.TokenPass;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
