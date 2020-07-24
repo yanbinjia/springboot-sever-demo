@@ -1,12 +1,23 @@
-package com.demo.server.common.interceptor;
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-24T14:40:16.653+08:00
+ */
 
+package com.demo.server.common.interceptor.advice;
+
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeException;
@@ -22,6 +33,7 @@ import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.exception.AppException;
 import com.demo.server.common.util.LogUtil;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
  * 应用ControllerAdvice全局异常处理,记录请求异常日志
@@ -34,6 +46,7 @@ import com.demo.server.common.util.LogUtil;
  * 如要处理404这类异常,统一响应格式,可以实现ErrorController接口做统一处理,例如ExceptionErrorController
  */
 @ControllerAdvice
+@Order(-1)
 public class ExceptionAdvice {
 
     @ResponseBody
@@ -86,15 +99,16 @@ public class ExceptionAdvice {
     }
 
     /**
-     * spring 参数缺失，框架默认异常
+     * org.springframework.web.bind.MissingServletRequestParameterException
+     * spring 参数缺失，框架默认异常, 例如: Required Long parameter 'id' is not present
      */
     @ResponseBody
-    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ExceptionHandler({MissingServletRequestParameterException.class})
     public Result<Void> handlerMissParamException(MissingServletRequestParameterException e, HttpServletRequest request,
                                                   HttpServletResponse response) {
 
         Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
-        result.setExtMsg(e.getMessage());
+        result.setExtMsg(e.getParameterName() + ":参数不存在.");
 
         LogUtil.exceptionLog(request, result, e);
 
@@ -102,17 +116,63 @@ public class ExceptionAdvice {
     }
 
     /**
-     * 拦截参数校验异常
+     * Hibernate Validator
+     * org.springframework.web.bind.MethodArgumentNotValidException
+     * 拦截参数校验异常, 需要validate的参数不符合要求, 抛出异常
      */
     @ResponseBody
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public Result<?> handleValidation(MethodArgumentNotValidException e, HttpServletRequest request,
                                       HttpServletResponse response) {
-
         Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
 
-        result.setExtMsg(e.getBindingResult().getAllErrors().stream().map(ExceptionAdvice::buildMessage)
-                .collect(Collectors.joining(";")));
+        result.setExtMsg(this.buildMessage(e));
+
+        LogUtil.exceptionLog(request, result, e);
+
+        return result;
+    }
+
+    /**
+     * org.springframework.http.converter.HttpMessageNotReadableException
+     * 未传递RequestBody参数/RequestBody参数解析异常
+     */
+    @ResponseBody
+    @ExceptionHandler(value = {HttpMessageNotReadableException.class})
+    public Result<?> handleValidation(HttpMessageNotReadableException e, HttpServletRequest request,
+                                      HttpServletResponse response) {
+        Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
+        result.setExtMsg("HttpMessageNotReadable:required request param error.");
+
+        LogUtil.exceptionLog(request, result, e);
+
+        return result;
+    }
+
+    /**
+     * Hibernate Validator
+     * javax.validation.ConstraintViolationException
+     * Controller上加@Validated注解, 在@RequestParam上开启validate能力.
+     * 需要validate的参数不符合要求, 抛出异常
+     */
+    @ResponseBody
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    public Result<?> handleValidation(ConstraintViolationException e, HttpServletRequest request,
+                                      HttpServletResponse response) {
+        Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
+        result.setExtMsg(this.buildMessage(e));
+
+        LogUtil.exceptionLog(request, result, e);
+
+        return result;
+    }
+
+    @ResponseBody
+    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
+    public Result<?> handleValidation(MethodArgumentTypeMismatchException e, HttpServletRequest request,
+                                      HttpServletResponse response) {
+        Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
+        result.setExtMsg(e.getParameter().getParameterName() + ":参数类型不匹配.");
 
         LogUtil.exceptionLog(request, result, e);
 
@@ -150,11 +210,24 @@ public class ExceptionAdvice {
         return result;
     }
 
-    private static String buildMessage(ObjectError error) {
-        if (error instanceof FieldError) {
-            return ((FieldError) error).getField() + error.getDefaultMessage();
-        }
-        return error.getDefaultMessage();
+    private String buildMessage(MethodArgumentNotValidException e) {
+        // 统一格式, "param:msg; ..."
+        return e.getBindingResult().getAllErrors().stream().map(error -> {
+            return ((FieldError) error).getField() + ":" + error.getDefaultMessage();
+        }).sorted().collect(Collectors.joining("; "));
+    }
+
+    private String buildMessage(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        // 统一格式,原格式为"method.param:msg, ...", 处理为"param:msg; ..."
+        return constraintViolations.stream().map((cv) -> {
+            String param = cv.getPropertyPath().toString();
+            int dotindex = param.lastIndexOf(".");
+            if (dotindex > 0) {
+                param = param.substring(dotindex + 1, param.length());
+            }
+            return cv == null ? "" : param + ":" + cv.getMessage();
+        }).sorted().collect(Collectors.joining("; "));
     }
 
 }

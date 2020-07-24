@@ -1,7 +1,12 @@
-package com.demo.server.common.interceptor;
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-24T14:32:33.791+08:00
+ */
+
+package com.demo.server.common.interceptor.filter;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,12 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.demo.server.common.util.RandomUtil;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.context.annotation.Configuration;
 
 import com.demo.server.common.util.RequestUtil;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 
 /**
  * 注意:
@@ -33,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @WebFilter(urlPatterns = "/*", filterName = "TraceFilter")
 @Slf4j
+@Order(1)
 public class TraceFilter implements Filter {
 
     private static final String TRACE_HEADER_NAME = "traceId";
@@ -46,11 +52,11 @@ public class TraceFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 
         // 设置开始时间
         TraceContext.getInstance().setStartTime(System.currentTimeMillis());
@@ -70,10 +76,10 @@ public class TraceFilter implements Filter {
         // 响应头中设置traceId
         httpServletResponse.addHeader(TRACE_HEADER_NAME, traceId);
 
-        log.debug(">>> deal start. Uri=[{}]", httpServletRequest.getRequestURI());
+        log.debug(">>> start filter deal. Uri=[{}]", httpServletRequest.getRequestURI());
 
         try {
-            chain.doFilter(request, response);
+            filterChain.doFilter(servletRequest, servletResponse);
         } finally {
             TraceContext.getInstance().remove();
         }

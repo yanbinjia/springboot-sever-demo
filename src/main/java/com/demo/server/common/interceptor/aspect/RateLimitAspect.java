@@ -1,4 +1,10 @@
-package com.demo.server.common.interceptor;
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-24T14:34:14.938+08:00
+ */
+
+package com.demo.server.common.interceptor.aspect;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -29,12 +35,12 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Aspect
 @Slf4j
-@Order(-10)
+@Order(2)
 public class RateLimitAspect {
 
     private Map<String, RateLimiter> rateLimiterMap = Maps.newConcurrentMap();
 
-    @Pointcut("@annotation(com.demo.server.common.interceptor.RateLimit)")
+    @Pointcut("@annotation(com.demo.server.common.interceptor.aspect.RateLimit)")
     public void pointCut() {
 
     }

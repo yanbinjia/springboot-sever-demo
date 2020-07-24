@@ -8,7 +8,7 @@ import org.springframework.web.method.HandlerMethod;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class HandlerInterceptorUtil {
+public class InterceptorUtil {
 
     /**
      * 检查是否是需要拦截Controller,只拦截自定义的Controller
@@ -22,6 +22,14 @@ public class HandlerInterceptorUtil {
         }
         return true;
 
+    }
+
+    public static String getClassName(final HandlerMethod handlerMethod) {
+        return handlerMethod.getBean().getClass().getName();
+    }
+
+    public static String getMethodName(final HandlerMethod handlerMethod) {
+        return handlerMethod.getMethod().getName();
     }
 
     /**

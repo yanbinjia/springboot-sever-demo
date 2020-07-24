@@ -2,7 +2,7 @@ package com.demo.server.config;
 
 import com.demo.server.common.util.DateUtil;
 import com.demo.server.common.util.RandomUtil;
-import com.demo.server.common.interceptor.RateLimit;
+import com.demo.server.common.interceptor.aspect.RateLimit;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
