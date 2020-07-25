@@ -9,7 +9,6 @@ package com.demo.server.common.interceptor.filter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -19,9 +18,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,12 +43,8 @@ public class XssFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         this.filterConfig = filterConfig;
-        this.action = this.getAction() == null ? "escape" : this.getAction().toLowerCase().trim();
-        initExcludes();
+        this.initConfig();
         log.info(">>> [{}] init ok.", this.filterConfig.getFilterName());
-        log.info(">>> XssConfig turnOn=[{}]", this.isTurnOn());
-        log.info(">>> XssConfig excludes=[{}]", this.getExcludes());
-        log.info(">>> XssConfig action=[{}]", this.getAction());
     }
 
     @Override
@@ -62,16 +55,16 @@ public class XssFilter implements Filter {
 
         if (this.excludes(request)) {
             filterChain.doFilter(servletRequest, servletResponse);
+            log.debug(">>> after chain.doFilter(). Uri=[{}]", request.getRequestURI());
             return;
         }
 
         if (this.getAction().equals("reject") && this.reject(request)) {
-
+            log.debug(">>> xss reject. Uri=[{}]", request.getRequestURI());
             return;
         }
 
         filterChain.doFilter(new XssHttpServletRequestWrapper(request, this.getAction()), servletResponse);
-
         log.debug(">>> after chain.doFilter(). Uri=[{}]", request.getRequestURI());
     }
 
@@ -103,7 +96,9 @@ public class XssFilter implements Filter {
         return false;
     }
 
-    private void initExcludes() {
+    private void initConfig() {
+        this.action = this.getAction() == null ? "escape" : this.getAction().toLowerCase().trim();
+
         if (StringUtils.isNotBlank(excludes)) {
             String[] urls = excludes.split(",");
             if (urls != null) {
@@ -112,10 +107,26 @@ public class XssFilter implements Filter {
                 }
             }
         }
+
+        log.info(">>> XssConfig turnOn=[{}]", this.isTurnOn());
+        log.info(">>> XssConfig excludes=[{}]", this.getExcludes());
+        log.info(">>> XssConfig action=[{}]", this.getAction());
     }
 
     private boolean reject(HttpServletRequest request) {
-        // TODO
+        Map<String, String[]> parameters = request.getParameterMap();
+        if (parameters != null) {
+            for (String key : parameters.keySet()) {
+                String[] values = parameters.get(key);
+                if (values != null) {
+                    for (int i = 0; i < values.length; i++) {
+                        if (XssUtil.haveIllegalStr(values[i])) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
 
         return false;
     }
