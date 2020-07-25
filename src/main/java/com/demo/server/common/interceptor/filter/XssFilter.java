@@ -47,6 +47,7 @@ public class XssFilter implements Filter {
         log.info(">>> [{}] init ok.", this.filterConfig.getFilterName());
     }
 
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
