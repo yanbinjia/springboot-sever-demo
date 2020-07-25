@@ -114,20 +114,7 @@ public class XssFilter implements Filter {
     }
 
     private boolean reject(HttpServletRequest request) {
-        Map<String, String[]> parameters = request.getParameterMap();
-        if (parameters != null) {
-            for (String key : parameters.keySet()) {
-                String[] values = parameters.get(key);
-                if (values != null) {
-                    for (int i = 0; i < values.length; i++) {
-                        if (XssUtil.haveIllegalStr(values[i])) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
+        // TODO
         return false;
     }
 
