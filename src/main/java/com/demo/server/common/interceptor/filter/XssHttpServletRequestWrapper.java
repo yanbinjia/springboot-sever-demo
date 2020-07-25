@@ -8,39 +8,42 @@ package com.demo.server.common.interceptor.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Slf4j
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
-    public static final String ENCODING = "UTF-8";
+    private String action = "";
 
     public XssHttpServletRequestWrapper(HttpServletRequest request) {
         super(request);
     }
 
+    public XssHttpServletRequestWrapper(HttpServletRequest request, String action) {
+        super(request);
+        this.action = action;
+    }
+
     @Override
     public String getHeader(String name) {
-        String header = super.getHeader(name);
-        if (StringUtils.isNotBlank(header)) {
-            return this.doFilter(header);
+        String value = super.getHeader(name);
+        if (StringUtils.isNotBlank(value)) {
+            return XssUtil.doFilter(value, this.action);
         }
-        return header;
+        return value;
     }
 
     @Override
     public String getParameter(String name) {
-        String parameter = super.getParameter(name);
-        if (StringUtils.isNotBlank(parameter)) {
-            return this.doFilter(parameter);
+        String value = super.getParameter(name);
+        if (StringUtils.isNotBlank(value)) {
+            return XssUtil.doFilter(value, this.action);
         }
-        return parameter;
+        return value;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         }
         for (int i = 0; i < values.length; i++) {
             if (StringUtils.isNotBlank(values[i])) {
-                values[i] = this.doFilter(values[i]);
+                values[i] = XssUtil.doFilter(values[i], this.action);
             }
         }
         return values;
@@ -65,8 +68,10 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
             filteredMap = new LinkedHashMap<>();
             for (String key : parameters.keySet()) {
                 String[] values = parameters.get(key);
-                for (int i = 0; i < values.length; i++) {
-                    values[i] = this.doFilter(values[i]);
+                if (values != null) {
+                    for (int i = 0; i < values.length; i++) {
+                        values[i] = XssUtil.doFilter(values[i], this.action);
+                    }
                 }
                 filteredMap.put(key, values);
             }
@@ -74,7 +79,4 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         return filteredMap;
     }
 
-    private String doFilter(String value) {
-        return HtmlUtils.htmlEscape(value, ENCODING);
-    }
 }
