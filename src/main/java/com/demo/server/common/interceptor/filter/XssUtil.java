@@ -36,19 +36,17 @@ public class XssUtil {
     }
 
     public static void main(String[] args) {
-        String inputTest = "<a>A标签</a>/s<ScriPt>eval('中文')\"测试\"😁😀😢😄<script></script>　＞＞　''＇＇";
+        String inputTest = ";;;<a>;;;A标签;;;</a>/s<ScriPt>eval('中文')\"测试\"😁😀😢😄<script></script>　＞＞　''＇＇";
         System.out.println("inputTest: " + inputTest);
         System.out.println("clean:");
         System.out.println("Whitelist.none(): " + Jsoup.clean(inputTest, Whitelist.none()));
         System.out.println("Whitelist.relaxed(): " + Jsoup.clean(inputTest, Whitelist.relaxed()));
         System.out.println("Whitelist.basic(): " + Jsoup.clean(inputTest, Whitelist.basic()));
 
-
-        System.out.println("escape>>＞＞:''＇＇");
+        System.out.println("escape:");
         System.out.println("StringEscapeUtils: " + StringEscapeUtils.escapeHtml(inputTest));
         System.out.println("SpringEscape: " + org.springframework.web.util.HtmlUtils.htmlEscape(inputTest, CHARSET_UTF8));
-        System.out.println("DemoUtilEscape: " + HtmlUtils.htmlEscape(inputTest, CHARSET_UTF8));
-        System.out.println("DemoUtilUnEscape: " + HtmlUtils.htmlUnescape(HtmlUtils.htmlEscape(inputTest, CHARSET_UTF8)));
+        System.out.println("SpringUnEscape: " + HtmlUtils.htmlUnescape(HtmlUtils.htmlEscape(inputTest, CHARSET_UTF8)));
     }
 
 }
