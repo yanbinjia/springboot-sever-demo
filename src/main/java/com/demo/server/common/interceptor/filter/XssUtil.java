@@ -6,9 +6,7 @@
 
 package com.demo.server.common.interceptor.filter;
 
-import com.google.common.escape.Escaper;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.tomcat.util.security.Escape;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.springframework.web.util.HtmlUtils;
@@ -39,7 +37,7 @@ public class XssUtil {
 
     public static void main(String[] args) {
 
-        String htmlStr = "<a href='sdfs'>xxxx辅导费<script > alert();对对对 </script >";
+        String htmlStr = "<a href='sdfs'>xxxx辅导费''''\"\"<iframe>";
 
         System.out.println("escape:");
         System.out.println(XssUtil.doFilter(htmlStr, "escape"));
@@ -53,6 +51,10 @@ public class XssUtil {
         System.out.println("unescape:");
         System.out.println(HtmlUtils.htmlUnescape("\"'&lt;a href=&#39;sdfs&#39;&gt;&lt;/a&gt; &lt; script &gt; alert(); &lt;/ script &gt;"));
 
+        System.out.println("clean:");
+
+        System.out.println(Jsoup.clean("eval()", Whitelist.none()));
+        System.out.println(HtmlUtils.htmlEscape("<>eval()'"));
     }
 
 }

@@ -142,7 +142,7 @@ public class ExceptionAdvice {
     public Result<?> handleValidation(HttpMessageNotReadableException e, HttpServletRequest request,
                                       HttpServletResponse response) {
         Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
-        result.setExtMsg("HttpMessageNotReadable:required request param error.");
+        result.setExtMsg("HttpMessageNotReadable: request body param error.");
 
         LogUtil.exceptionLog(request, result, e);
 
