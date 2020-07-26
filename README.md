@@ -28,7 +28,7 @@ It is a simple work,just put the pieces together for developing faster and perso
 - 工具封装:EnumUtil、HashUtil、RandomUtil、RequestUtil、DateUtil、Base64Util等
 - 好用工具:guava、commons-lang3、commons-io、commons-collections4、commons-codec、jsoup、lombok
 - 图片验证码功能
-- XSS(Cross Site Scripting) filter
+- XSS(Cross Site Scripting) filter, simple implement
 
 
 
