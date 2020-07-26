@@ -104,7 +104,7 @@ public class XssFilter implements Filter {
             String[] urls = excludes.split(",");
             if (urls != null) {
                 for (String url : urls) {
-                    excludesMap.put(url, Pattern.compile("^" + url));
+                    excludesMap.put(url, Pattern.compile("^" + url, Pattern.CASE_INSENSITIVE));
                 }
             }
         }
