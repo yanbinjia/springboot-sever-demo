@@ -8,7 +8,7 @@ It is a simple work,just put the pieces together for developing faster and perso
 - common: 工具,异常,常量,interceptor,listener等
 - config: spring web config 和一些应用配置
 - dao: 数据访问层相关实现
-- manager: 通用业务处理层: 三方封装、Service通用能力下沉、组合dao操作 (来源于Alibaba《Java开发手册》)
+- manager: 通用业务处理层: 三方封装、Service通用能力下沉、组合dao操作
 - service: 具体业务逻辑服务
 - web: Controller
 
@@ -28,7 +28,7 @@ It is a simple work,just put the pieces together for developing faster and perso
 - 工具封装:EnumUtil、HashUtil、RandomUtil、RequestUtil、DateUtil、Base64Util等
 - 好用工具:guava、commons-lang3、commons-io、commons-collections4、commons-codec、jsoup、lombok
 - 图片验证码功能
-- XSS(Cross Site Scripting) filter
+- XSS(Cross Site Scripting) filter, simple implement
 
 
 

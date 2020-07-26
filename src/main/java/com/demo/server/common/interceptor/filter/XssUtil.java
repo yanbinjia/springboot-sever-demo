@@ -6,9 +6,7 @@
 
 package com.demo.server.common.interceptor.filter;
 
-import com.google.common.escape.Escaper;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.tomcat.util.security.Escape;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.springframework.web.util.HtmlUtils;
@@ -38,21 +36,17 @@ public class XssUtil {
     }
 
     public static void main(String[] args) {
-
-        String htmlStr = "<a href='sdfs'>xxxx辅导费<script > alert();对对对 </script >";
+        String inputTest = ";;;<a>;;;A标签;;;</a>/s<ScriPt>eval('中文')\"测试\"😁😀😢😄<script></script>　＞＞　''＇＇";
+        System.out.println("inputTest: " + inputTest);
+        System.out.println("clean:");
+        System.out.println("Whitelist.none(): " + Jsoup.clean(inputTest, Whitelist.none()));
+        System.out.println("Whitelist.relaxed(): " + Jsoup.clean(inputTest, Whitelist.relaxed()));
+        System.out.println("Whitelist.basic(): " + Jsoup.clean(inputTest, Whitelist.basic()));
 
         System.out.println("escape:");
-        System.out.println(XssUtil.doFilter(htmlStr, "escape"));
-        System.out.println(StringEscapeUtils.escapeHtml(htmlStr));
-
-        System.out.println("clean:");
-        System.out.println(Jsoup.clean(htmlStr, Whitelist.none()));
-        System.out.println(Jsoup.clean(htmlStr, Whitelist.relaxed()));
-        System.out.println(Jsoup.clean(htmlStr, Whitelist.basic()));
-
-        System.out.println("unescape:");
-        System.out.println(HtmlUtils.htmlUnescape("\"'&lt;a href=&#39;sdfs&#39;&gt;&lt;/a&gt; &lt; script &gt; alert(); &lt;/ script &gt;"));
-
+        System.out.println("StringEscapeUtils: " + StringEscapeUtils.escapeHtml(inputTest));
+        System.out.println("SpringEscape: " + org.springframework.web.util.HtmlUtils.htmlEscape(inputTest, CHARSET_UTF8));
+        System.out.println("SpringUnEscape: " + HtmlUtils.htmlUnescape(HtmlUtils.htmlEscape(inputTest, CHARSET_UTF8)));
     }
 
 }
