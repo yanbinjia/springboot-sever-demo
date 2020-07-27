@@ -2,12 +2,15 @@ package com.demo.study.testclass.juc;
 
 import lombok.SneakyThrows;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
 
 public class LongAdderTest {
     @SneakyThrows
     public static void main(String[] args) {
+
+        AtomicInteger atomicInteger = new AtomicInteger(0);
 
         AtomicLong atomicLong = new AtomicLong(0);
         LongAdder longAdder = new LongAdder();
@@ -21,6 +24,7 @@ public class LongAdderTest {
                     for (int i = 0; i < 10000; i++) {
                         longAdder.increment();
                         atomicLong.incrementAndGet();
+                        atomicInteger.addAndGet(100);
                     }
                 }
             });
