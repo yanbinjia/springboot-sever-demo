@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-28T19:02:56.494+08:00
+ */
+
 package com.demo.server.config;
 
 import com.demo.server.common.interceptor.aspect.RateLimit;

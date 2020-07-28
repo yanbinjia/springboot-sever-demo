@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-28T19:01:46.984+08:00
+ */
+
 package com.demo.server.common.interceptor;
 
 import com.alibaba.fastjson.JSONObject;

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-28T19:01:37.553+08:00
+ */
+
 package com.demo.server.common.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
