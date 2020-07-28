@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class SpringUtil implements ApplicationContextAware {
     /**
-     * SpringBoot项目中获取ApplicationContext方法
+     * SpringBoot中获取ApplicationContext方法
      * <p>
      * 1.直接使用Autowired注入:
      * //@Component public class SpringUtil {
