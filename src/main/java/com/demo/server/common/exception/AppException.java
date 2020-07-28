@@ -7,7 +7,6 @@
 package com.demo.server.common.exception;
 
 import com.demo.server.bean.base.ResultCode;
-
 import lombok.Data;
 
 @Data

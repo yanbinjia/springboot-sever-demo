@@ -221,9 +221,9 @@ public class ExceptionAdvice {
             String param = cv.getPropertyPath().toString();
             int dotindex = param.lastIndexOf(".");
             if (dotindex > 0) {
-                param = param.substring(dotindex + 1, param.length());
+                param = param.substring(dotindex + 1);
             }
-            return cv == null ? "" : param + ":" + cv.getMessage();
+            return param + ":" + cv.getMessage();
         }).sorted().collect(Collectors.joining("; "));
     }
 

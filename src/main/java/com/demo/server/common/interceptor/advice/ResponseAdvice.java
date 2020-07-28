@@ -6,9 +6,13 @@
 
 package com.demo.server.common.interceptor.advice;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.interceptor.filter.TraceContext;
+import com.demo.server.common.util.LogUtil;
+import com.demo.server.common.util.LogUtil.LogLevel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -19,12 +23,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.demo.server.bean.base.Result;
-import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.util.LogUtil;
-import com.demo.server.common.util.LogUtil.LogLevel;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * ResponseBodyAdvice接口是在Controller执行return之后，在response返回给客户端之前，执行的对response的一些处理。

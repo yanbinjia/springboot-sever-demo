@@ -1,26 +1,23 @@
 package com.demo.server.common.interceptor;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.alibaba.fastjson.JSONObject;
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.interceptor.filter.TraceContext;
+import com.demo.server.common.util.LogUtil;
+import com.demo.server.common.util.LogUtil.LogLevel;
+import com.demo.server.config.SignConfig;
+import com.demo.server.service.base.security.SignService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.alibaba.fastjson.JSONObject;
-import com.demo.server.bean.base.Result;
-import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.util.LogUtil;
-import com.demo.server.common.util.LogUtil.LogLevel;
-import com.demo.server.config.SignConfig;
-import com.demo.server.service.base.security.SignService;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Component
 @Slf4j

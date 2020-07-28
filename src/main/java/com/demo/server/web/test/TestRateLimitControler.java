@@ -1,13 +1,12 @@
 package com.demo.server.web.test;
 
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
+import com.demo.server.common.interceptor.TokenPass;
+import com.demo.server.common.interceptor.aspect.RateLimit;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.demo.server.bean.base.Result;
-import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.interceptor.aspect.RateLimit;
-import com.demo.server.common.interceptor.TokenPass;
 
 @RestController
 @RequestMapping("/test/rate")

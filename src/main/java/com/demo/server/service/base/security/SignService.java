@@ -103,7 +103,7 @@ public class SignService {
 		String paramStrByServer = "";
 
 		// 处理请求参数,对参数按照key=value的格式，并按照参数名ASCII字典序排序
-		SortedMap<String, String> paramsSortedMap = new TreeMap<>(RequestUtil.getHttpParamter(request));
+		SortedMap<String, String> paramsSortedMap = new TreeMap<>(RequestUtil.getParameterMap(request));
 		if (paramsSortedMap != null) {
 			paramsSortedMap.remove("sign");
 			paramsSortedMap.forEach((k, v) -> {
