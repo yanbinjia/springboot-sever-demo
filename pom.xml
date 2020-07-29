@@ -334,6 +334,11 @@
                 <jdbc.url>jdbc:mysql://127.0.0.1:3306/bg_admin</jdbc.url>
                 <jdbc.user>root</jdbc.user>
                 <jdbc.password>1234ZXCV</jdbc.password>
+
+                <redis.database>0</redis.database>
+                <redis.host>127.0.0.1</redis.host>
+                <redis.port>6379</redis.port>
+                <redis.password></redis.password>
             </properties>
         </profile>
         <profile>
@@ -342,6 +347,11 @@
                 <jdbc.url>jdbc:mysql://127.0.0.1:3306/bg_admin</jdbc.url>
                 <jdbc.user>root</jdbc.user>
                 <jdbc.password>1234ZXCV</jdbc.password>
+
+                <redis.database>0</redis.database>
+                <redis.host>127.0.0.1</redis.host>
+                <redis.port>6379</redis.port>
+                <redis.password></redis.password>
             </properties>
         </profile>
     </profiles>

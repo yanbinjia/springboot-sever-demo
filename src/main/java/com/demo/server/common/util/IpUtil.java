@@ -14,7 +14,7 @@ public class IpUtil {
         return InetAddress.getLocalHost().getHostAddress();
     }
 
-    public static void main(String[] args) throws UnknownHostException {
-        System.out.println(IpUtil.getLocalIp());
+    public static String getLocalHostName() throws UnknownHostException {
+        return InetAddress.getLocalHost().getHostName();
     }
 }
