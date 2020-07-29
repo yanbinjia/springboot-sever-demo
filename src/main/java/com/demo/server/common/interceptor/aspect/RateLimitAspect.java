@@ -8,6 +8,7 @@ package com.demo.server.common.interceptor.aspect;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
+import com.demo.server.common.util.SpringUtil;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +21,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -45,8 +44,7 @@ public class RateLimitAspect {
     @Around("pointCut()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         // 获取请求uri
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest();
+        HttpServletRequest request = SpringUtil.getRequest();
         String uri = request.getRequestURI();
 
         log.debug(">>> doAround before joinPoint.proceed(). Uri=[{}]", uri);

@@ -7,20 +7,22 @@
 package com.demo.server.common.interceptor.filter;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.springframework.web.util.HtmlUtils;
 
 public class XssUtil {
 
-    public static enum FlterAction {
-        ESCAPE, CLEAN, REJECT;
-    }
-
     public static final String CHARSET_UTF8 = "UTF-8";
 
     public static String doFilter(String value, String action) {
-        switch (action) {
+
+        if (StringUtils.isBlank(action)) {
+            return HtmlUtils.htmlEscape(value, CHARSET_UTF8);
+        }
+
+        switch (action.toLowerCase().trim()) {
             case "escape":
                 return HtmlUtils.htmlEscape(value, CHARSET_UTF8);
             case "clean":

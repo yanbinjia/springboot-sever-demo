@@ -26,4 +26,7 @@ public class SignConfig {
     private boolean turnOn = false;
     // 签名算法,support:sha256,md5
     private String algorithm = "md5";
+    // excludes config use regex
+    private String excludes = "";
+
 }

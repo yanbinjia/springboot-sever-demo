@@ -6,12 +6,11 @@
 
 package com.demo.server.common.interceptor.filter;
 
-import lombok.Data;
+import com.demo.server.config.XssConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
@@ -25,16 +24,12 @@ import java.util.regex.Pattern;
 
 @Configuration
 @WebFilter(urlPatterns = {"/*"}, filterName = "XssFilter")
-@PropertySource("classpath:security.properties")
-@ConfigurationProperties(prefix = "xss")
-@Data
 @Slf4j
 @Order(2)
 public class XssFilter implements Filter {
 
-    private boolean turnOn = true;
-    private String excludes = "";// excludes config use regex
-    private String action = "escape";// action support:escape,clean,reject
+    @Autowired
+    XssConfig xssConfig;
 
     private Map<String, Pattern> excludesMap = new HashMap<>();
 
@@ -60,12 +55,12 @@ public class XssFilter implements Filter {
             return;
         }
 
-        if (this.getAction().equals("reject") && this.reject(request)) {
+        if (xssConfig.getAction().equals("reject") && this.reject(request)) {
             log.debug(">>> xss reject. Uri=[{}]", request.getRequestURI());
             return;
         }
 
-        filterChain.doFilter(new XssHttpServletRequestWrapper(request, this.getAction()), servletResponse);
+        filterChain.doFilter(new XssHttpServletRequestWrapper(request, xssConfig.getAction()), servletResponse);
         log.debug(">>> after chain.doFilter(). Uri=[{}]", request.getRequestURI());
     }
 
@@ -75,7 +70,7 @@ public class XssFilter implements Filter {
     }
 
     private boolean excludes(HttpServletRequest request) {
-        if (!this.isTurnOn()) {
+        if (!xssConfig.isTurnOn()) {
             log.debug(">>> xss pass, filter is turn off.");
             return true;
         }
@@ -98,10 +93,8 @@ public class XssFilter implements Filter {
     }
 
     private void initConfig() {
-        this.action = this.getAction() == null ? "escape" : this.getAction().toLowerCase().trim();
-
-        if (StringUtils.isNotBlank(excludes)) {
-            String[] urls = excludes.split(",");
+        if (StringUtils.isNotBlank(xssConfig.getExcludes())) {
+            String[] urls = xssConfig.getExcludes().trim().split(",");
             if (urls != null) {
                 for (String url : urls) {
                     excludesMap.put(url, Pattern.compile("^" + url, Pattern.CASE_INSENSITIVE));
@@ -109,9 +102,9 @@ public class XssFilter implements Filter {
             }
         }
 
-        log.info(">>> XssConfig turnOn=[{}]", this.isTurnOn());
-        log.info(">>> XssConfig excludes=[{}]", this.getExcludes());
-        log.info(">>> XssConfig action=[{}]", this.getAction());
+        log.info(">>> XssConfig turnOn=[{}]", xssConfig.isTurnOn());
+        log.info(">>> XssConfig excludes=[{}]", xssConfig.getExcludes());
+        log.info(">>> XssConfig action=[{}]", xssConfig.getAction());
     }
 
     private boolean reject(HttpServletRequest request) {
