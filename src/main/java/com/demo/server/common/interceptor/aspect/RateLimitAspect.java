@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Order(2)
 public class RateLimitAspect {
-
     private Map<String, RateLimiter> rateLimiterMap = Maps.newConcurrentMap();
 
     @Pointcut("@annotation(com.demo.server.common.interceptor.aspect.RateLimit)")
