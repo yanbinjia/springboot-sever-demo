@@ -49,7 +49,7 @@ public class MetricAspect {
         long startTime = System.currentTimeMillis();
         String methodStr = this.getMethodStr(joinPoint);
 
-        log.debug(">>> doAround before joinPoint.proceed(). Method=[{}]", methodStr);
+        log.debug(">>> doAround before joinPoint.proceed(), method=[{}]", methodStr);
 
         // 执行目标方法，Invoke the method.
         Object object = joinPoint.proceed();
@@ -63,7 +63,7 @@ public class MetricAspect {
             MetricService.putMetricEvent(metirc);
         }
 
-        log.debug(">>> doAround after joinPoint.proceed(). Method=[{}]", methodStr);
+        log.debug(">>> doAround after joinPoint.proceed(), method=[{}]", methodStr);
 
         return object;
     }

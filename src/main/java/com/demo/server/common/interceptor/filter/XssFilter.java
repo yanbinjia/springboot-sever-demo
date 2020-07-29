@@ -47,21 +47,21 @@ public class XssFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
-        log.debug(">>> start filter deal. Uri=[{}]", request.getRequestURI());
+        log.debug(">>> start filter deal, uri=[{}]", request.getRequestURI());
 
         if (this.excludes(request)) {
             filterChain.doFilter(servletRequest, servletResponse);
-            log.debug(">>> after chain.doFilter(). Uri=[{}]", request.getRequestURI());
+            log.debug(">>> after chain.doFilter(), uri=[{}]", request.getRequestURI());
             return;
         }
 
         if (xssConfig.getAction().equals("reject") && this.reject(request)) {
-            log.debug(">>> xss reject. Uri=[{}]", request.getRequestURI());
+            log.debug(">>> xss reject, uri=[{}]", request.getRequestURI());
             return;
         }
 
         filterChain.doFilter(new XssHttpServletRequestWrapper(request, xssConfig.getAction()), servletResponse);
-        log.debug(">>> after chain.doFilter(). Uri=[{}]", request.getRequestURI());
+        log.debug(">>> after chain.doFilter(), uri=[{}]", request.getRequestURI());
     }
 
     @Override
@@ -84,7 +84,7 @@ public class XssFilter implements Filter {
             pattern = entry.getValue();
             Matcher m = pattern.matcher(request.getRequestURI());
             if (m.find()) {
-                log.debug(">>> xss pass, url in excludes. Uri=[{}]", request.getRequestURI());
+                log.debug(">>> xss pass, url=[{}] in excludes.", request.getRequestURI());
                 return true;
             }
         }

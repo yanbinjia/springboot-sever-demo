@@ -47,7 +47,7 @@ public class RateLimitAspect {
         HttpServletRequest request = SpringUtil.getRequest();
         String uri = request.getRequestURI();
 
-        log.debug(">>> doAround before joinPoint.proceed(). Uri=[{}]", uri);
+        log.debug(">>> doAround before joinPoint.proceed(), uri=[{}]", uri);
 
         // 获取RateLimit注解
         RateLimit rateLimitAnnotation = this.getRateLimitAnnotation(joinPoint);
@@ -72,7 +72,7 @@ public class RateLimitAspect {
         // 执行目标方法，Invoke the method.
         Object object = joinPoint.proceed();
 
-        log.debug(">>> doAround after joinPoint.proceed(). Uri=[{}]", uri);
+        log.debug(">>> doAround after joinPoint.proceed(), uri=[{}]", uri);
 
         return object;
     }

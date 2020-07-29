@@ -68,7 +68,7 @@ public class TraceFilter implements Filter {
         // 响应头中设置traceId
         httpServletResponse.addHeader(TRACE_HEADER_NAME, traceId);
 
-        log.debug(">>> start filter deal. Uri=[{}]", httpServletRequest.getRequestURI());
+        log.debug(">>> start filter deal, uri=[{}]", httpServletRequest.getRequestURI());
 
         try {
             filterChain.doFilter(servletRequest, servletResponse);
@@ -76,7 +76,7 @@ public class TraceFilter implements Filter {
             TraceContext.getInstance().remove();
         }
 
-        log.debug(">>> after chain.doFilter(). Uri=[{}]", httpServletRequest.getRequestURI());
+        log.debug(">>> after chain.doFilter(), uri=[{}]", httpServletRequest.getRequestURI());
 
     }
 

@@ -15,15 +15,21 @@ import com.demo.server.common.util.LogUtil.LogLevel;
 import com.demo.server.config.SignConfig;
 import com.demo.server.service.base.security.SignService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 @Slf4j
@@ -33,13 +39,31 @@ public class SignInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     SignConfig signConfig;
 
+    private Map<String, Pattern> excludesMap = new HashMap<>();
+
+    @PostConstruct
+    public void initConfig() {
+        if (StringUtils.isNotBlank(signConfig.getExcludes())) {
+            String[] urls = signConfig.getExcludes().trim().split(",");
+            if (urls != null) {
+                for (String url : urls) {
+                    excludesMap.put(url, Pattern.compile("^" + url, Pattern.CASE_INSENSITIVE));
+                }
+            }
+        }
+
+        log.info(">>> SignConfig turnOn=[{}]", signConfig.isTurnOn());
+        log.info(">>> SignConfig algorithm=[{}]", signConfig.getAlgorithm());
+        log.info(">>> SignConfig excludes=[{}]", signConfig.getExcludes());
+        log.info(">>> SignConfig timestampExpireSecs=[{}]", signConfig.getTimestampExpireSecs());
+        log.info(">>> SignConfig printCheckInfo=[{}]", signConfig.isPrintCheckInfo());
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         // -----------------------------------------------------
-        // 开关
-        if (!signConfig.isTurnOn()) {
-            log.debug(">>> signConfig turnOff.");
+        if (this.excludes(request)) {
             return true;
         }
 
@@ -92,6 +116,29 @@ public class SignInterceptor extends HandlerInterceptorAdapter {
         }
 
         return true;
+    }
+
+    private boolean excludes(HttpServletRequest request) {
+        if (!signConfig.isTurnOn()) {
+            log.debug(">>> sign pass, sign is turn off.");
+            return true;
+        }
+
+        if (excludesMap == null) {
+            return false;
+        }
+
+        Pattern pattern;
+        for (Map.Entry<String, Pattern> entry : excludesMap.entrySet()) {
+            pattern = entry.getValue();
+            Matcher m = pattern.matcher(request.getRequestURI());
+            if (m.find()) {
+                log.debug(">>> sign pass, uri=[{}] in excludes. ", request.getRequestURI());
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
