@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 @Slf4j
 @Order(2)
 public class XssFilter implements Filter {
-
     @Autowired
     XssConfig xssConfig;
 

@@ -16,7 +16,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>demo-server</name>
-    <description>demo-server,a SpringBoot demo for study.</description>
+    <description>demo-server,a SpringBoot demo for developing faster and personal study.</description>
 
     <repositories>
         <repository>
