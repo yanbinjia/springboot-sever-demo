@@ -593,7 +593,7 @@ public class RedisService {
     }
 
 
-    //=========BoundListOperations 用法 start============
+    // ========= BoundListOperations 用法 start ============
 
     /**
      * 将数据添加到Redis的list中（从右边添加）
@@ -638,7 +638,9 @@ public class RedisService {
         return boundValueOperations.rightPop();
     }
 
-    //=========BoundListOperations 用法 End============
+    // ========= BoundListOperations 用法 End ============
+
+    // =================== BitMap 操作 ===================
 
     /**
      * 将指定param的值设置为1
