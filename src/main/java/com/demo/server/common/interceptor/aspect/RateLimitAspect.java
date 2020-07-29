@@ -6,13 +6,12 @@
 
 package com.demo.server.common.interceptor.aspect;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
+import com.demo.server.common.util.SpringUtil;
+import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.RateLimiter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,15 +21,12 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.demo.server.bean.base.Result;
-import com.demo.server.bean.base.ResultCode;
-import com.google.common.collect.Maps;
-import com.google.common.util.concurrent.RateLimiter;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Aspect
@@ -48,11 +44,10 @@ public class RateLimitAspect {
     @Around("pointCut()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         // 获取请求uri
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest();
+        HttpServletRequest request = SpringUtil.getRequest();
         String uri = request.getRequestURI();
 
-        log.debug(">>> doAround before joinPoint.proceed(). Uri=[{}]", uri);
+        log.debug(">>> doAround before joinPoint.proceed(), uri=[{}]", uri);
 
         // 获取RateLimit注解
         RateLimit rateLimitAnnotation = this.getRateLimitAnnotation(joinPoint);
@@ -77,7 +72,7 @@ public class RateLimitAspect {
         // 执行目标方法，Invoke the method.
         Object object = joinPoint.proceed();
 
-        log.debug(">>> doAround after joinPoint.proceed(). Uri=[{}]", uri);
+        log.debug(">>> doAround after joinPoint.proceed(), uri=[{}]", uri);
 
         return object;
     }

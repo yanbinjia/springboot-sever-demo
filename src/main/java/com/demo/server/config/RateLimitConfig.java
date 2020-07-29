@@ -1,8 +1,14 @@
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-28T19:02:56.494+08:00
+ */
+
 package com.demo.server.config;
 
+import com.demo.server.common.interceptor.aspect.RateLimit;
 import com.demo.server.common.util.DateUtil;
 import com.demo.server.common.util.RandomUtil;
-import com.demo.server.common.interceptor.aspect.RateLimit;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;

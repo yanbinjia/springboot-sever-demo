@@ -6,25 +6,17 @@
 
 package com.demo.server.common.interceptor.filter;
 
-import java.io.IOException;
+import com.demo.server.common.util.RandomUtil;
+import com.demo.server.common.util.RequestUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.demo.server.common.util.RandomUtil;
-import org.springframework.context.annotation.Configuration;
-
-import com.demo.server.common.util.RequestUtil;
-
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.annotation.Order;
+import java.io.IOException;
 
 /**
  * 注意:
@@ -76,7 +68,7 @@ public class TraceFilter implements Filter {
         // 响应头中设置traceId
         httpServletResponse.addHeader(TRACE_HEADER_NAME, traceId);
 
-        log.debug(">>> start filter deal. Uri=[{}]", httpServletRequest.getRequestURI());
+        log.debug(">>> start filter deal, uri=[{}]", httpServletRequest.getRequestURI());
 
         try {
             filterChain.doFilter(servletRequest, servletResponse);
@@ -84,7 +76,7 @@ public class TraceFilter implements Filter {
             TraceContext.getInstance().remove();
         }
 
-        log.debug(">>> after chain.doFilter(). Uri=[{}]", httpServletRequest.getRequestURI());
+        log.debug(">>> after chain.doFilter(), uri=[{}]", httpServletRequest.getRequestURI());
 
     }
 

@@ -6,11 +6,8 @@
 
 package com.demo.server.common.interceptor.advice;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.interceptor.SignPass;
 import com.demo.server.common.interceptor.TokenPass;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -23,8 +20,9 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
-import com.demo.server.bean.base.Result;
-import com.demo.server.bean.base.ResultCode;
+import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 public class ExceptionErrorController implements ErrorController {

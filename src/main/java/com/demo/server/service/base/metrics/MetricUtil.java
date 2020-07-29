@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MetricUtil {
 
-    private static Locale locale = Locale.getDefault();
+    private static final Locale locale = Locale.getDefault();
     private static final TimeUnit rateUnit = TimeUnit.SECONDS;
     private static final TimeUnit durationUnit = TimeUnit.MILLISECONDS;
 

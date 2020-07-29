@@ -6,20 +6,14 @@
 
 package com.demo.server.common.interceptor.advice;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-
+import com.demo.server.bean.base.Result;
+import com.demo.server.bean.base.ResultCode;
+import com.demo.server.common.exception.AppException;
+import com.demo.server.common.util.LogUtil;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,12 +22,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import com.demo.server.bean.base.Result;
-import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.exception.AppException;
-import com.demo.server.common.util.LogUtil;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 应用ControllerAdvice全局异常处理,记录请求异常日志
@@ -51,7 +48,7 @@ public class ExceptionAdvice {
 
     @ResponseBody
     @ExceptionHandler(AppException.class)
-    public Result<Void> handlerAppException(AppException e, HttpServletRequest request, HttpServletResponse response) {
+    public Result<Void> handleException(AppException e, HttpServletRequest request, HttpServletResponse response) {
 
         Result<Void> result = new Result<Void>();
         result.setCode(e.getCode());
@@ -69,8 +66,8 @@ public class ExceptionAdvice {
      */
     @ResponseBody
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public Result<Void> handlerMissParamException(HttpRequestMethodNotSupportedException e, HttpServletRequest request,
-                                                  HttpServletResponse response) {
+    public Result<Void> handleException(HttpRequestMethodNotSupportedException e, HttpServletRequest request,
+                                        HttpServletResponse response) {
 
         Result<Void> result = new Result<Void>(ResultCode.METHOD_NOT_ALLOWED);
         result.setExtMsg(e.getMessage());
@@ -87,8 +84,8 @@ public class ExceptionAdvice {
      */
     @ResponseBody
     @ExceptionHandler(HttpMediaTypeException.class)
-    public Result<Void> handlerMissParamException(HttpMediaTypeException e, HttpServletRequest request,
-                                                  HttpServletResponse response) {
+    public Result<Void> handleException(HttpMediaTypeException e, HttpServletRequest request,
+                                        HttpServletResponse response) {
 
         Result<Void> result = new Result<Void>(ResultCode.NOT_ACCEPTABLE);
         result.setExtMsg(e.getMessage());
@@ -104,8 +101,8 @@ public class ExceptionAdvice {
      */
     @ResponseBody
     @ExceptionHandler({MissingServletRequestParameterException.class})
-    public Result<Void> handlerMissParamException(MissingServletRequestParameterException e, HttpServletRequest request,
-                                                  HttpServletResponse response) {
+    public Result<Void> handleException(MissingServletRequestParameterException e, HttpServletRequest request,
+                                        HttpServletResponse response) {
 
         Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
         result.setExtMsg(e.getParameterName() + ":参数不存在.");
@@ -122,8 +119,8 @@ public class ExceptionAdvice {
      */
     @ResponseBody
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
-    public Result<?> handleValidation(MethodArgumentNotValidException e, HttpServletRequest request,
-                                      HttpServletResponse response) {
+    public Result<?> handleException(MethodArgumentNotValidException e, HttpServletRequest request,
+                                     HttpServletResponse response) {
         Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
 
         result.setExtMsg(this.buildMessage(e));
@@ -139,8 +136,8 @@ public class ExceptionAdvice {
      */
     @ResponseBody
     @ExceptionHandler(value = {HttpMessageNotReadableException.class})
-    public Result<?> handleValidation(HttpMessageNotReadableException e, HttpServletRequest request,
-                                      HttpServletResponse response) {
+    public Result<?> handleException(HttpMessageNotReadableException e, HttpServletRequest request,
+                                     HttpServletResponse response) {
         Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
         result.setExtMsg("HttpMessageNotReadable: request body param error.");
 
@@ -157,8 +154,8 @@ public class ExceptionAdvice {
      */
     @ResponseBody
     @ExceptionHandler(value = {ConstraintViolationException.class})
-    public Result<?> handleValidation(ConstraintViolationException e, HttpServletRequest request,
-                                      HttpServletResponse response) {
+    public Result<?> handleException(ConstraintViolationException e, HttpServletRequest request,
+                                     HttpServletResponse response) {
         Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
         result.setExtMsg(this.buildMessage(e));
 
@@ -169,8 +166,8 @@ public class ExceptionAdvice {
 
     @ResponseBody
     @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
-    public Result<?> handleValidation(MethodArgumentTypeMismatchException e, HttpServletRequest request,
-                                      HttpServletResponse response) {
+    public Result<?> handleException(MethodArgumentTypeMismatchException e, HttpServletRequest request,
+                                     HttpServletResponse response) {
         Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
         result.setExtMsg(e.getParameter().getParameterName() + ":参数类型不匹配.");
 
@@ -184,8 +181,8 @@ public class ExceptionAdvice {
      */
     @ResponseBody
     @ExceptionHandler(ServletException.class)
-    public Result<Void> handlerMissParamException(ServletException e, HttpServletRequest request,
-                                                  HttpServletResponse response) {
+    public Result<Void> handleException(ServletException e, HttpServletRequest request,
+                                        HttpServletResponse response) {
 
         Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
         result.setExtMsg(e.getMessage());
@@ -201,7 +198,7 @@ public class ExceptionAdvice {
     @ResponseBody
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Result<Void> handlerException(Exception e, HttpServletRequest request, HttpServletResponse response) {
+    public Result<Void> handleException(Exception e, HttpServletRequest request, HttpServletResponse response) {
 
         Result<Void> result = new Result<Void>(ResultCode.SYS_ERROR);
 
@@ -224,9 +221,9 @@ public class ExceptionAdvice {
             String param = cv.getPropertyPath().toString();
             int dotindex = param.lastIndexOf(".");
             if (dotindex > 0) {
-                param = param.substring(dotindex + 1, param.length());
+                param = param.substring(dotindex + 1);
             }
-            return cv == null ? "" : param + ":" + cv.getMessage();
+            return param + ":" + cv.getMessage();
         }).sorted().collect(Collectors.joining("; "));
     }
 

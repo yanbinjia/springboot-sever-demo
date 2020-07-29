@@ -8,7 +8,6 @@ package com.demo.server.bean.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.hibernate.validator.constraints.CreditCardNumber;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
