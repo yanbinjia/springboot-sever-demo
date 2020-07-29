@@ -12,39 +12,43 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.*;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 
 @Configuration
 public class RedisConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
-
         RedisTemplate<String, Object> template = new RedisTemplate<>();
-
-        // 配置连接工厂
         template.setConnectionFactory(factory);
 
-        // JdkSerializationRedisSerializer在存储内容时，除了属性的内容外还存了其它内容在里面，总长度长，且不容易阅读(\x0\x0\x00\x000\x0\x0)
+        // JdkSerializationRedisSerializer存储内容时，除了属性的内容外还存了其它内容在里面，总长度长，且不容易阅读(\x0\x0\x00\x000\x0\x0)
         // Jackson2JsonRedisSerializer不是很好用. 所以采用FastJsonRedisSerializer. 也可以直接使用StringRedisSerializer,更为清晰明了.
         // 使用FastJsonRedisSerializer序列化和反序列化redis的value值（默认使用JDK的序列化方式）
-        FastJsonRedisSerializer jacksonSeializer = new FastJsonRedisSerializer(Object.class);
+        FastJsonRedisSerializer jsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
 
         // 创建FastJsonConfig对象并设定序列化规则
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
-        jacksonSeializer.setFastJsonConfig(fastJsonConfig);
+        jsonRedisSerializer.setFastJsonConfig(fastJsonConfig);
 
-        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-
-        //使用StringRedisSerializer来序列化和反序列化redis的key值
-        template.setKeySerializer(stringRedisSerializer);
+        // 使用StringRedisSerializer来序列化和反序列化redis的key值
+        template.setKeySerializer(RedisSerializer.string());
         // 值采用json序列化
-        template.setValueSerializer(jacksonSeializer);
+        template.setValueSerializer(jsonRedisSerializer);
 
         // 设置hash key 和value序列化模式
-        template.setHashKeySerializer(stringRedisSerializer);
-        template.setHashValueSerializer(jacksonSeializer);
+        template.setHashKeySerializer(RedisSerializer.string());
+        template.setHashValueSerializer(jsonRedisSerializer);
+
         template.afterPropertiesSet();
+
+        return template;
+    }
+
+    @Bean
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory factory) {
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setConnectionFactory(factory);
 
         return template;
     }
