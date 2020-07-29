@@ -641,7 +641,7 @@ public class RedisService {
     //=========BoundListOperations 用法 End============
 
     /**
-     * 将指定param的值设置为1，{@param param}会经过hash计算进行存储。
+     * 将指定param的值设置为1
      *
      * @param key   bitmap结构的key
      * @param param 要设置偏移的key，该key会经过hash运算。
@@ -653,8 +653,6 @@ public class RedisService {
     }
 
     /**
-     * 将指定param的值设置为0，{@param param}会经过hash计算进行存储。
-     *
      * @param key   bitmap结构的key
      * @param param 要移除偏移的key，该key会经过hash运算。
      * @return 若偏移位上的值为1，那么返回true。
@@ -664,7 +662,7 @@ public class RedisService {
     }
 
     /**
-     * 将指定offset偏移量的值设置为1；
+     * 将指定offset偏移量的值设置为1
      *
      * @param key    bitmap结构的key
      * @param offset 指定的偏移量。
@@ -676,8 +674,6 @@ public class RedisService {
     }
 
     /**
-     * 将指定offset偏移量的值设置为0；
-     *
      * @param key    bitmap结构的key
      * @param offset 指定的偏移量。
      * @return 若偏移位上的值为1，那么返回true。
@@ -705,7 +701,7 @@ public class RedisService {
      * @param end   该参数的单位是byte。
      * @return 在指定范围[start*8,end*8]内所有value=1的数量
      */
-    public Long bitCount(String key, int start, int end) {
+    public Long bitCount(String key, long start, long end) {
         return redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes(), start, end));
     }
 

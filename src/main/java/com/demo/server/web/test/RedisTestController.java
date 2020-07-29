@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/redis")
@@ -28,8 +30,6 @@ public class RedisTestController {
             @RequestParam(name = "id", required = true) Long id,
             @NotEmpty(message = "不能为空")
             @RequestParam String value) {
-
-        Result<String> result = new Result<>(ResultCode.SUCCESS);
         String idStr = String.valueOf(id);
         String valueStr = value;
 
@@ -46,9 +46,28 @@ public class RedisTestController {
 
         redisService.set("123456", "1234567String", -1L);
 
-
+        Result<String> result = new Result<>(ResultCode.SUCCESS);
         result.setData(String.valueOf(redisService.get(idStr)));
         result.setMsg(String.valueOf(redisService.get("123456")));
+
+        return result;
+    }
+
+    @TokenPass
+    @SignPass
+    @GetMapping("/bitmap")
+    @ResponseBody
+    public Result<Map<String, String>> test2(@RequestParam(name = "id", required = true) Long id) {
+        String key = "online";
+        redisService.setBit(key, id, true);
+        boolean getbit = redisService.getBit(key, id);
+
+        Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
+        Map<String, String> map = new HashMap<>();
+        map.put("bitmap-key", key);
+        map.put("bitcount", String.valueOf(redisService.bitCount(key)));
+        map.put("getbit[" + id + "]", String.valueOf(getbit));
+        result.setData(map);
 
         return result;
     }
