@@ -1,4 +1,4 @@
-package com.demo.server.common.util;
+package com.demo.server.common.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

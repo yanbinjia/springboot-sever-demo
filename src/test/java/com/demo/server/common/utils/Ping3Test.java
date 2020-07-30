@@ -1,4 +1,4 @@
-package com.demo.server.common.util;
+package com.demo.server.common.utils;
 
 import com.demo.study.testclass.thread.MultiTreadTestCase;
 import org.junit.After;

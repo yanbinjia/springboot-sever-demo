@@ -4,7 +4,7 @@
  * @LastModified: 2020-07-28T11:29:01.716+08:00
  */
 
-package com.demo.server.common.util;
+package com.demo.server.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;

@@ -1,6 +1,6 @@
 package com.demo.server.dao.typehandler.column;
 
-import com.demo.server.common.util.AesUtil;
+import com.demo.server.common.utils.AesUtil;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 

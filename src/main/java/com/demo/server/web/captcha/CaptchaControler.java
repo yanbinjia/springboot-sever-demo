@@ -9,7 +9,7 @@ import com.demo.server.common.captcha.easycaptcha.base.Captcha;
 import com.demo.server.common.captcha.easycaptcha.utils.CaptchaUtil;
 import com.demo.server.common.interceptor.SignPass;
 import com.demo.server.common.interceptor.TokenPass;
-import com.demo.server.common.util.RandomUtil;
+import com.demo.server.common.utils.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

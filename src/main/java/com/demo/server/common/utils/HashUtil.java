@@ -1,4 +1,4 @@
-package com.demo.server.common.util;
+package com.demo.server.common.utils;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;

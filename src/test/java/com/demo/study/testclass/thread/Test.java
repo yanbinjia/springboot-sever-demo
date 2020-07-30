@@ -1,10 +1,7 @@
 package com.demo.study.testclass.thread;
 
 
-import com.demo.server.common.util.ThreadPoolUtil;
-import com.mchange.v2.lang.ThreadUtils;
-
-import java.util.concurrent.atomic.LongAdder;
+import com.demo.server.common.utils.ThreadPoolUtil;
 
 public class Test {
     public static void main(String[] args) throws Exception {

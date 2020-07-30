@@ -1,6 +1,6 @@
 package com.demo.server.service.schedule;
 
-import com.demo.server.common.util.DateUtil;
+import com.demo.server.common.utils.DateUtil;
 import com.demo.server.manager.UserInfoManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

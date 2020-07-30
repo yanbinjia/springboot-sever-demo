@@ -6,8 +6,8 @@
 
 package com.demo.server.common.interceptor.filter;
 
-import com.demo.server.common.util.RandomUtil;
-import com.demo.server.common.util.RequestUtil;
+import com.demo.server.common.utils.RandomUtil;
+import com.demo.server.common.utils.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;

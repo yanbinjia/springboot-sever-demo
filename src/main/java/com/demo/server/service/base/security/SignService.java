@@ -2,8 +2,8 @@ package com.demo.server.service.base.security;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.util.HashUtil;
-import com.demo.server.common.util.RequestUtil;
+import com.demo.server.common.utils.HashUtil;
+import com.demo.server.common.utils.RequestUtil;
 import com.demo.server.config.SignConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

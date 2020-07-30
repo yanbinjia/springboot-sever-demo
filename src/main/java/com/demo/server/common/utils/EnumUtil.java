@@ -1,4 +1,4 @@
-package com.demo.server.common.util;
+package com.demo.server.common.utils;
 
 import com.demo.server.bean.enums.UserDeleted;
 import org.apache.commons.lang3.EnumUtils;

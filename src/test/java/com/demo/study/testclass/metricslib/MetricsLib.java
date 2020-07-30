@@ -4,7 +4,7 @@ import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import com.demo.server.common.util.RandomUtil;
+import com.demo.server.common.utils.RandomUtil;
 
 import java.util.concurrent.TimeUnit;
 
