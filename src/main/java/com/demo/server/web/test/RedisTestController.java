@@ -57,7 +57,7 @@ public class RedisTestController {
     @SignPass
     @GetMapping("/bitmap")
     @ResponseBody
-    public Result<Map<String, String>> test2(@RequestParam(name = "id", required = true) Long id) {
+    public Result<Map<String, String>> bitmap(@RequestParam(name = "id", required = true) Long id) {
         String key = "online";
         redisService.setBit(key, id, true);
         boolean getbit = redisService.getBit(key, id);
@@ -67,6 +67,68 @@ public class RedisTestController {
         map.put("bitmap-key", key);
         map.put("bitcount", String.valueOf(redisService.bitCount(key)));
         map.put("getbit[" + id + "]", String.valueOf(getbit));
+        result.setData(map);
+
+        return result;
+    }
+
+    @TokenPass
+    @SignPass
+    @GetMapping("/lock")
+    @ResponseBody
+    public Result<Map<String, String>> lock(@RequestParam(required = true) @NotEmpty(message = "不能为空") String key) {
+
+        String lockKey = redisService.LOCK_PREFIX + key.trim();
+        String lockValue = lockKey + "@" + System.currentTimeMillis();
+        int expireSeconds = 60 * 5;
+
+        boolean getLock = redisService.getLock(lockKey, lockValue, expireSeconds);
+
+        Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
+        Map<String, String> map = new HashMap<>();
+
+        if (getLock) {
+            map.put("getLock", "success");
+            map.put("lockKey", lockKey);
+            map.put("lockValue", String.valueOf(redisService.get(lockKey)));
+            map.put("expireSeconds", expireSeconds + "");
+        } else {
+            map.put("getLock", "fail");
+            map.put("lockKey", lockKey);
+            map.put("lockValue", String.valueOf(redisService.get(lockKey)));
+            map.put("expireSeconds", expireSeconds + "");
+        }
+
+        result.setData(map);
+
+        return result;
+    }
+
+    @TokenPass
+    @SignPass
+    @GetMapping("/releaselock")
+    @ResponseBody
+    public Result<Map<String, String>> releaselock(@RequestParam(required = true) @NotEmpty(message = "不能为空") String key,
+                                                   @RequestParam(required = true) @NotEmpty(message = "不能为空") String value) {
+
+        String lockKey = redisService.LOCK_PREFIX + key.trim();
+        String lockValue = value;
+
+        boolean releaseLock = redisService.releaseLock(lockKey, lockValue);
+
+        Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
+        Map<String, String> map = new HashMap<>();
+
+        if (releaseLock) {
+            map.put("releaseLock", "success");
+            map.put("lockKey", lockKey);
+            map.put("lockValue", lockValue);
+        } else {
+            map.put("releaseLock", "fail");
+            map.put("lockKey", lockKey);
+            map.put("lockValue", String.valueOf(redisService.get(lockKey)));
+        }
+
         result.setData(map);
 
         return result;

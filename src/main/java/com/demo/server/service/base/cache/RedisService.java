@@ -14,13 +14,12 @@ import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -778,4 +777,61 @@ public class RedisService {
         }
         return true;
     }
+    // =================== DistributeLock ===================
+
+    public static String LOCK_PREFIX = "redis_lock_";
+
+    /**
+     * @param lockKey
+     * @param value
+     * @param expireTime 秒
+     * @return 成功true, 失败false
+     */
+    public Boolean getLock(String lockKey, String value, int expireTime) {
+        try {
+            String script = "" +
+                    "if(redis.call('setNx',KEYS[1],ARGV[1])) " +
+                    "then " +
+                    "   if(redis.call('get',KEYS[1])==ARGV[1]) " +
+                    "   then return redis.call('expire',KEYS[1],ARGV[2]) " +
+                    "   else return 0 " +
+                    "   end " +
+                    "end ";
+            RedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);// resultType Long.class
+            Long result = redisTemplate.execute(redisScript, Collections.singletonList(lockKey), value, expireTime);
+
+            if (result == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * @param lockKey
+     * @param value
+     * @return 成功true, 失败false
+     */
+    public Boolean releaseLock(String lockKey, String value) {
+        try {
+            String script = "" +
+                    "if(redis.call('get', KEYS[1]) == ARGV[1]) " +
+                    "then " +
+                    "   return redis.call('del', KEYS[1]) " +
+                    "else return 0 " +
+                    "end";
+            RedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);// resultType Long.class
+            Long result = redisTemplate.execute(redisScript, Collections.singletonList(lockKey), value);
+
+            if (result == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
