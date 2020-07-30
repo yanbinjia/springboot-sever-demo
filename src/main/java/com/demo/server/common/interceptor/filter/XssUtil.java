@@ -6,6 +6,7 @@
 
 package com.demo.server.common.interceptor.filter;
 
+import com.demo.server.common.utils.html.HtmlUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -26,15 +27,10 @@ public class XssUtil {
             case "escape":
                 return HtmlUtils.htmlEscape(value, CHARSET_UTF8);
             case "clean":
-                return Jsoup.clean(value, Whitelist.none());
+                return HtmlUtil.filter(value);
             default:
                 return HtmlUtils.htmlEscape(value, CHARSET_UTF8);
         }
-    }
-
-    public static boolean haveIllegalStr(String value) {
-        // TODO
-        return false;
     }
 
     public static void main(String[] args) {
@@ -49,6 +45,7 @@ public class XssUtil {
         System.out.println("StringEscapeUtils: " + StringEscapeUtils.escapeHtml(inputTest));
         System.out.println("SpringEscape: " + org.springframework.web.util.HtmlUtils.htmlEscape(inputTest, CHARSET_UTF8));
         System.out.println("SpringUnEscape: " + HtmlUtils.htmlUnescape(HtmlUtils.htmlEscape(inputTest, CHARSET_UTF8)));
+        System.out.println("HtmlUtil: " + HtmlUtil.filter(inputTest));
+        System.out.println("HtmlUtilUnEscape: " + HtmlUtil.htmlUnescape(HtmlUtil.filter(inputTest)));
     }
-
 }

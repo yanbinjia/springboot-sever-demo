@@ -1,7 +1,7 @@
 package com.demo.server.dao.typehandler.global;
 
 import com.demo.server.bean.base.EncryptStr;
-import com.demo.server.common.util.AesUtil;
+import com.demo.server.common.utils.AesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;

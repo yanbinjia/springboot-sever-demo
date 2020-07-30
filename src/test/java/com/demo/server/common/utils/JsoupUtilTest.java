@@ -1,4 +1,4 @@
-package com.demo.server.common.util;
+package com.demo.server.common.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;

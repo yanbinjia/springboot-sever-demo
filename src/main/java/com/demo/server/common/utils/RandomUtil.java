@@ -4,7 +4,7 @@
  * @LastModified: 2020-07-28T12:45:39.380+08:00
  */
 
-package com.demo.server.common.util;
+package com.demo.server.common.utils;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;

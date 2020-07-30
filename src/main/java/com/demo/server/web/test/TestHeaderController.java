@@ -3,7 +3,7 @@ package com.demo.server.web.test;
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.interceptor.TokenPass;
-import com.demo.server.common.util.SpringUtil;
+import com.demo.server.common.utils.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;

@@ -784,6 +784,33 @@ public class RedisService {
     /**
      * @param lockKey
      * @param value
+     * @return 成功true, 失败false
+     */
+    public Boolean getLock(String lockKey, String value) {
+        try {
+            String script = "redis.call('setNx',KEYS[1],ARGV[1])";
+            RedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);// resultType Long.class
+            Long result = redisTemplate.execute(redisScript, Collections.singletonList(lockKey), value);
+
+            /*
+            Object getLockOk = redisTemplate.execute((RedisCallback) connection -> {
+                Boolean acquire = connection.setNX(lockKey.getBytes(Charsets.UTF_8), value.getBytes(Charsets.UTF_8));
+                return acquire;
+            });
+            */
+
+            if (result == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * @param lockKey
+     * @param value
      * @param expireTime 秒
      * @return 成功true, 失败false
      */

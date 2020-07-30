@@ -8,7 +8,7 @@ package com.demo.server.common.interceptor.aspect;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.util.SpringUtil;
+import com.demo.server.common.utils.SpringUtil;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.RateLimiter;
 import lombok.extern.slf4j.Slf4j;

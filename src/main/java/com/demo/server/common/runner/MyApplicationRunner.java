@@ -6,8 +6,8 @@
 
 package com.demo.server.common.runner;
 
-import com.demo.server.common.util.DateUtil;
-import com.demo.server.common.util.IpUtil;
+import com.demo.server.common.utils.DateUtil;
+import com.demo.server.common.utils.IpUtil;
 import com.demo.server.service.base.cache.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

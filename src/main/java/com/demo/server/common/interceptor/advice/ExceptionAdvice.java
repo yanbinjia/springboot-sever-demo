@@ -9,7 +9,7 @@ package com.demo.server.common.interceptor.advice;
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.exception.AppException;
-import com.demo.server.common.util.LogUtil;
+import com.demo.server.common.utils.LogUtil;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;

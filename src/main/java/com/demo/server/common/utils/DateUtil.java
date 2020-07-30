@@ -1,4 +1,4 @@
-package com.demo.server.common.util;
+package com.demo.server.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;

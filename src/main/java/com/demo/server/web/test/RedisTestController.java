@@ -108,7 +108,7 @@ public class RedisTestController {
     @SignPass
     @GetMapping("/releaselock")
     @ResponseBody
-    public Result<Map<String, String>> releaselock(@RequestParam(required = true) @NotEmpty(message = "不能为空") String key,
+    public Result<Map<String, String>> releaseLock(@RequestParam(required = true) @NotEmpty(message = "不能为空") String key,
                                                    @RequestParam(required = true) @NotEmpty(message = "不能为空") String value) {
 
         String lockKey = redisService.LOCK_PREFIX + key.trim();
