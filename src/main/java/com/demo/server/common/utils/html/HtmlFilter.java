@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2020 demo ^-^.
  * @Author: yanbinjia@126.com
- * @LastModified: 2020-07-30T13:58:18.359+08:00
+ * @LastModified: 2020-07-30T16:43:29.996+08:00
  */
 
-package com.demo.server.common.utils;
+package com.demo.server.common.utils.html;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

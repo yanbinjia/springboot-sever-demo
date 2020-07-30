@@ -6,7 +6,7 @@
 
 package com.demo.server.common.interceptor.filter;
 
-import com.demo.server.common.utils.HtmlUtil;
+import com.demo.server.common.utils.html.HtmlUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;

@@ -4,7 +4,7 @@ import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.interceptor.SignPass;
 import com.demo.server.common.interceptor.TokenPass;
-import com.demo.server.common.utils.system.oshi.OshiUtil;
+import com.demo.server.common.utils.system.OshiUtil;
 import com.demo.server.service.base.metrics.Metric;
 import com.demo.server.service.base.metrics.MetricService;
 import org.springframework.web.bind.annotation.GetMapping;

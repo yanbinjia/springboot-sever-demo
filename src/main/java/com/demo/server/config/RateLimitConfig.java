@@ -35,7 +35,7 @@ public class RateLimitConfig {
 
     @Bean
     public void init() {
-        this.scanAnnotationAndInit();
+        // this.scanAnnotationAndInit();
     }
 
     private void scanAnnotationAndInit() {

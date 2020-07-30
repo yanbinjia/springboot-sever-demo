@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2020 demo ^-^.
  * @Author: yanbinjia@126.com
- * @LastModified: 2020-07-30T14:08:12.932+08:00
+ * @LastModified: 2020-07-30T16:43:30.009+08:00
  */
 
-package com.demo.server.common.utils;
+package com.demo.server.common.utils.html;
 
 import org.springframework.web.util.HtmlUtils;
 

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2020 demo ^-^.
  * @Author: yanbinjia@126.com
- * @LastModified: 2020-07-30T14:38:11.649+08:00
+ * @LastModified: 2020-07-30T16:42:20.503+08:00
  */
 
-package com.demo.server.common.utils.system.oshi;
+package com.demo.server.common.utils.system;
 
 import oshi.SystemInfo;
 import oshi.hardware.*;
