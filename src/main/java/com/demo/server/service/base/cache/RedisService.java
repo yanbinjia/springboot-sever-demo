@@ -6,6 +6,7 @@
 
 package com.demo.server.service.base.cache;
 
+import com.google.common.base.Preconditions;
 import com.google.common.hash.Funnels;
 import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,12 @@ import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -593,7 +593,7 @@ public class RedisService {
     }
 
 
-    //=========BoundListOperations 用法 start============
+    // ========= BoundListOperations 用法 start ============
 
     /**
      * 将数据添加到Redis的list中（从右边添加）
@@ -638,7 +638,9 @@ public class RedisService {
         return boundValueOperations.rightPop();
     }
 
-    //=========BoundListOperations 用法 End============
+    // ========= BoundListOperations 用法 End ============
+
+    // =================== BitMap 操作 ===================
 
     /**
      * 将指定param的值设置为1
@@ -747,6 +749,89 @@ public class RedisService {
     private long hash(String key) {
         Charset charset = Charset.forName("UTF-8");
         return Math.abs(Hashing.murmur3_128().hashObject(key, Funnels.stringFunnel(charset)).asInt());
+    }
+
+    // =================== BloomFilter ===================
+
+    /**
+     * 根据给定的布隆过滤器添加值
+     */
+    public <T> void addByBloomFilter(BloomFilterHelper<T> bloomFilterHelper, String key, T value) {
+        Preconditions.checkArgument(bloomFilterHelper != null, "bloomFilterHelper不能为空");
+        int[] offset = bloomFilterHelper.murmurHashOffset(value);
+        for (int i : offset) {
+            redisTemplate.opsForValue().setBit(key, i, true);
+        }
+    }
+
+    /**
+     * 根据给定的布隆过滤器判断值是否存在
+     */
+    public <T> boolean checkByBloomFilter(BloomFilterHelper<T> bloomFilterHelper, String key, T value) {
+        Preconditions.checkArgument(bloomFilterHelper != null, "bloomFilterHelper不能为空");
+        int[] offset = bloomFilterHelper.murmurHashOffset(value);
+        for (int i : offset) {
+            if (!redisTemplate.opsForValue().getBit(key, i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    // =================== DistributeLock ===================
+
+    public static String LOCK_PREFIX = "redis_lock_";
+
+    /**
+     * @param lockKey
+     * @param value
+     * @param expireTime 秒
+     * @return 成功true, 失败false
+     */
+    public Boolean getLock(String lockKey, String value, int expireTime) {
+        try {
+            String script = "" +
+                    "if(redis.call('setNx',KEYS[1],ARGV[1])) " +
+                    "then " +
+                    "   if(redis.call('get',KEYS[1])==ARGV[1]) " +
+                    "   then return redis.call('expire',KEYS[1],ARGV[2]) " +
+                    "   else return 0 " +
+                    "   end " +
+                    "end ";
+            RedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);// resultType Long.class
+            Long result = redisTemplate.execute(redisScript, Collections.singletonList(lockKey), value, expireTime);
+
+            if (result == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * @param lockKey
+     * @param value
+     * @return 成功true, 失败false
+     */
+    public Boolean releaseLock(String lockKey, String value) {
+        try {
+            String script = "" +
+                    "if(redis.call('get', KEYS[1]) == ARGV[1]) " +
+                    "then " +
+                    "   return redis.call('del', KEYS[1]) " +
+                    "else return 0 " +
+                    "end";
+            RedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);// resultType Long.class
+            Long result = redisTemplate.execute(redisScript, Collections.singletonList(lockKey), value);
+
+            if (result == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }
