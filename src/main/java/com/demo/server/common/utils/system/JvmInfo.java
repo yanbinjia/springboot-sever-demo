@@ -21,7 +21,7 @@ public class JvmInfo {
 
     private String javaVersion;
     private String javaVendor;
-    private String javaUrl;
+    private String javaVendorUrl;
 
     private String jvmStartTime;// Java虚拟机的启动时间
     private String jvmUpTime;// Java虚拟机的正常运行时间

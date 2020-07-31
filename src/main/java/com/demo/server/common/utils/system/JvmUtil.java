@@ -40,7 +40,7 @@ public class JvmUtil {
 
         jvmInfo.setJavaVersion(System.getProperty("java.version"));
         jvmInfo.setJavaVendor(System.getProperty("java.vendor"));
-        jvmInfo.setJavaUrl(System.getProperty("java.vendor.url"));
+        jvmInfo.setJavaVendorUrl(System.getProperty("java.vendor.url"));
 
         jvmInfo.setOsName(System.getProperty("os.name"));
         jvmInfo.setOsVersion(System.getProperty("os.version"));
