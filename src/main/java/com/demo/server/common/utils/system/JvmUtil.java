@@ -18,7 +18,6 @@ import java.util.Locale;
 public class JvmUtil {
     private static NumberFormat fmtI = new DecimalFormat("###,###", new DecimalFormatSymbols(Locale.ENGLISH));
     private static NumberFormat fmtD = new DecimalFormat("###,##0.000", new DecimalFormatSymbols(Locale.ENGLISH));
-    private static final Runtime currentRuntime = Runtime.getRuntime();
 
     public static JvmInfo getJvmInfo() {
         //线程使用情况
@@ -61,16 +60,16 @@ public class JvmUtil {
         jvmInfo.setClassCountUnloaded(cl.getUnloadedClassCount());
         jvmInfo.setClassCountTotalLoaded(cl.getTotalLoadedClassCount());
 
-        jvmInfo.setMemMax(bytesToMB(currentRuntime.maxMemory()));
-        jvmInfo.setMemTotalAllocated(bytesToMB(currentRuntime.totalMemory()));
-        jvmInfo.setMemFreeInAllocated(bytesToMB(currentRuntime.freeMemory()));
+        jvmInfo.setMemMax(bytesToMB(Runtime.getRuntime().maxMemory()));
+        jvmInfo.setMemTotalAllocated(bytesToMB(Runtime.getRuntime().totalMemory()));
+        jvmInfo.setMemFreeInAllocated(bytesToMB(Runtime.getRuntime().freeMemory()));
         jvmInfo.setMemUsable(bytesToMB(getUsableMemory()));
 
         return jvmInfo;
     }
 
     public static final long getUsableMemory() {
-        return currentRuntime.maxMemory() - currentRuntime.totalMemory() + currentRuntime.freeMemory();
+        return Runtime.getRuntime().maxMemory() - Runtime.getRuntime().totalMemory() + Runtime.getRuntime().freeMemory();
     }
 
     protected static int bytesToMB(long bytes) {

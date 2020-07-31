@@ -10,7 +10,6 @@ import lombok.Data;
 
 @Data
 public class JvmInfo {
-
     private String userName;
     private String userHome;
     private String userDir;
@@ -56,5 +55,4 @@ public class JvmInfo {
     private long classCountLoaded;// 当前加载类数量
     private long classCountUnloaded;// 未加载类数量
     private long ClassCountTotalLoaded;//
-
 }
