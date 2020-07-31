@@ -11,6 +11,8 @@ import org.springframework.boot.context.event.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -55,6 +57,16 @@ public class MyApplicationListener implements ApplicationListener<ApplicationEve
         //应用启动失败后产生这个事件
         if (event instanceof ApplicationFailedEvent) {
             log.info(">>> ApplicationFailed.");
+            return;
+        }
+        //应用停止
+        if (event instanceof ContextStoppedEvent) {
+            log.info(">>> ApplicationStopped.");
+            return;
+        }
+        //应用关闭
+        if (event instanceof ContextClosedEvent) {
+            log.info(">>> ApplicationClosed.");
             return;
         }
     }

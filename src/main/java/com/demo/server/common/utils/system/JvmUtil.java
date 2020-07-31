@@ -6,28 +6,18 @@
 
 package com.demo.server.common.utils.system;
 
-import java.lang.management.ClassLoadingMXBean;
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryUsage;
-import java.lang.management.ThreadMXBean;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Locale;
+import com.demo.server.common.utils.NumberUtil;
+
+import java.lang.management.*;
 
 public class JvmUtil {
-    private static NumberFormat fmtI = new DecimalFormat("###,###", new DecimalFormatSymbols(Locale.ENGLISH));
-    private static NumberFormat fmtD = new DecimalFormat("###,##0.000", new DecimalFormatSymbols(Locale.ENGLISH));
 
     public static JvmInfo getJvmInfo() {
-        //线程使用情况
         ThreadMXBean threads = ManagementFactory.getThreadMXBean();
-        //堆内存使用情况
         MemoryUsage heapMemoryUsage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
-        //非堆内存使用情况
         MemoryUsage nonHeapMemoryUsage = ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage();
-        //类加载情况
         ClassLoadingMXBean cl = ManagementFactory.getClassLoadingMXBean();
+        OperatingSystemMXBean osMBean = ManagementFactory.getOperatingSystemMXBean();
 
         JvmInfo jvmInfo = new JvmInfo();
         jvmInfo.setUserName(System.getProperty("user.name"));
@@ -45,6 +35,8 @@ public class JvmUtil {
         jvmInfo.setOsName(System.getProperty("os.name"));
         jvmInfo.setOsVersion(System.getProperty("os.version"));
         jvmInfo.setOsArch(System.getProperty("os.arch"));
+        jvmInfo.setOsAvailableProcessors(osMBean.getAvailableProcessors());
+        jvmInfo.setOsSystemLoadAverage(NumberUtil.round(osMBean.getSystemLoadAverage(), 2).doubleValue());
 
         jvmInfo.setHeapMemInit(bytesToMB(heapMemoryUsage.getInit()));
         jvmInfo.setHeapMemCommitted(bytesToMB(heapMemoryUsage.getCommitted()));
@@ -65,6 +57,10 @@ public class JvmUtil {
         jvmInfo.setMemFreeInAllocated(bytesToMB(Runtime.getRuntime().freeMemory()));
         jvmInfo.setMemUsable(bytesToMB(getUsableMemory()));
 
+        jvmInfo.setThreadDaemonCount(threads.getDaemonThreadCount());
+        jvmInfo.setThreadPeakCount(threads.getPeakThreadCount());
+        jvmInfo.setThreadTotalCount(threads.getThreadCount());
+
         return jvmInfo;
     }
 
@@ -76,39 +72,9 @@ public class JvmUtil {
         return (int) (bytes / 1024 / 1024);
     }
 
-    protected static String toDuration(double uptime) {
-        uptime /= 1000;
-        if (uptime < 60) {
-            return fmtD.format(uptime) + " seconds";
-        }
-        uptime /= 60;
-        if (uptime < 60) {
-            long minutes = (long) uptime;
-            String s = fmtI.format(minutes) + (minutes > 1 ? " minutes" : " minute");
-            return s;
-        }
-        uptime /= 60;
-        if (uptime < 24) {
-            long hours = (long) uptime;
-            long minutes = (long) ((uptime - hours) * 60);
-            String s = fmtI.format(hours) + (hours > 1 ? " hours" : " hour");
-            if (minutes != 0) {
-                s += " " + fmtI.format(minutes) + (minutes > 1 ? " minutes" : " minute");
-            }
-            return s;
-        }
-        uptime /= 24;
-        long days = (long) uptime;
-        long hours = (long) ((uptime - days) * 24);
-        String s = fmtI.format(days) + (days > 1 ? " days" : " day");
-        if (hours != 0) {
-            s += " " + fmtI.format(hours) + (hours > 1 ? " hours" : " hour");
-        }
-        return s;
-    }
-
     public static void main(String[] args) {
         System.out.println(JvmUtil.getJvmInfo());
+        System.out.println(OshiUtil.getCpuInfo().toString());
     }
 
 }

@@ -17,23 +17,20 @@ public class JvmInfo {
     private String jvmName;
     private String jvmVersion;
     private String jvmVendor;
-    private String jvmInfo;
 
     private String javaVersion;
     private String javaVendor;
     private String javaVendorUrl;
 
-    private String jvmStartTime;// Java虚拟机的启动时间
-    private String jvmUpTime;// Java虚拟机的正常运行时间
-
     private String osName;// 操作系统名称
     private String osArch;// 操作系统内核
     private String osVersion;// 操作系统版本
+    private int osAvailableProcessors;//
+    private double osSystemLoadAverage;//
 
     private int threadTotalCount; // 总线程数(守护+非守护)
     private int threadDaemonCount;// 守护进程线程数
     private int threadPeakCount; // 峰值线程数
-    private int threadStartCount;// Java虚拟机启动后创建并启动的线程总数
 
     private String memUnit = "MB";
 
@@ -54,5 +51,5 @@ public class JvmInfo {
 
     private long classCountLoaded;// 当前加载类数量
     private long classCountUnloaded;// 未加载类数量
-    private long ClassCountTotalLoaded;//
+    private long classCountTotalLoaded;//
 }
