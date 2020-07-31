@@ -1,27 +1,24 @@
 package com.demo.server.bean.base;
 
-import com.demo.server.common.exception.AppException;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
 public class Result<T> {
 
     // 返回数据对象
     private T data;
 
     // 返回状态码
-    private int code = ResultCode.FAILED.code;
+    private int code;
 
     // 返回消息
-    private String msg = ResultCode.FAILED.msg;
+    private String msg;
 
     // 服务器unix时间戳(秒)
     private long timestamp = System.currentTimeMillis() / 1000;
 
     // timestamp 可读时间
     // private String timestamp = DateUtil.getCurrentDateTimeStr();
+
+    public Result() {
+    }
 
     public Result(ResultCode responseCode) {
         super();
@@ -46,17 +43,44 @@ public class Result<T> {
         this.msg = msg;
     }
 
-    public void setResultCode(ResultCode resultCode) {
-        this.code = resultCode.code;
-        this.msg = resultCode.msg;
-    }
-
-    public void setResultCode(AppException e) {
-        this.code = e.getCode();
-        this.msg = e.getMsg();
+    public void setResultCode(ResultCode responseCode) {
+        this.code = responseCode.code;
+        this.msg = responseCode.msg;
     }
 
     public void setExtMsg(String extMsg) {
         this.msg += "(" + extMsg + ")";
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }
