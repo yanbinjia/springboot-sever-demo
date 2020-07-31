@@ -1,4 +1,4 @@
-package com.demo.server.common.captcha.easycaptcha.base;
+package com.demo.server.common.utils.captcha.easycaptcha.base;
 
 import java.awt.*;
 

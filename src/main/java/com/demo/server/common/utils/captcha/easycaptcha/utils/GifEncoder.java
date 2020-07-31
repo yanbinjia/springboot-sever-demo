@@ -1,4 +1,4 @@
-package com.demo.server.common.captcha.easycaptcha.utils;
+package com.demo.server.common.utils.captcha.easycaptcha.utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

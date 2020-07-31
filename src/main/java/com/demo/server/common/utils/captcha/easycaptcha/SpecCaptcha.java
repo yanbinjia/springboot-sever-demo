@@ -1,6 +1,6 @@
-package com.demo.server.common.captcha.easycaptcha;
+package com.demo.server.common.utils.captcha.easycaptcha;
 
-import com.demo.server.common.captcha.easycaptcha.base.Captcha;
+import com.demo.server.common.utils.captcha.easycaptcha.base.Captcha;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
