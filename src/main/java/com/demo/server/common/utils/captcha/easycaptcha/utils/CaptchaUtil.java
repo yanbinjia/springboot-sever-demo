@@ -162,7 +162,7 @@ public class CaptchaUtil {
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
-        response.setHeader("Captcha-Key", captchaKey);// captchaKey
+        response.setHeader("CaptchaKey", captchaKey);// captchaKey
     }
 
 }
