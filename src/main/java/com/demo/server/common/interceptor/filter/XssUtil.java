@@ -34,7 +34,7 @@ public class XssUtil {
     }
 
     public static void main(String[] args) {
-        String inputTest = ";;;<a>;;;A标签;;;</a>/s<ScriPt>eval('中文')\"测试\"😁😀😢😄<script></script>　＞＞　''＇＇";
+        String inputTest = "\"VVV555;;;\"<script><a onclick='t()'>test</a>;;<a src='ww'>;A标签;</a>/s<ScriPt>eval('中')\"测\"😁😀😢😄<script></script>　>> ＞＞　''＇＇";
         System.out.println("inputTest: " + inputTest);
         System.out.println("clean:");
         System.out.println("Whitelist.none(): " + Jsoup.clean(inputTest, Whitelist.none()));
