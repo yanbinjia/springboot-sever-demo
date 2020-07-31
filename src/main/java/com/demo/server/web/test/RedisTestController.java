@@ -5,6 +5,7 @@ import com.demo.server.bean.base.ResultCode;
 import com.demo.server.bean.entity.UserInfo;
 import com.demo.server.common.interceptor.SignPass;
 import com.demo.server.common.interceptor.TokenPass;
+import com.demo.server.common.utils.RandomUtil;
 import com.demo.server.service.base.cache.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -79,7 +80,42 @@ public class RedisTestController {
     public Result<Map<String, String>> lock(@RequestParam(required = true) @NotEmpty(message = "不能为空") String key) {
 
         String lockKey = redisService.LOCK_PREFIX + key.trim();
-        String lockValue = lockKey + "@" + System.currentTimeMillis();
+        String lockValue = lockKey + "@" + RandomUtil.uuidWithoutSeparator();
+        int expireSeconds = 60 * 5;
+
+        boolean getLock = redisService.getLock(lockKey, lockValue, expireSeconds);
+
+        Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
+        Map<String, String> map = new HashMap<>();
+
+        if (getLock) {
+            map.put("getLock", "success");
+            map.put("lockKey", lockKey);
+            map.put("lockValue", String.valueOf(redisService.get(lockKey)));
+            map.put("expireSeconds", expireSeconds + "");
+        } else {
+            map.put("getLock", "fail");
+            map.put("lockKey", lockKey);
+            map.put("lockValue", String.valueOf(redisService.get(lockKey)));
+            map.put("expireSeconds", expireSeconds + "");
+        }
+
+        result.setData(map);
+
+        return result;
+    }
+
+    @TokenPass
+    @SignPass
+    @GetMapping("/lock2")
+    @ResponseBody
+    public Result<Map<String, String>> lock(@RequestParam(required = true)
+                                            @NotEmpty(message = "不能为空") String key,
+                                            @RequestParam(required = true)
+                                            @NotEmpty(message = "不能为空") String value) {
+
+        String lockKey = redisService.LOCK_PREFIX + key.trim();
+        String lockValue = value;
         int expireSeconds = 60 * 5;
 
         boolean getLock = redisService.getLock(lockKey, lockValue, expireSeconds);

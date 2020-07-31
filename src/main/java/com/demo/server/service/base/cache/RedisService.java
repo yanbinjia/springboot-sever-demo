@@ -816,6 +816,7 @@ public class RedisService {
      */
     public Boolean getLock(String lockKey, String value, int expireTime) {
         try {
+            /*
             String script = "" +
                     "if(redis.call('setNx',KEYS[1],ARGV[1])) " +
                     "then " +
@@ -824,6 +825,23 @@ public class RedisService {
                     "   else return 0 " +
                     "   end " +
                     "end ";
+             */
+
+            /**
+             * redis 命令
+             * eval "if redis.call('set','key123','123','EX',300,'NX') then return 1 else return 0 end" 0
+             */
+
+            String script = "" +
+                    "if redis.call('set',KEYS[1],ARGV[1],'EX',ARGV[2],'NX') " +
+                    "then return 1 " +
+                    "else " +
+                    "   if redis.call('get',KEYS[1])==ARGV[1] " +
+                    "   then return redis.call('expire',KEYS[1],ARGV[2]) " +
+                    "   else return 0 " +
+                    "   end " +
+                    "end ";
+
             RedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);// resultType Long.class
             Long result = redisTemplate.execute(redisScript, Collections.singletonList(lockKey), value, expireTime);
 
