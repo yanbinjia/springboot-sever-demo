@@ -29,7 +29,7 @@ It is a simple work,just put the pieces together for developing faster and perso
 - 好用工具:guava、commons-lang3、commons-io、commons-collections4、commons-codec、jsoup、lombok
 - 图片验证码功能
 - XSS(Cross Site Scripting) filter, simple implement
-
+- 二维码生成(ZXing)
 
 
 
