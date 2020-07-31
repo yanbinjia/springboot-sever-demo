@@ -1,6 +1,6 @@
-package com.demo.server.common.captcha.easycaptcha.servlet;
+package com.demo.server.common.utils.captcha.easycaptcha.servlet;
 
-import com.demo.server.common.captcha.easycaptcha.utils.CaptchaUtil;
+import com.demo.server.common.utils.captcha.easycaptcha.utils.CaptchaUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

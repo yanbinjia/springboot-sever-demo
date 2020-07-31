@@ -2,11 +2,11 @@ package com.demo.server.dao.typehandler.global;
 
 import com.demo.server.bean.base.EncryptStr;
 import com.demo.server.common.utils.AesUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
+import org.slf4j.Logger;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -15,8 +15,9 @@ import java.sql.SQLException;
 
 @MappedJdbcTypes(JdbcType.VARCHAR)
 @MappedTypes(EncryptStr.class)
-@Slf4j
 public class EncryptTypeHandler extends BaseTypeHandler<EncryptStr> {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(EncryptTypeHandler.class);
+
     /**
      * 全局 TypeHandler
      * <p>

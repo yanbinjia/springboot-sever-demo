@@ -1,7 +1,7 @@
-package com.demo.server.common.captcha.easycaptcha.utils;
+package com.demo.server.common.utils.captcha.easycaptcha.utils;
 
-import com.demo.server.common.captcha.easycaptcha.SpecCaptcha;
-import com.demo.server.common.captcha.easycaptcha.base.Captcha;
+import com.demo.server.common.utils.captcha.easycaptcha.SpecCaptcha;
+import com.demo.server.common.utils.captcha.easycaptcha.base.Captcha;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

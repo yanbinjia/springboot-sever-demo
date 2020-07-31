@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-07-31T18:11:10.274+08:00
+ */
+
 package com.demo.server.bean.base;
 
 /**

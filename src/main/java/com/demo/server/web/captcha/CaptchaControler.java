@@ -2,11 +2,11 @@ package com.demo.server.web.captcha;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.captcha.easycaptcha.ArithmeticCaptcha;
-import com.demo.server.common.captcha.easycaptcha.GifCaptcha;
-import com.demo.server.common.captcha.easycaptcha.SpecCaptcha;
-import com.demo.server.common.captcha.easycaptcha.base.Captcha;
-import com.demo.server.common.captcha.easycaptcha.utils.CaptchaUtil;
+import com.demo.server.common.utils.captcha.easycaptcha.ArithmeticCaptcha;
+import com.demo.server.common.utils.captcha.easycaptcha.GifCaptcha;
+import com.demo.server.common.utils.captcha.easycaptcha.SpecCaptcha;
+import com.demo.server.common.utils.captcha.easycaptcha.base.Captcha;
+import com.demo.server.common.utils.captcha.easycaptcha.utils.CaptchaUtil;
 import com.demo.server.common.interceptor.SignPass;
 import com.demo.server.common.interceptor.TokenPass;
 import com.demo.server.common.utils.RandomUtil;

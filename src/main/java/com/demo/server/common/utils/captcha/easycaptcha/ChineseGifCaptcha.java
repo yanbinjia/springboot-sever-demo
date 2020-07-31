@@ -1,7 +1,7 @@
-package com.demo.server.common.captcha.easycaptcha;
+package com.demo.server.common.utils.captcha.easycaptcha;
 
-import com.demo.server.common.captcha.easycaptcha.base.Captcha;
-import com.demo.server.common.captcha.easycaptcha.utils.GifEncoder;
+import com.demo.server.common.utils.captcha.easycaptcha.base.ChineseCaptchaAbstract;
+import com.demo.server.common.utils.captcha.easycaptcha.utils.GifEncoder;
 
 import java.awt.*;
 import java.awt.geom.CubicCurve2D;
@@ -9,26 +9,22 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * Gif验证码类
- * Created by 王帆 on 2018-07-27 上午 10:08.
- */
-public class GifCaptcha extends Captcha {
+public class ChineseGifCaptcha extends ChineseCaptchaAbstract {
 
-    public GifCaptcha() {
+    public ChineseGifCaptcha() {
     }
 
-    public GifCaptcha(int width, int height) {
+    public ChineseGifCaptcha(int width, int height) {
         setWidth(width);
         setHeight(height);
     }
 
-    public GifCaptcha(int width, int height, int len) {
+    public ChineseGifCaptcha(int width, int height, int len) {
         this(width, height);
         setLen(len);
     }
 
-    public GifCaptcha(int width, int height, int len, Font font) {
+    public ChineseGifCaptcha(int width, int height, int len, Font font) {
         this(width, height, len);
         setFont(font);
     }
@@ -120,7 +116,7 @@ public class GifCaptcha extends Captcha {
             g2d.setComposite(ac3);
             g2d.setColor(fontColor[i]);
             int fY = height - ((height - (int) fontMetrics.getStringBounds(String.valueOf(strs[i]), g2d).getHeight()) >> 1);  // 文字的纵坐标
-            g2d.drawString(String.valueOf(strs[i]), i * fW + fSp + 3, fY - 3);
+            g2d.drawString(String.valueOf(strs[i]), i * fW + fSp - 3, fY - 3);
         }
         g2d.dispose();
         return image;
@@ -139,5 +135,4 @@ public class GifCaptcha extends Captcha {
         float s = len * r;
         return num >= len ? (num * r - s) : num * r;
     }
-
 }
