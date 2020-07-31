@@ -28,10 +28,6 @@ public class JvmInfo {
     private int osAvailableProcessors;//
     private double osSystemLoadAverage;//
 
-    private int threadTotalCount; // 总线程数(守护+非守护)
-    private int threadDaemonCount;// 守护进程线程数
-    private int threadPeakCount; // 峰值线程数
-
     private String memUnit = "MB";
 
     private long memMax;
@@ -52,4 +48,12 @@ public class JvmInfo {
     private long classCountLoaded;// 当前加载类数量
     private long classCountUnloaded;// 未加载类数量
     private long classCountTotalLoaded;//
+
+    private int threadTotalCount; // 总线程数(守护+非守护)
+    private int threadDaemonCount;// 守护进程线程数
+    private int threadPeakCount; // 峰值线程数
+
+    private String timeStartTime;
+    private long timeUpTime;// uptime of the Java virtual machine in milliseconds.
+
 }

@@ -6,9 +6,11 @@
 
 package com.demo.server.common.utils.system;
 
+import com.demo.server.common.utils.DateUtil;
 import com.demo.server.common.utils.NumberUtil;
 
 import java.lang.management.*;
+import java.util.Date;
 
 public class JvmUtil {
 
@@ -18,6 +20,7 @@ public class JvmUtil {
         MemoryUsage nonHeapMemoryUsage = ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage();
         ClassLoadingMXBean cl = ManagementFactory.getClassLoadingMXBean();
         OperatingSystemMXBean osMBean = ManagementFactory.getOperatingSystemMXBean();
+        RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
 
         JvmInfo jvmInfo = new JvmInfo();
         jvmInfo.setUserName(System.getProperty("user.name"));
@@ -38,6 +41,11 @@ public class JvmUtil {
         jvmInfo.setOsAvailableProcessors(osMBean.getAvailableProcessors());
         jvmInfo.setOsSystemLoadAverage(NumberUtil.round(osMBean.getSystemLoadAverage(), 2).doubleValue());
 
+        jvmInfo.setMemMax(bytesToMB(Runtime.getRuntime().maxMemory()));
+        jvmInfo.setMemTotalAllocated(bytesToMB(Runtime.getRuntime().totalMemory()));
+        jvmInfo.setMemFreeInAllocated(bytesToMB(Runtime.getRuntime().freeMemory()));
+        jvmInfo.setMemUsable(bytesToMB(getUsableMemory()));
+
         jvmInfo.setHeapMemInit(bytesToMB(heapMemoryUsage.getInit()));
         jvmInfo.setHeapMemCommitted(bytesToMB(heapMemoryUsage.getCommitted()));
         jvmInfo.setHeapMemUsed(bytesToMB(heapMemoryUsage.getUsed()));
@@ -52,14 +60,12 @@ public class JvmUtil {
         jvmInfo.setClassCountUnloaded(cl.getUnloadedClassCount());
         jvmInfo.setClassCountTotalLoaded(cl.getTotalLoadedClassCount());
 
-        jvmInfo.setMemMax(bytesToMB(Runtime.getRuntime().maxMemory()));
-        jvmInfo.setMemTotalAllocated(bytesToMB(Runtime.getRuntime().totalMemory()));
-        jvmInfo.setMemFreeInAllocated(bytesToMB(Runtime.getRuntime().freeMemory()));
-        jvmInfo.setMemUsable(bytesToMB(getUsableMemory()));
-
         jvmInfo.setThreadDaemonCount(threads.getDaemonThreadCount());
         jvmInfo.setThreadPeakCount(threads.getPeakThreadCount());
         jvmInfo.setThreadTotalCount(threads.getThreadCount());
+
+        jvmInfo.setTimeStartTime(DateUtil.getDateTimeStr(new Date(rb.getStartTime())));
+        jvmInfo.setTimeUpTime(rb.getUptime());
 
         return jvmInfo;
     }
@@ -75,6 +81,7 @@ public class JvmUtil {
     public static void main(String[] args) {
         System.out.println(JvmUtil.getJvmInfo());
         System.out.println(OshiUtil.getCpuInfo().toString());
+
     }
 
 }
