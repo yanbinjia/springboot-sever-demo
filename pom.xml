@@ -329,6 +329,14 @@
             <version>5.6.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+        <!-- https://github.com/zxing/zxing -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/de.siegmar/fastcsv -->
         <!-- https://github.com/osiegmar/FastCSV -->
         <!--
