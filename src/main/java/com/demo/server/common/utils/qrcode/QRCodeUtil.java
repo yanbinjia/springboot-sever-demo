@@ -31,7 +31,7 @@ public class QRCodeUtil {
     public static final String IMG_FORMAT_PNG = "png";
 
     public static BufferedImage genQrCodeImg(String content, int width, int height) {
-        return genQrCodeImg(content, width, height, ARGBColor.black, ARGBColor.white, null, null);
+        return genQrCodeImg(content, width, height, ARGBColor.Black, ARGBColor.White, null, null);
     }
 
     public static BufferedImage genQrCodeImg(String content, int width, int height, int lineColor, int backgroundColor) {
@@ -230,8 +230,8 @@ public class QRCodeUtil {
         String dstPath = "./tmp/";
         int backgroundColor = 0xFFb5e871;
 
-        BufferedImage bufferedImage1 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.royalBlue, ARGBColor.white, logoPath, backgroundPath);
-        BufferedImage bufferedImage2 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.doderBlue, ARGBColor.white, logoPath, backgroundPath);
+        BufferedImage bufferedImage1 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.RoyalBlue, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage2 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.DoderBlue, ARGBColor.White, logoPath, backgroundPath);
 
         QRCodeUtil.saveToPath(bufferedImage1, dstPath + "qrcode1.png");
         QRCodeUtil.saveToPath(bufferedImage2, dstPath + "qrcode2.png");
