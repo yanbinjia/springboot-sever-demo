@@ -42,13 +42,7 @@ public class QRCodeTestController {
     @GetMapping("/test2")
     public void testOutput(HttpServletResponse response,
                            @NotEmpty(message = "不能为空") @RequestParam String content) {
-        String logoPath = "";
-        String backgroundPath = "";
-
-        BufferedImage bufferedImage = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.white, logoPath, backgroundPath);
-
-        QRCodeUtil.setHeader(response, content);
-
-        QRCodeUtil.output(response, bufferedImage);
+        BufferedImage bufferedImage = QRCodeUtil.genQrCodeImg(content, 300, 300);
+        QRCodeUtil.output(response, content, bufferedImage);
     }
 }

@@ -30,6 +30,14 @@ public class QRCodeUtil {
 
     public static final String IMG_FORMAT_PNG = "png";
 
+    public static BufferedImage genQrCodeImg(String content, int width, int height) {
+        return genQrCodeImg(content, width, height, ARGBColor.white, null, null);
+    }
+
+    public static String genQrCodeImgBase64(String content, int width, int height) {
+        return toBase64(genQrCodeImg(content, width, height));
+    }
+
     public static String genQrCodeImgBase64(String content, int width, int height, int backgroundColor,
                                             String logoPath, String backgroundPath) {
         BufferedImage bufferedImage = genQrCodeImg(content, width, height, backgroundColor, logoPath, backgroundPath);
@@ -55,7 +63,7 @@ public class QRCodeUtil {
             bufferedImage = writeBufferedImage(bitMatrix, backgroundColor, logoPath, backgroundPath);
 
         } catch (Exception e) {
-            logger.error(">>> genQrCodeImg error:", e);
+            logger.error("genQrCodeImg error:", e);
         }
 
         return bufferedImage;
@@ -79,7 +87,7 @@ public class QRCodeUtil {
         int width = matrix.getWidth();
         int height = matrix.getHeight();
 
-        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -112,7 +120,7 @@ public class QRCodeUtil {
             // graphics.drawRect(x, y, logoWidth, logoHeight);
             graphics.drawImage(logoBuffImg, x, y, logoWidth, logoHeight, null);
         } catch (IOException e) {
-            logger.error(">>> addLogo error.", e);
+            logger.error("addLogo error.", e);
         } finally {
             // 释放资源
             graphics.dispose();
@@ -138,7 +146,7 @@ public class QRCodeUtil {
             // 绘制
             graphics.drawImage(bufferedImage, x, y, null);
         } catch (IOException e) {
-            logger.error(">>> QRUtil addBackground error.", e);
+            logger.error("addBackground error.", e);
         } finally {
             graphics.dispose();
         }
@@ -148,36 +156,33 @@ public class QRCodeUtil {
 
     public static boolean saveToPath(BufferedImage bufferedImage, String outputPath) {
         if (bufferedImage == null || StringUtils.isBlank(outputPath)) {
-            logger.error(">>> saveToPath error. qrBuffImg,outputPath cannot be null.");
+            logger.error("saveToPath error. qrBuffImg,outputPath cannot be null.");
             return false;
         }
         try {
             ImageIO.write(bufferedImage, IMG_FORMAT_PNG, new File(outputPath));
             return true;
         } catch (IOException e) {
-            logger.error(">>> saveToPath error. outputPath=[{}]", outputPath, e);
+            logger.error("saveToPath error. outputPath=[{}]", outputPath, e);
         }
         return false;
     }
 
     public static String toBase64(BufferedImage bufferedImage) {
         String type = "data:image/png;base64,";
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             ImageIO.write(bufferedImage, IMG_FORMAT_PNG, outputStream);
             outputStream.flush();
         } catch (IOException e) {
-            logger.error(">>> toBase64 error.", e);
+            logger.error("toBase64 error.", e);
         } finally {
             try {
                 outputStream.close();
             } catch (IOException e) {
-                e.printStackTrace();
-                logger.error(">>> toBase64 error.", e);
+                logger.error("toBase64 error.", e);
             }
         }
-
         return type + Base64.getEncoder().encodeToString(outputStream.toByteArray());
     }
 
@@ -189,6 +194,11 @@ public class QRCodeUtil {
         response.setHeader("QRCodeContent", content);// content
     }
 
+    public static boolean output(HttpServletResponse response, String content, BufferedImage bufferedImage) {
+        setHeader(response, content);
+        return output(response, bufferedImage);
+    }
+
     public static boolean output(HttpServletResponse response, BufferedImage bufferedImage) {
         OutputStream out = null;
         try {
@@ -197,12 +207,13 @@ public class QRCodeUtil {
             out.flush();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("output error.", e);
         } finally {
             try {
                 out.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                logger.error("output error.", e);
             }
         }
         return false;

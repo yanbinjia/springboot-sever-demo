@@ -49,7 +49,6 @@ public class ImageUtil {
     }
 
     public static boolean getFromUrl(String url, String filePath) {
-
         if (StringUtils.isAnyBlank(url, filePath)) {
             return false;
         }
