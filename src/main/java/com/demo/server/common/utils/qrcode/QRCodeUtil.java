@@ -31,20 +31,24 @@ public class QRCodeUtil {
     public static final String IMG_FORMAT_PNG = "png";
 
     public static BufferedImage genQrCodeImg(String content, int width, int height) {
-        return genQrCodeImg(content, width, height, ARGBColor.white, null, null);
+        return genQrCodeImg(content, width, height, ARGBColor.black, ARGBColor.white, null, null);
     }
 
-    public static String genQrCodeImgBase64(String content, int width, int height) {
-        return toBase64(genQrCodeImg(content, width, height));
+    public static BufferedImage genQrCodeImg(String content, int width, int height, int lineColor, int backgroundColor) {
+        return genQrCodeImg(content, width, height, lineColor, backgroundColor, null, null);
     }
 
-    public static String genQrCodeImgBase64(String content, int width, int height, int backgroundColor,
+    public static String genQrCodeImgBase64(String content,
+                                            int width, int height,
+                                            int lineColor, int backgroundColor,
                                             String logoPath, String backgroundPath) {
-        BufferedImage bufferedImage = genQrCodeImg(content, width, height, backgroundColor, logoPath, backgroundPath);
+        BufferedImage bufferedImage = genQrCodeImg(content, width, height, lineColor, backgroundColor, logoPath, backgroundPath);
         return toBase64(bufferedImage);
     }
 
-    public static BufferedImage genQrCodeImg(String content, int width, int height, int backgroundColor,
+    public static BufferedImage genQrCodeImg(String content,
+                                             int width, int height,
+                                             int lineColor, int backgroundColor,
                                              String logoPath, String backgroundPath) {
         BufferedImage bufferedImage = null;
         try {
@@ -60,7 +64,7 @@ public class QRCodeUtil {
             BitMatrix bitMatrix = new CustomMultiFormatWriter().encode(content,
                     BarcodeFormat.QR_CODE, width, height, hints);
 
-            bufferedImage = writeBufferedImage(bitMatrix, backgroundColor, logoPath, backgroundPath);
+            bufferedImage = writeBufferedImage(bitMatrix, lineColor, backgroundColor, logoPath, backgroundPath);
 
         } catch (Exception e) {
             logger.error("genQrCodeImg error:", e);
@@ -69,9 +73,9 @@ public class QRCodeUtil {
         return bufferedImage;
     }
 
-    public static BufferedImage writeBufferedImage(BitMatrix matrix, int backgroundColor,
+    public static BufferedImage writeBufferedImage(BitMatrix matrix, int lineColor, int backgroundColor,
                                                    String logoPath, String backgroundPath) {
-        BufferedImage bufferedImage = toBasicBufferedImage(matrix, backgroundColor);
+        BufferedImage bufferedImage = toBasicBufferedImage(matrix, lineColor, backgroundColor);
 
         if (StringUtils.isNotBlank(logoPath)) {
             bufferedImage = addLogo(bufferedImage, logoPath);
@@ -83,7 +87,7 @@ public class QRCodeUtil {
         return bufferedImage;
     }
 
-    public static BufferedImage toBasicBufferedImage(BitMatrix matrix, int backgroundColor) {
+    public static BufferedImage toBasicBufferedImage(BitMatrix matrix, int lineColor, int backgroundColor) {
         int width = matrix.getWidth();
         int height = matrix.getHeight();
 
@@ -91,7 +95,7 @@ public class QRCodeUtil {
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                bufferedImage.setRGB(x, y, matrix.get(x, y) ? ARGBColor.black : backgroundColor);
+                bufferedImage.setRGB(x, y, matrix.get(x, y) ? lineColor : backgroundColor);
             }
         }
         return bufferedImage;
@@ -223,15 +227,16 @@ public class QRCodeUtil {
         String content = "https://mp.weixin.qq.com/xxxxxxxxxxx";
         String logoPath = "./tmp/1.png";
         String backgroundPath = "./tmp/2.png";
-        String dstPath = "./tmp/qrcode.png";
+        String dstPath = "./tmp/";
         int backgroundColor = 0xFFb5e871;
 
-        BufferedImage bufferedImage = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.white, logoPath, backgroundPath);
+        BufferedImage bufferedImage1 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.royalBlue, ARGBColor.white, logoPath, backgroundPath);
+        BufferedImage bufferedImage2 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.doderBlue, ARGBColor.white, logoPath, backgroundPath);
 
-        boolean success = QRCodeUtil.saveToPath(bufferedImage, dstPath);
+        QRCodeUtil.saveToPath(bufferedImage1, dstPath + "qrcode1.png");
+        QRCodeUtil.saveToPath(bufferedImage2, dstPath + "qrcode2.png");
 
-        System.out.printf("saveToPath success=[%s] dstPath=[%s] %n", success, dstPath);
         System.out.println("base64:");
-        System.out.println(QRCodeUtil.toBase64(bufferedImage));
+        System.out.println(QRCodeUtil.toBase64(bufferedImage1));
     }
 }
