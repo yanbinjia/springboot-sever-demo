@@ -31,7 +31,7 @@ public class QRCodeTestController {
         Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
         Map<String, String> map = new HashMap<>();
         map.put("content", content);
-        map.put("image", QRCodeUtil.genQrCodeImgBase64(content, 300, 300, ARGBColor.white, logoPath, backgroundPath));
+        map.put("image", QRCodeUtil.genQrCodeImgBase64(content, 300, 300, ARGBColor.black, ARGBColor.white, logoPath, backgroundPath));
         result.setData(map);
 
         return result;
@@ -40,9 +40,18 @@ public class QRCodeTestController {
     @TokenPass
     @SignPass
     @GetMapping("/test2")
-    public void testOutput(HttpServletResponse response,
-                           @NotEmpty(message = "不能为空") @RequestParam String content) {
+    public void testOutput1(HttpServletResponse response,
+                            @NotEmpty(message = "不能为空") @RequestParam String content) {
         BufferedImage bufferedImage = QRCodeUtil.genQrCodeImg(content, 300, 300);
+        QRCodeUtil.output(response, content, bufferedImage);
+    }
+
+    @TokenPass
+    @SignPass
+    @GetMapping("/test3")
+    public void testOutput2(HttpServletResponse response,
+                            @NotEmpty(message = "不能为空") @RequestParam String content) {
+        BufferedImage bufferedImage = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.doderBlue, ARGBColor.white);
         QRCodeUtil.output(response, content, bufferedImage);
     }
 }
