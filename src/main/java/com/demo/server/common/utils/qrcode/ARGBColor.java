@@ -22,5 +22,4 @@ public class ARGBColor {
     public static final int purple = 0xFF7F007F;// 紫色
     public static final int brown = 0xFF996633;// 棕色
     public static final int clear = 0x00000000;// 透明
-    public static final int none = -1;//
 }

@@ -79,7 +79,7 @@ public class RedisTestController {
     @ResponseBody
     public Result<Map<String, String>> lock(@RequestParam(required = true) @NotEmpty(message = "不能为空") String key) {
 
-        String lockKey = redisService.LOCK_PREFIX + key.trim();
+        String lockKey = RedisService.LOCK_PREFIX + key.trim();
         String lockValue = lockKey + "@" + RandomUtil.uuidWithoutSeparator();
         int expireSeconds = 60 * 5;
 
@@ -114,7 +114,7 @@ public class RedisTestController {
                                             @RequestParam(required = true)
                                             @NotEmpty(message = "不能为空") String value) {
 
-        String lockKey = redisService.LOCK_PREFIX + key.trim();
+        String lockKey = RedisService.LOCK_PREFIX + key.trim();
         String lockValue = value;
         int expireSeconds = 60 * 5;
 
@@ -147,7 +147,7 @@ public class RedisTestController {
     public Result<Map<String, String>> releaseLock(@RequestParam(required = true) @NotEmpty(message = "不能为空") String key,
                                                    @RequestParam(required = true) @NotEmpty(message = "不能为空") String value) {
 
-        String lockKey = redisService.LOCK_PREFIX + key.trim();
+        String lockKey = RedisService.LOCK_PREFIX + key.trim();
         String lockValue = value;
 
         boolean releaseLock = redisService.releaseLock(lockKey, lockValue);
