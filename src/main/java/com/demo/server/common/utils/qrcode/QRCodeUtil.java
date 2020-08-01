@@ -34,20 +34,19 @@ public class QRCodeUtil {
         return genQrCodeImg(content, width, height, ARGBColor.Black, ARGBColor.White, null, null);
     }
 
-    public static BufferedImage genQrCodeImg(String content, int width, int height, int lineColor, int backgroundColor) {
+    public static BufferedImage genQrCodeImg(String content, int width, int height,
+                                             int lineColor, int backgroundColor) {
         return genQrCodeImg(content, width, height, lineColor, backgroundColor, null, null);
     }
 
-    public static String genQrCodeImgBase64(String content,
-                                            int width, int height,
+    public static String genQrCodeImgBase64(String content, int width, int height,
                                             int lineColor, int backgroundColor,
                                             String logoPath, String backgroundPath) {
         BufferedImage bufferedImage = genQrCodeImg(content, width, height, lineColor, backgroundColor, logoPath, backgroundPath);
         return toBase64(bufferedImage);
     }
 
-    public static BufferedImage genQrCodeImg(String content,
-                                             int width, int height,
+    public static BufferedImage genQrCodeImg(String content, int width, int height,
                                              int lineColor, int backgroundColor,
                                              String logoPath, String backgroundPath) {
         BufferedImage bufferedImage = null;
