@@ -25,11 +25,11 @@ It is a simple work,just put the pieces together for developing faster and perso
 - 接口参数签名和验证(md5/sha256), HandlerInterceptorAdapter实现
 - 异常处理和日志打印(error log), Controller请求和响应日志打印(access log), @ControllerAdvice实现
 - RateLimitAspect, 基于guava RateLimiter接口限流，Controller方法注解 @RateLimit(qps = 50)
-- 工具封装:SpringUtil、EnumUtil、HashUtil、RandomUtil、RequestUtil、DateUtil、Base64Util等
+- 工具封装:SpringUtil、HashUtil、RandomUtil、DateUtil、Base64Util等
 - 好用工具:guava、commons-lang3、commons-io、commons-collections4、commons-codec、jsoup、lombok
 - 图片验证码功能
 - XSS(Cross Site Scripting) filter, simple implement
-- 二维码生成(ZXing)
+- 二维码生成([ZXing](https://github.com/zxing/zxing))
 
 
 
