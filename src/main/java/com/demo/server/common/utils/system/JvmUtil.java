@@ -14,6 +14,15 @@ import java.util.Date;
 
 public class JvmUtil {
 
+    public static String getUserDir() {
+        return System.getProperty("user.dir");
+    }
+
+    public static String getClassPathRoot() {
+        return JvmUtil.class.getResource("/").getPath();
+    }
+
+
     public static JvmInfo getJvmInfo() {
         ThreadMXBean threads = ManagementFactory.getThreadMXBean();
         MemoryUsage heapMemoryUsage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
@@ -26,6 +35,7 @@ public class JvmUtil {
         jvmInfo.setUserName(System.getProperty("user.name"));
         jvmInfo.setUserHome(System.getProperty("user.home"));
         jvmInfo.setUserDir(System.getProperty("user.dir"));
+        jvmInfo.setClassPath(getClassPathRoot());
 
         jvmInfo.setJvmName(System.getProperty("java.vm.name"));
         jvmInfo.setJvmVersion(System.getProperty("java.vm.version"));
@@ -81,7 +91,8 @@ public class JvmUtil {
     public static void main(String[] args) {
         System.out.println(JvmUtil.getJvmInfo());
         System.out.println(OshiUtil.getCpuInfo().toString());
-
+        System.out.println("getClassPathRoot=" + JvmUtil.getClassPathRoot());
+        System.out.println("getUserDir=" + JvmUtil.getUserDir());
     }
 
 }

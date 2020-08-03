@@ -6,6 +6,7 @@ import com.demo.server.common.interceptor.SignPass;
 import com.demo.server.common.interceptor.TokenPass;
 import com.demo.server.common.utils.qrcode.ARGBColor;
 import com.demo.server.common.utils.qrcode.QRCodeUtil;
+import com.demo.server.common.utils.system.JvmUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +52,8 @@ public class QRCodeTestController {
     @GetMapping("/test3")
     public void testOutput2(HttpServletResponse response,
                             @NotEmpty(message = "不能为空") @RequestParam String content) {
-        BufferedImage bufferedImage = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.DoderBlue, ARGBColor.White);
+        String logoPath = JvmUtil.getClassPathRoot() + "/resources/logo-wechat.png";
+        BufferedImage bufferedImage = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.DoderBlue, ARGBColor.White, logoPath, null);
         QRCodeUtil.outToWeb(response, content, bufferedImage);
     }
 }
