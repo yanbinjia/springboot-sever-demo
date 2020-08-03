@@ -30,23 +30,23 @@ public class QRCodeUtil {
 
     public static final String IMG_FORMAT_PNG = "png";
 
-    public static BufferedImage genQrCodeImg(String content, int width, int height) {
-        return genQrCodeImg(content, width, height, ARGBColor.Black, ARGBColor.White, null, null);
+    public static BufferedImage genQRCodeImg(String content, int width, int height) {
+        return genQRCodeImg(content, width, height, ARGBColor.Black, ARGBColor.White, null, null);
     }
 
-    public static BufferedImage genQrCodeImg(String content, int width, int height,
+    public static BufferedImage genQRCodeImg(String content, int width, int height,
                                              int lineColor, int backgroundColor) {
-        return genQrCodeImg(content, width, height, lineColor, backgroundColor, null, null);
+        return genQRCodeImg(content, width, height, lineColor, backgroundColor, null, null);
     }
 
-    public static String genQrCodeImgBase64(String content, int width, int height,
+    public static String genQRCodeImgBase64(String content, int width, int height,
                                             int lineColor, int backgroundColor,
                                             String logoPath, String backgroundPath) {
-        BufferedImage bufferedImage = genQrCodeImg(content, width, height, lineColor, backgroundColor, logoPath, backgroundPath);
+        BufferedImage bufferedImage = genQRCodeImg(content, width, height, lineColor, backgroundColor, logoPath, backgroundPath);
         return toBase64(bufferedImage);
     }
 
-    public static BufferedImage genQrCodeImg(String content, int width, int height,
+    public static BufferedImage genQRCodeImg(String content, int width, int height,
                                              int lineColor, int backgroundColor,
                                              String logoPath, String backgroundPath) {
         BufferedImage bufferedImage = null;
@@ -63,7 +63,7 @@ public class QRCodeUtil {
             BitMatrix bitMatrix = new CustomMultiFormatWriter().encode(content,
                     BarcodeFormat.QR_CODE, width, height, hints);
 
-            bufferedImage = writeBufferedImage(bitMatrix, lineColor, backgroundColor, logoPath, backgroundPath);
+            bufferedImage = drawQRCodeBuffImg(bitMatrix, lineColor, backgroundColor, logoPath, backgroundPath);
 
         } catch (Exception e) {
             logger.error("genQrCodeImg error:", e);
@@ -72,9 +72,9 @@ public class QRCodeUtil {
         return bufferedImage;
     }
 
-    public static BufferedImage writeBufferedImage(BitMatrix matrix, int lineColor, int backgroundColor,
-                                                   String logoPath, String backgroundPath) {
-        BufferedImage bufferedImage = toBasicBufferedImage(matrix, lineColor, backgroundColor);
+    public static BufferedImage drawQRCodeBuffImg(BitMatrix matrix, int lineColor, int backgroundColor,
+                                                  String logoPath, String backgroundPath) {
+        BufferedImage bufferedImage = drawBasicQRCodeBuffImg(matrix, lineColor, backgroundColor);
 
         if (StringUtils.isNotBlank(logoPath)) {
             addLogo(bufferedImage, logoPath);
@@ -86,7 +86,7 @@ public class QRCodeUtil {
         return bufferedImage;
     }
 
-    public static BufferedImage toBasicBufferedImage(BitMatrix matrix, int lineColor, int backgroundColor) {
+    public static BufferedImage drawBasicQRCodeBuffImg(BitMatrix matrix, int lineColor, int backgroundColor) {
         int width = matrix.getWidth();
         int height = matrix.getHeight();
 
@@ -236,15 +236,15 @@ public class QRCodeUtil {
         String backgroundPath = "./doc/resources/2.png";
         String dstPath = "./tmp/";
 
-        BufferedImage bufferedImage1 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.RoyalBlue, ARGBColor.White, logoPathOfWechat, backgroundPath);
-        BufferedImage bufferedImage2 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.DoderBlue, ARGBColor.White, logoPathOfChrome, backgroundPath);
+        BufferedImage bufferedImage1 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.RoyalBlue, ARGBColor.White, logoPathOfWechat, backgroundPath);
+        BufferedImage bufferedImage2 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.DoderBlue, ARGBColor.White, logoPathOfChrome, backgroundPath);
 
-        BufferedImage bufferedImage3 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.SeaGreen, ARGBColor.White, logoPath, backgroundPath);
-        BufferedImage bufferedImage4 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.LightSeaGreen, ARGBColor.White, logoPath, backgroundPath);
-        BufferedImage bufferedImage5 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.MediumSeaGreen, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage3 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.SeaGreen, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage4 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.LightSeaGreen, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage5 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.MediumSeaGreen, ARGBColor.White, logoPath, backgroundPath);
 
-        BufferedImage bufferedImage6 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.Purple2, ARGBColor.White, logoPath, backgroundPath);
-        BufferedImage bufferedImage7 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.MediumPurple, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage6 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.Purple2, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage7 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.MediumPurple, ARGBColor.White, logoPath, backgroundPath);
 
         QRCodeUtil.saveToPath(bufferedImage1, dstPath + "qrcode1.png");
         QRCodeUtil.saveToPath(bufferedImage2, dstPath + "qrcode2.png");
