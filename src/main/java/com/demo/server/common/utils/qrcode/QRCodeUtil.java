@@ -77,11 +77,11 @@ public class QRCodeUtil {
         BufferedImage bufferedImage = toBasicBufferedImage(matrix, lineColor, backgroundColor);
 
         if (StringUtils.isNotBlank(logoPath)) {
-            bufferedImage = addLogo(bufferedImage, logoPath);
+            addLogo(bufferedImage, logoPath);
         }
 
         if (StringUtils.isNotBlank(backgroundPath)) {
-            bufferedImage = addBackground(bufferedImage, backgroundPath);
+            addBackground(bufferedImage, backgroundPath);
         }
         return bufferedImage;
     }
@@ -111,22 +111,25 @@ public class QRCodeUtil {
             graphics = bufferedImage.getGraphics();
             BufferedImage logoBuffImg = ImageIO.read(logoFile);
 
-            int logoWidth = logoBuffImg.getWidth();
-            int logoHeight = logoBuffImg.getHeight();
-
-            // 计算图片放置位置
-            int x = (bufferedImage.getWidth() - logoWidth) / 2;
-            int y = (bufferedImage.getHeight() - logoBuffImg.getHeight()) / 2;
-
-            // 开始绘制图片
-            // graphics.drawRoundRect(x, y, logoWidth, logoHeight, 10, 10);
-            // graphics.drawRect(x, y, logoWidth, logoHeight);
+            // 计算设置logo放置位置,二维码正中间
+            int x = bufferedImage.getWidth() / 5 * 2;
+            int y = bufferedImage.getHeight() / 5 * 2;
+            // 计算设置logo大小,根据需求调整
+            int logoWidth = bufferedImage.getHeight() / 5;
+            int logoHeight = bufferedImage.getHeight() / 5;
+            // 绘制logo到二维码
             graphics.drawImage(logoBuffImg, x, y, logoWidth, logoHeight, null);
+
+            // 美化,绘制指定弧度的圆角矩形
+            graphics.setColor(Color.gray);
+            graphics.drawRoundRect(x, y, logoWidth, logoHeight, 20, 20);
+
         } catch (IOException e) {
             logger.error("addLogo error.", e);
         } finally {
-            // 释放资源
-            graphics.dispose();
+            if (graphics != null) {
+                graphics.dispose();// 释放资源
+            }
         }
 
         return bufferedImage;
@@ -138,10 +141,9 @@ public class QRCodeUtil {
             return bufferedImage;
         }
 
-        BufferedImage backgroundImg = null;
         Graphics graphics = null;
         try {
-            backgroundImg = ImageIO.read(backgroundFile);
+            BufferedImage backgroundImg = ImageIO.read(backgroundFile);
             graphics = backgroundImg.getGraphics();
             // 计算插入位置
             int x = backgroundImg.getWidth() / 2 - bufferedImage.getWidth(null) / 2;
@@ -151,7 +153,9 @@ public class QRCodeUtil {
         } catch (IOException e) {
             logger.error("addBackground error.", e);
         } finally {
-            graphics.dispose();
+            if (graphics != null) {
+                graphics.dispose();// 释放资源
+            }
         }
 
         return bufferedImage;
@@ -213,7 +217,9 @@ public class QRCodeUtil {
             logger.error("output error.", e);
         } finally {
             try {
-                out.close();
+                if (out != null) {
+                    out.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 logger.error("output error.", e);
@@ -223,17 +229,31 @@ public class QRCodeUtil {
     }
 
     public static void main(String[] args) {
-        String content = "https://mp.weixin.qq.com/xxxxxxxxxxx";
-        String logoPath = "./tmp/1.png";
-        String backgroundPath = "./tmp/2.png";
+        String content = "https://www.baidu.com/s?wd=qrcode";
+        String logoPath = "./doc/resources/logo-transformers.png";
+        String logoPathOfWechat = "./doc/resources/logo-wechat.png";
+        String logoPathOfChrome = "./doc/resources/logo-chrome.png";
+        String backgroundPath = "./doc/resources/2.png";
         String dstPath = "./tmp/";
-        int backgroundColor = 0xFFb5e871;
 
-        BufferedImage bufferedImage1 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.RoyalBlue, ARGBColor.White, logoPath, backgroundPath);
-        BufferedImage bufferedImage2 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.DoderBlue, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage1 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.RoyalBlue, ARGBColor.White, logoPathOfWechat, backgroundPath);
+        BufferedImage bufferedImage2 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.DoderBlue, ARGBColor.White, logoPathOfChrome, backgroundPath);
+
+        BufferedImage bufferedImage3 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.SeaGreen, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage4 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.LightSeaGreen, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage5 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.MediumSeaGreen, ARGBColor.White, logoPath, backgroundPath);
+
+        BufferedImage bufferedImage6 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.Purple2, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage7 = QRCodeUtil.genQrCodeImg(content, 300, 300, ARGBColor.MediumPurple, ARGBColor.White, logoPath, backgroundPath);
 
         QRCodeUtil.saveToPath(bufferedImage1, dstPath + "qrcode1.png");
         QRCodeUtil.saveToPath(bufferedImage2, dstPath + "qrcode2.png");
+        QRCodeUtil.saveToPath(bufferedImage3, dstPath + "qrcode3.png");
+        QRCodeUtil.saveToPath(bufferedImage4, dstPath + "qrcode4.png");
+        QRCodeUtil.saveToPath(bufferedImage5, dstPath + "qrcode5.png");
+
+        QRCodeUtil.saveToPath(bufferedImage6, dstPath + "qrcode6.png");
+        QRCodeUtil.saveToPath(bufferedImage7, dstPath + "qrcode7.png");
 
         System.out.println("base64:");
         System.out.println(QRCodeUtil.toBase64(bufferedImage1));
