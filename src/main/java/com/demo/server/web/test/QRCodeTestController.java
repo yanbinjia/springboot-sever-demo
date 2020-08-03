@@ -43,7 +43,7 @@ public class QRCodeTestController {
     public void testOutput1(HttpServletResponse response,
                             @NotEmpty(message = "不能为空") @RequestParam String content) {
         BufferedImage bufferedImage = QRCodeUtil.genQRCodeImg(content, 300, 300);
-        QRCodeUtil.output(response, content, bufferedImage);
+        QRCodeUtil.outToWeb(response, content, bufferedImage);
     }
 
     @TokenPass
@@ -52,6 +52,6 @@ public class QRCodeTestController {
     public void testOutput2(HttpServletResponse response,
                             @NotEmpty(message = "不能为空") @RequestParam String content) {
         BufferedImage bufferedImage = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.DoderBlue, ARGBColor.White);
-        QRCodeUtil.output(response, content, bufferedImage);
+        QRCodeUtil.outToWeb(response, content, bufferedImage);
     }
 }

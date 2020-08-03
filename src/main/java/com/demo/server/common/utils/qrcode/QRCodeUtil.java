@@ -204,12 +204,12 @@ public class QRCodeUtil {
         response.setHeader("QRCodeContent", content);// content
     }
 
-    public static boolean output(HttpServletResponse response, String content, BufferedImage bufferedImage) {
+    public static boolean outToWeb(HttpServletResponse response, String content, BufferedImage bufferedImage) {
         setHeader(response, content);
-        return output(response, bufferedImage);
+        return outToWeb(response, bufferedImage);
     }
 
-    public static boolean output(HttpServletResponse response, BufferedImage bufferedImage) {
+    public static boolean outToWeb(HttpServletResponse response, BufferedImage bufferedImage) {
         OutputStream out = null;
         try {
             out = response.getOutputStream();
