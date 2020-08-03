@@ -240,20 +240,13 @@ public class QRCodeUtil {
         BufferedImage bufferedImage2 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.DoderBlue, ARGBColor.White, logoPathOfChrome, backgroundPath);
 
         BufferedImage bufferedImage3 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.SeaGreen, ARGBColor.White, logoPath, backgroundPath);
-        BufferedImage bufferedImage4 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.LightSeaGreen, ARGBColor.White, logoPath, backgroundPath);
-        BufferedImage bufferedImage5 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.MediumSeaGreen, ARGBColor.White, logoPath, backgroundPath);
+        BufferedImage bufferedImage4 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.Purple2, ARGBColor.White, logoPath, backgroundPath);
 
-        BufferedImage bufferedImage6 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.Purple2, ARGBColor.White, logoPath, backgroundPath);
-        BufferedImage bufferedImage7 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.MediumPurple, ARGBColor.White, logoPath, backgroundPath);
 
         QRCodeUtil.saveToPath(bufferedImage1, dstPath + "qrcode1.png");
         QRCodeUtil.saveToPath(bufferedImage2, dstPath + "qrcode2.png");
         QRCodeUtil.saveToPath(bufferedImage3, dstPath + "qrcode3.png");
         QRCodeUtil.saveToPath(bufferedImage4, dstPath + "qrcode4.png");
-        QRCodeUtil.saveToPath(bufferedImage5, dstPath + "qrcode5.png");
-
-        QRCodeUtil.saveToPath(bufferedImage6, dstPath + "qrcode6.png");
-        QRCodeUtil.saveToPath(bufferedImage7, dstPath + "qrcode7.png");
 
         System.out.println("base64:");
         System.out.println(QRCodeUtil.toBase64(bufferedImage1));
