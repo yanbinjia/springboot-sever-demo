@@ -13,6 +13,7 @@ public class JvmInfo {
     private String userName;
     private String userHome;
     private String userDir;
+    private String classPath;
 
     private String jvmName;
     private String jvmVersion;
