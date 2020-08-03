@@ -284,9 +284,7 @@ public class QRCodeUtil {
         QRCodeUtil.saveToPath(bufferedImage3, dstPath + "qrcode3.png");
         QRCodeUtil.saveToPath(bufferedImage4, dstPath + "qrcode4.png");
 
-        System.out.println("toBase64()" + QRCodeUtil.toBase64(bufferedImage1));
-        System.out.println();
-        System.out.println("decode()=" + QRCodeUtil.decode(bufferedImage1));
-        System.out.println("decode()=" + QRCodeUtil.decode(dstPath + "qrcode1.png"));
+        System.out.println("decode(buffImg)=" + QRCodeUtil.decode(bufferedImage1));
+        System.out.println("decode(filePath)=" + QRCodeUtil.decode(dstPath + "qrcode1.png"));
     }
 }
