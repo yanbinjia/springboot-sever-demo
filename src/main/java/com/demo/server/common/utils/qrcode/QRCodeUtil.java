@@ -126,7 +126,6 @@ public class QRCodeUtil {
             // 美化,绘制指定弧度的圆角矩形
             graphics.setColor(Color.gray);
             graphics.drawRoundRect(x, y, logoWidth, logoHeight, 20, 20);
-
         } catch (IOException e) {
             logger.error("addLogo error.", e);
         } finally {
