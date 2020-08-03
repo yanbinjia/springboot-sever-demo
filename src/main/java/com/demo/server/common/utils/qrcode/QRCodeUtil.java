@@ -6,9 +6,10 @@
 
 package com.demo.server.common.utils.qrcode;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -23,7 +24,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 public class QRCodeUtil {
     private static final Logger logger = LoggerFactory.getLogger(QRCodeUtil.class);
@@ -228,6 +231,40 @@ public class QRCodeUtil {
         return false;
     }
 
+    public static String decode(String filePath) {
+        String content = null;
+        File qrFile = new File(filePath);
+        if (StringUtils.isBlank(filePath) || !qrFile.exists()) {
+            return content;
+        }
+        try {
+            content = decode(ImageIO.read(qrFile));
+        } catch (IOException e) {
+            logger.error("decode error.", e);
+        }
+        return content;
+    }
+
+    public static String decode(BufferedImage bufferedImage) {
+        String content = null;
+        try {
+            LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
+            Binarizer binarizer = new HybridBinarizer(source);
+            BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
+
+            Map<DecodeHintType, Object> hints = new HashMap<DecodeHintType, Object>();
+            hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
+
+            Result result = new MultiFormatReader().decode(binaryBitmap, hints);
+            if (result != null) {
+                content = result.getText();
+            }
+        } catch (Exception e) {
+            logger.error("decode error.", e);
+        }
+        return content;
+    }
+
     public static void main(String[] args) {
         String content = "https://www.baidu.com/s?wd=qrcode";
         String logoPath = "./doc/resources/logo-transformers.png";
@@ -242,13 +279,14 @@ public class QRCodeUtil {
         BufferedImage bufferedImage3 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.SeaGreen, ARGBColor.White, logoPath, backgroundPath);
         BufferedImage bufferedImage4 = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.Purple2, ARGBColor.White, logoPath, backgroundPath);
 
-
         QRCodeUtil.saveToPath(bufferedImage1, dstPath + "qrcode1.png");
         QRCodeUtil.saveToPath(bufferedImage2, dstPath + "qrcode2.png");
         QRCodeUtil.saveToPath(bufferedImage3, dstPath + "qrcode3.png");
         QRCodeUtil.saveToPath(bufferedImage4, dstPath + "qrcode4.png");
 
-        System.out.println("base64:");
-        System.out.println(QRCodeUtil.toBase64(bufferedImage1));
+        System.out.println("toBase64()" + QRCodeUtil.toBase64(bufferedImage1));
+        System.out.println();
+        System.out.println("decode()=" + QRCodeUtil.decode(bufferedImage1));
+        System.out.println("decode()=" + QRCodeUtil.decode(dstPath + "qrcode1.png"));
     }
 }
