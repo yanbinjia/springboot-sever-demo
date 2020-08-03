@@ -235,7 +235,7 @@ public class QRCodeUtil {
         String content = null;
         File qrFile = new File(filePath);
         if (StringUtils.isBlank(filePath) || !qrFile.exists()) {
-            return content;
+            return null;
         }
         try {
             content = decode(ImageIO.read(qrFile));
@@ -252,7 +252,7 @@ public class QRCodeUtil {
             Binarizer binarizer = new HybridBinarizer(source);
             BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
 
-            Map<DecodeHintType, Object> hints = new HashMap<DecodeHintType, Object>();
+            Map<DecodeHintType, Object> hints = new HashMap<>();
             hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
 
             Result result = new MultiFormatReader().decode(binaryBitmap, hints);
@@ -286,5 +286,6 @@ public class QRCodeUtil {
 
         System.out.println("decode(buffImg)=" + QRCodeUtil.decode(bufferedImage1));
         System.out.println("decode(filePath)=" + QRCodeUtil.decode(dstPath + "qrcode1.png"));
+
     }
 }
