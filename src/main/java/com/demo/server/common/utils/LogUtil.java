@@ -19,7 +19,7 @@ public class LogUtil {
 
     private static final Logger accessLogger = LoggerFactory.getLogger(AppConstant.LOGGER_ACCESS);
 
-    private static final Logger exceptionLogger = LoggerFactory.getLogger(LogUtil.class);
+    private static final Logger appLogger = LoggerFactory.getLogger(LogUtil.class);
 
     public static int LOG_MAX_LEN = 300;
 
@@ -69,7 +69,7 @@ public class LogUtil {
         logSb.append(LOG_SPLIT);
         logSb.append(maxLenDeal(JSONObject.toJSONString(result)));
 
-        exceptionLogger.error(logSb.toString(), t);
+        appLogger.error(logSb.toString(), t);
     }
 
     /**
@@ -83,6 +83,12 @@ public class LogUtil {
             logStr = logStr.substring(0, LOG_MAX_LEN) + "...}";
         }
         return logStr;
+    }
+
+    public static void debug(String format, Object... arguments) {
+        if (appLogger.isDebugEnabled()) {
+            appLogger.debug(format, arguments);
+        }
     }
 
 }
