@@ -6,7 +6,7 @@ import com.demo.server.bean.entity.UserInfo;
 import com.demo.server.common.interceptor.SignPass;
 import com.demo.server.common.interceptor.TokenPass;
 import com.demo.server.common.utils.RandomUtil;
-import com.demo.server.service.base.cache.RedisService;
+import com.demo.server.common.utils.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ import java.util.Map;
 @Validated
 public class RedisTestController {
     @Autowired
-    RedisService redisService;
+    RedisUtil redisUtil;
 
     @TokenPass
     @SignPass
@@ -43,13 +43,13 @@ public class RedisTestController {
         userInfo.setCreateTime(LocalDateTime.now());
         userInfo.setUpdateTime(LocalDateTime.now());
 
-        redisService.set(idStr, userInfo, -1L);
+        redisUtil.set(idStr, userInfo, -1L);
 
-        redisService.set("123456", "1234567String", -1L);
+        redisUtil.set("123456", "1234567String", -1L);
 
         Result<String> result = new Result<>(ResultCode.SUCCESS);
-        result.setData(String.valueOf(redisService.get(idStr)));
-        result.setMsg(String.valueOf(redisService.get("123456")));
+        result.setData(String.valueOf(redisUtil.get(idStr)));
+        result.setMsg(String.valueOf(redisUtil.get("123456")));
 
         return result;
     }
@@ -60,13 +60,13 @@ public class RedisTestController {
     @ResponseBody
     public Result<Map<String, String>> bitmap(@RequestParam(name = "id", required = true) Long id) {
         String key = "online";
-        redisService.setBit(key, id, true);
-        boolean getbit = redisService.getBit(key, id);
+        redisUtil.setBit(key, id, true);
+        boolean getbit = redisUtil.getBit(key, id);
 
         Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
         Map<String, String> map = new HashMap<>();
         map.put("bitmap-key", key);
-        map.put("bitcount", String.valueOf(redisService.bitCount(key)));
+        map.put("bitcount", String.valueOf(redisUtil.bitCount(key)));
         map.put("getbit[" + id + "]", String.valueOf(getbit));
         result.setData(map);
 
@@ -79,11 +79,11 @@ public class RedisTestController {
     @ResponseBody
     public Result<Map<String, String>> lock(@RequestParam(required = true) @NotEmpty(message = "不能为空") String key) {
 
-        String lockKey = RedisService.LOCK_PREFIX + key.trim();
+        String lockKey = RedisUtil.LOCK_PREFIX + key.trim();
         String lockValue = lockKey + "@" + RandomUtil.uuidWithoutSeparator();
         int expireSeconds = 60 * 5;
 
-        boolean getLock = redisService.getLock(lockKey, lockValue, expireSeconds);
+        boolean getLock = redisUtil.getLock(lockKey, lockValue, expireSeconds);
 
         Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
         Map<String, String> map = new HashMap<>();
@@ -91,12 +91,12 @@ public class RedisTestController {
         if (getLock) {
             map.put("getLock", "success");
             map.put("lockKey", lockKey);
-            map.put("lockValue", String.valueOf(redisService.get(lockKey)));
+            map.put("lockValue", String.valueOf(redisUtil.get(lockKey)));
             map.put("expireSeconds", expireSeconds + "");
         } else {
             map.put("getLock", "fail");
             map.put("lockKey", lockKey);
-            map.put("lockValue", String.valueOf(redisService.get(lockKey)));
+            map.put("lockValue", String.valueOf(redisUtil.get(lockKey)));
             map.put("expireSeconds", expireSeconds + "");
         }
 
@@ -114,11 +114,11 @@ public class RedisTestController {
                                             @RequestParam(required = true)
                                             @NotEmpty(message = "不能为空") String value) {
 
-        String lockKey = RedisService.LOCK_PREFIX + key.trim();
+        String lockKey = RedisUtil.LOCK_PREFIX + key.trim();
         String lockValue = value;
         int expireSeconds = 60 * 5;
 
-        boolean getLock = redisService.getLock(lockKey, lockValue, expireSeconds);
+        boolean getLock = redisUtil.getLock(lockKey, lockValue, expireSeconds);
 
         Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
         Map<String, String> map = new HashMap<>();
@@ -126,12 +126,12 @@ public class RedisTestController {
         if (getLock) {
             map.put("getLock", "success");
             map.put("lockKey", lockKey);
-            map.put("lockValue", String.valueOf(redisService.get(lockKey)));
+            map.put("lockValue", String.valueOf(redisUtil.get(lockKey)));
             map.put("expireSeconds", expireSeconds + "");
         } else {
             map.put("getLock", "fail");
             map.put("lockKey", lockKey);
-            map.put("lockValue", String.valueOf(redisService.get(lockKey)));
+            map.put("lockValue", String.valueOf(redisUtil.get(lockKey)));
             map.put("expireSeconds", expireSeconds + "");
         }
 
@@ -147,10 +147,10 @@ public class RedisTestController {
     public Result<Map<String, String>> releaseLock(@RequestParam(required = true) @NotEmpty(message = "不能为空") String key,
                                                    @RequestParam(required = true) @NotEmpty(message = "不能为空") String value) {
 
-        String lockKey = RedisService.LOCK_PREFIX + key.trim();
+        String lockKey = RedisUtil.LOCK_PREFIX + key.trim();
         String lockValue = value;
 
-        boolean releaseLock = redisService.releaseLock(lockKey, lockValue);
+        boolean releaseLock = redisUtil.releaseLock(lockKey, lockValue);
 
         Result<Map<String, String>> result = new Result<>(ResultCode.SUCCESS);
         Map<String, String> map = new HashMap<>();
@@ -162,7 +162,7 @@ public class RedisTestController {
         } else {
             map.put("releaseLock", "fail");
             map.put("lockKey", lockKey);
-            map.put("lockValue", String.valueOf(redisService.get(lockKey)));
+            map.put("lockValue", String.valueOf(redisUtil.get(lockKey)));
         }
 
         result.setData(map);

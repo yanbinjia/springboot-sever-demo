@@ -28,7 +28,6 @@ import java.util.List;
 
 @Configuration
 public class AppWebMvcConfig implements WebMvcConfigurer {
-
     @Autowired
     private TokenInterceptor tokenInterceptor;
     @Autowired
