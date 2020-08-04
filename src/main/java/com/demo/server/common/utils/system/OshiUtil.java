@@ -31,6 +31,9 @@ public class OshiUtil {
         os = systemInfo.getOperatingSystem();
     }
 
+    private OshiUtil() {
+    }
+
     /**
      * 获取操作系统相关信息，包括系统版本、文件系统、进程等
      *
