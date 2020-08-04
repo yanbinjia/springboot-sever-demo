@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class AesUtil {
+
     public static final String KEY_ALGORITHM = "AES";
     public static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";// 默认的加密算法
     public static final String CHARSET_UTF8 = "UTF-8";

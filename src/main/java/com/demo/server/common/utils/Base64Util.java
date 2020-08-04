@@ -9,6 +9,7 @@ import java.util.Base64;
 import java.util.UUID;
 
 public class Base64Util {
+
     private Base64Util() {
     }
 

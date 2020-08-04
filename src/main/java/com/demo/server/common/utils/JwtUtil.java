@@ -16,6 +16,7 @@ import java.util.Map;
  * https://tools.ietf.org/html/rfc7519
  */
 public class JwtUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
     public static String createToken(Map<String, String> claimsMap, String secret, int expireAfterNSecs) {

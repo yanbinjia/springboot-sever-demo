@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class OshiUtil {
+
     private static final SystemInfo systemInfo;
     /**
      * 硬件信息

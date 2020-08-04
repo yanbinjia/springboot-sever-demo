@@ -7,6 +7,7 @@
 package com.demo.server.common.utils.qrcode;
 
 public class ARGBColor {
+
     public static final int White = 0xFFFFFFFF;// 白色
     public static final int Black = 0xFF000000;// 黑色
 
@@ -45,4 +46,5 @@ public class ARGBColor {
     public static final int Brown = 0xFF996633;// 棕色
 
     public static final int Clear = 0x00000000;// 透明
+
 }
