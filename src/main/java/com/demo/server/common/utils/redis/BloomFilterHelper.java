@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2020 demo ^-^.
  * @Author: yanbinjia@126.com
- * @LastModified: 2020-07-29T23:12:47.530+08:00
+ * @LastModified: 2020-08-04T12:00:46.136+08:00
  */
 
-package com.demo.server.service.base.cache;
+package com.demo.server.common.utils.redis;
 
 import com.google.common.base.Preconditions;
 import com.google.common.hash.Funnel;

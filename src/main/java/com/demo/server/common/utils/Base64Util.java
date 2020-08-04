@@ -10,6 +10,9 @@ import java.util.UUID;
 
 public class Base64Util {
 
+    private Base64Util() {
+    }
+
     /*
      * Base64 是一种基于 64 个可打印字符来表示二进制数据的表示方法.
      *

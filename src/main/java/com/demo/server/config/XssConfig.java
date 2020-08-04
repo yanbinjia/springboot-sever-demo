@@ -17,6 +17,8 @@ import org.springframework.context.annotation.PropertySource;
 @Data
 public class XssConfig {
     private boolean turnOn = true;
+    // pathPatterns config use regex
+    private String pathPatterns = "";
     // excludes config use regex
     private String excludes = "";
     // action support:escape,clean,reject

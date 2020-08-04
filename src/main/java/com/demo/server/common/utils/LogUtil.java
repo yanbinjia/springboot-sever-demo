@@ -21,8 +21,9 @@ public class LogUtil {
 
     private static final Logger exceptionLogger = LoggerFactory.getLogger(LogUtil.class);
 
-    public static void accessLog(LogLevel level, HttpServletRequest request, String responseStr, String code, long cost) {
+    public static int LOG_MAX_LEN = 300;
 
+    public static void accessLog(LogLevel level, HttpServletRequest request, String responseStr, String code, long cost) {
         StringBuilder logSb = new StringBuilder();
         logSb.append(RequestUtil.getIp(request));
         logSb.append(LOG_SPLIT);
@@ -34,7 +35,7 @@ public class LogUtil {
         logSb.append(LOG_SPLIT);
         logSb.append(JSONObject.toJSONString(RequestUtil.getParameterMap(request)));
         logSb.append(LOG_SPLIT);
-        logSb.append(responseStr(responseStr));
+        logSb.append(maxLenDeal(responseStr));
 
         String logMsgStr = logSb.toString();
 
@@ -52,11 +53,9 @@ public class LogUtil {
                 accessLogger.info(logMsgStr);
                 break;
         }
-
     }
 
     public static void exceptionLog(HttpServletRequest request, Result<?> result, Throwable t) {
-
         StringBuilder logSb = new StringBuilder();
         logSb.append(RequestUtil.getIp(request));
         logSb.append(LOG_SPLIT);
@@ -68,17 +67,22 @@ public class LogUtil {
         logSb.append(LOG_SPLIT);
         logSb.append(JSONObject.toJSONString(RequestUtil.getParameterMap(request)));
         logSb.append(LOG_SPLIT);
-        logSb.append(responseStr(JSONObject.toJSONString(result)));
+        logSb.append(maxLenDeal(JSONObject.toJSONString(result)));
 
         exceptionLogger.error(logSb.toString(), t);
-
     }
 
-    public static String responseStr(String responseStr) {
-        if (StringUtils.isNotBlank(responseStr) && responseStr.length() > 310) {
-            responseStr = responseStr.substring(0, 300) + "...}";
+    /**
+     * logStr截断, 防止日志内容过多
+     *
+     * @param logStr
+     * @return 截断后日志字符串
+     */
+    public static String maxLenDeal(String logStr) {
+        if (StringUtils.isNotBlank(logStr) && logStr.length() >= LOG_MAX_LEN + 10) {
+            logStr = logStr.substring(0, LOG_MAX_LEN) + "...}";
         }
-        return responseStr;
+        return logStr;
     }
 
 }

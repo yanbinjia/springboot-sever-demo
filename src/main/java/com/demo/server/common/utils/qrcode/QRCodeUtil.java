@@ -29,6 +29,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 public class QRCodeUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(QRCodeUtil.class);
 
     public static final String IMG_FORMAT_PNG = "png";

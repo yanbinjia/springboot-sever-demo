@@ -15,6 +15,9 @@ public class AesUtil {
     public static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";// 默认的加密算法
     public static final String CHARSET_UTF8 = "UTF-8";
 
+    private AesUtil() {
+    }
+
     /**
      * AES 加密操作
      *

@@ -8,7 +8,7 @@ package com.demo.server.common.runner;
 
 import com.demo.server.common.utils.DateUtil;
 import com.demo.server.common.utils.IpUtil;
-import com.demo.server.service.base.cache.RedisService;
+import com.demo.server.common.utils.redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,14 +19,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class MyApplicationRunner implements org.springframework.boot.ApplicationRunner {
     @Autowired
-    private RedisService redisService;
+    private RedisUtil redisUtil;
 
     @Value("${server.port}")
     private String port;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        boolean redisStatus = redisService.set("DemoServer-balabala",
+        boolean redisStatus = redisUtil.set("DemoServer-balabala",
                 "DemoServer-balabala@" + IpUtil.getLocalIp() + ":" + this.port);
         log.info("==============================================");
         log.info(">>> Application startup @{}", DateUtil.getCurrentDateTimeStr());

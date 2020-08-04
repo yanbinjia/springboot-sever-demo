@@ -22,6 +22,6 @@ public class JwtConfig {
     private String iss = "default";
     // "exp" (Expiration Time) Claim, 单位秒
     private int expireAfterSecs = 60 * 60 * 12;
-    //
+    // refresh token 过期时间, 单位秒
     private int refreshExpireAfterSecs = 60 * 60 * 24 * 15;
 }
