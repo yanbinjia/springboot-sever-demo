@@ -1,6 +1,7 @@
 package com.demo.server.common.utils;
 
 import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection.Response;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -70,43 +73,67 @@ public class ImageUtil {
         return result;
     }
 
-    public static BufferedImage zoomByRatio(String filePath, int width, int height, double quality) {
-        if (StringUtils.isBlank(filePath)) {
-            logger.error("filePath can no be blank.");
-            return null;
-        }
-        try {
-            return Thumbnails.of(filePath).size(width, height).outputQuality(quality).asBufferedImage();
-        } catch (IOException e) {
-            logger.error("zoomByRatio", e);
-        }
-        return null;
+    public static BufferedImage zoomByRatio(String filePath, int width, int height, double quality) throws IOException {
+        return Thumbnails.of(filePath).size(width, height).outputQuality(quality).asBufferedImage();
     }
 
-    public static BufferedImage zoomByRatio(String filePath, double scale, double quality) {
-        if (StringUtils.isBlank(filePath)) {
-            logger.error("filePath can no be blank.");
-            return null;
-        }
-        try {
-            return Thumbnails.of(filePath).scale(scale).outputQuality(quality).asBufferedImage();
-        } catch (IOException e) {
-            logger.error("zoomByRatio", e);
-        }
-        return null;
+    public static BufferedImage zoomByRatio(String filePath, double scale, double quality) throws IOException {
+        return Thumbnails.of(filePath).scale(scale).outputQuality(quality).asBufferedImage();
     }
 
-    public static BufferedImage zoomBySize(String filePath, int width, int height, double quality) {
-        if (StringUtils.isBlank(filePath)) {
-            logger.error("filePath can no be blank.");
-            return null;
-        }
+    public static BufferedImage zoomBySize(String filePath, int width, int height, double quality) throws IOException {
+        return Thumbnails.of(filePath).size(width, height).outputQuality(quality).keepAspectRatio(false).asBufferedImage();
+    }
+
+    public static BufferedImage watermark(String filePath, String text, int fontSize, Color color) throws IOException {
+        Graphics2D graphics = null;
+        BufferedImage watermarkImage = null;
         try {
-            return Thumbnails.of(filePath).size(width, height).outputQuality(quality).keepAspectRatio(false).asBufferedImage();
-        } catch (IOException e) {
-            logger.error("zoomByRatio", e);
+            Font font = new Font("", Font.BOLD, fontSize);
+            FontMetrics fm = new JLabel(text).getFontMetrics(font);
+
+            int extraSize = fontSize / 12;// 预留多出一点宽度和高度
+            int width = fm.charsWidth(text.toCharArray(), 0, text.length()) + extraSize; // 所有设置字体的字符总宽度
+            int height = fontSize + extraSize;// 高度
+
+            logger.debug("fontSize={},extraSize={}", fontSize, extraSize);
+            logger.debug("watermarkImage(水印画布) width={},height={}", width, height);
+
+            watermarkImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+            graphics = watermarkImage.createGraphics();
+
+            // 设置为背景透明
+            watermarkImage = graphics.getDeviceConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+            graphics.dispose();
+
+            // 绘制字符串
+            graphics = watermarkImage.createGraphics();
+
+            graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            graphics.setClip(0, 0, width, height);
+
+            graphics.setFont(font);
+            graphics.setColor(color);
+
+            Rectangle rectangle = graphics.getClipBounds();
+            FontMetrics fontMetrics = graphics.getFontMetrics(font);
+            int ascent = fontMetrics.getAscent();
+            int decent = fontMetrics.getDescent();
+
+            int x = extraSize / 2;
+            int y = (rectangle.height - (ascent + decent)) / 2 + ascent;
+            // int y = height - extraSize; // 可用但不完美.
+
+            graphics.drawString(text, x, y);
+
+        } finally {
+            if (graphics != null) {
+                graphics.dispose();
+            }
         }
-        return null;
+
+        return Thumbnails.of(filePath).scale(1f).watermark(Positions.BOTTOM_RIGHT, watermarkImage, 0.70f).asBufferedImage();
     }
 
     public static BufferedImage rotate(String filePath, int width, int height, double angle) {
@@ -136,7 +163,7 @@ public class ImageUtil {
         return false;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println(ImageUtil.isImageByExt("/sf/sf/saf/ddd.txt.png"));
         String filePath = "./tmp/readFileFromUrl.png";
         String url = "https://www.baidu.com/img/flexible/logo/pc/result@2.png";
@@ -145,5 +172,9 @@ public class ImageUtil {
         String srcFilePath = "./tmp/src_img.jpg";
         BufferedImage bufferedImage = ImageUtil.zoomByRatio(srcFilePath, 0.2, 0.9);
         ImageUtil.saveToFile(bufferedImage, "jpg", "./tmp/src_img_0.2.jpg");
+
+
+        bufferedImage = ImageUtil.watermark(srcFilePath, "Power by demo. balabalabala.", 30, Color.lightGray);
+        ImageUtil.saveToFile(bufferedImage, "jpg", "./tmp/src_img_watermark.jpg");
     }
 }
