@@ -343,8 +343,18 @@
             <version>3.4.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
+        <!-- Thumbnailator is a thumbnail generation library for Java. -->
+        <!-- https://github.com/coobird/thumbnailator -->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.11</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.im4java/im4java -->
-        <!-- imagedeal, website: https://imagemagick.org/index.php -->
+        <!-- im4java is a pure-java interface to the ImageMagick commandline. Need to install imagemagick in host.-->
+        <!-- https://imagemagick.org/index.php -->
         <dependency>
             <groupId>org.im4java</groupId>
             <artifactId>im4java</artifactId>

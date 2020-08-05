@@ -185,16 +185,16 @@ public class QRCodeUtil {
         return bufferedImage;
     }
 
-    public static boolean saveToPath(BufferedImage bufferedImage, String outputPath) {
-        if (bufferedImage == null || StringUtils.isBlank(outputPath)) {
-            logger.error("saveToPath error. qrBuffImg,outputPath cannot be null.");
+    public static boolean saveToFile(BufferedImage bufferedImage, String formatName, String filePath) {
+        if (bufferedImage == null || org.apache.commons.lang3.StringUtils.isBlank(filePath)) {
+            logger.error("saveToPath error. qrBuffImg,filePath cannot be null.");
             return false;
         }
         try {
-            ImageIO.write(bufferedImage, IMG_FORMAT_PNG, new File(outputPath));
+            ImageIO.write(bufferedImage, formatName, new File(filePath));
             return true;
         } catch (IOException e) {
-            logger.error("saveToPath error. outputPath=[{}]", outputPath, e);
+            logger.error("saveToPath error. filePath=[{}]", filePath, e);
         }
         return false;
     }
@@ -303,10 +303,10 @@ public class QRCodeUtil {
         BufferedImage bufferedImage3 = QRCodeUtil.genQRCodeImg(content, width, height, ARGBColor.SeaGreen, ARGBColor.White, logoPath, backgroundPath);
         BufferedImage bufferedImage4 = QRCodeUtil.genQRCodeImg(content, width, height, ARGBColor.Purple2, ARGBColor.White, logoPath, backgroundPath);
 
-        QRCodeUtil.saveToPath(bufferedImage1, dstPath + "qrcode1.png");
-        QRCodeUtil.saveToPath(bufferedImage2, dstPath + "qrcode2.png");
-        QRCodeUtil.saveToPath(bufferedImage3, dstPath + "qrcode3.png");
-        QRCodeUtil.saveToPath(bufferedImage4, dstPath + "qrcode4.png");
+        QRCodeUtil.saveToFile(bufferedImage1, QRCodeUtil.IMG_FORMAT_PNG, dstPath + "qrcode1.png");
+        QRCodeUtil.saveToFile(bufferedImage2, QRCodeUtil.IMG_FORMAT_PNG, dstPath + "qrcode2.png");
+        QRCodeUtil.saveToFile(bufferedImage3, QRCodeUtil.IMG_FORMAT_PNG, dstPath + "qrcode3.png");
+        QRCodeUtil.saveToFile(bufferedImage4, QRCodeUtil.IMG_FORMAT_PNG, dstPath + "qrcode4.png");
 
         System.out.println("decode(buffImg)=" + QRCodeUtil.decode(bufferedImage1));
         System.out.println("decode(filePath)=" + QRCodeUtil.decode(dstPath + "qrcode1.png"));
