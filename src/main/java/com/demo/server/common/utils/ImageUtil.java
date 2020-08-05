@@ -85,6 +85,10 @@ public class ImageUtil {
         return Thumbnails.of(filePath).size(width, height).outputQuality(quality).keepAspectRatio(false).asBufferedImage();
     }
 
+    public static BufferedImage rotate(String filePath, int width, int height, double angle) throws IOException {
+        return Thumbnails.of(filePath).size(width, height).rotate(angle).asBufferedImage();
+    }
+
     public static BufferedImage watermark(String filePath, String text, int fontSize, Color color) throws IOException {
         Graphics2D graphics = null;
         BufferedImage watermarkImage = null;
@@ -133,19 +137,6 @@ public class ImageUtil {
         }
 
         return Thumbnails.of(filePath).scale(1f).watermark(Positions.BOTTOM_RIGHT, watermarkImage, 0.70f).asBufferedImage();
-    }
-
-    public static BufferedImage rotate(String filePath, int width, int height, double angle) {
-        if (StringUtils.isBlank(filePath)) {
-            logger.error("filePath can no be blank.");
-            return null;
-        }
-        try {
-            return Thumbnails.of(filePath).size(width, height).rotate(angle).asBufferedImage();
-        } catch (IOException e) {
-            logger.error("zoomByRatio", e);
-        }
-        return null;
     }
 
     public static boolean saveToFile(BufferedImage bufferedImage, String formatName, String filePath) {
