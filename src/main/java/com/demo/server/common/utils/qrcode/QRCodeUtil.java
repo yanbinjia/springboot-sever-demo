@@ -287,7 +287,7 @@ public class QRCodeUtil {
     }
 
     public static void main(String[] args) {
-        String content = "https://www.baidu.com/s?wd=qrcode";
+        String content = "https://www.baidu.com/s?wd=qrcode%20zxing";
         String logoPath = "./doc/resources/logo-transformers.png";
         String logoPathOfWechat = "./doc/resources/logo-wechat.png";
         String logoPathOfChrome = "./doc/resources/logo-chrome.png";

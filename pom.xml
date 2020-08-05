@@ -343,6 +343,13 @@
             <version>3.4.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.im4java/im4java -->
+        <!-- imagedeal, website: https://imagemagick.org/index.php -->
+        <dependency>
+            <groupId>org.im4java</groupId>
+            <artifactId>im4java</artifactId>
+            <version>1.4.0</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/de.siegmar/fastcsv -->
         <!-- https://github.com/osiegmar/FastCSV -->
