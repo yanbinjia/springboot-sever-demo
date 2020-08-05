@@ -96,8 +96,7 @@ public class ImageUtil {
             int width = fm.charsWidth(text.toCharArray(), 0, text.length()) + extraSize; // 所有设置字体的字符总宽度
             int height = fontSize + extraSize;// 高度
 
-            logger.debug("fontSize={},extraSize={}", fontSize, extraSize);
-            logger.debug("watermarkImage(水印画布) width={},height={}", width, height);
+            logger.debug("fontSize={},extraSize={},watermarkImage(水印画布) width={},height={}", fontSize, extraSize, width, height);
 
             watermarkImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -173,8 +172,7 @@ public class ImageUtil {
         BufferedImage bufferedImage = ImageUtil.zoomByRatio(srcFilePath, 0.2, 0.9);
         ImageUtil.saveToFile(bufferedImage, "jpg", "./tmp/src_img_0.2.jpg");
 
-
-        bufferedImage = ImageUtil.watermark(srcFilePath, "Power by demo. balabalabala.", 30, Color.lightGray);
+        bufferedImage = ImageUtil.watermark(srcFilePath, "Power by demo. @balabalabala.", 30, Color.lightGray);
         ImageUtil.saveToFile(bufferedImage, "jpg", "./tmp/src_img_watermark.jpg");
     }
 }
