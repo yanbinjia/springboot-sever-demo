@@ -94,6 +94,13 @@ public class ImageUtil {
     }
 
     /**
+     * 按大小,等比例缩放
+     */
+    public static BufferedImage zoomByRatio(InputStream inputStream, int width, int height, double quality) throws IOException {
+        return Thumbnails.of(inputStream).size(width, height).outputQuality(quality).asBufferedImage();
+    }
+
+    /**
      * 按百分比,等比例缩放
      */
     public static BufferedImage zoomByRatio(String filePath, double scale, double quality) throws IOException {
@@ -105,6 +112,13 @@ public class ImageUtil {
      */
     public static BufferedImage zoomByRatio(BufferedImage bufferedImage, double scale, double quality) throws IOException {
         return Thumbnails.of(bufferedImage).scale(scale).outputQuality(quality).asBufferedImage();
+    }
+
+    /**
+     * 按百分比,等比例缩放
+     */
+    public static BufferedImage zoomByRatio(InputStream inputStream, double scale, double quality) throws IOException {
+        return Thumbnails.of(inputStream).scale(scale).outputQuality(quality).asBufferedImage();
     }
 
     /**
@@ -121,6 +135,13 @@ public class ImageUtil {
         return Thumbnails.of(bufferedImage).size(width, height).outputQuality(quality).keepAspectRatio(false).asBufferedImage();
     }
 
+    /**
+     * 按大小缩放,不保持比例
+     */
+    public static BufferedImage zoomBySize(InputStream inputStream, int width, int height, double quality) throws IOException {
+        return Thumbnails.of(inputStream).size(width, height).outputQuality(quality).keepAspectRatio(false).asBufferedImage();
+    }
+
     public static BufferedImage rotate(String filePath, int width, int height, double angle) throws IOException {
         return Thumbnails.of(filePath).size(width, height).rotate(angle).asBufferedImage();
     }
@@ -128,6 +149,11 @@ public class ImageUtil {
     public static BufferedImage rotate(BufferedImage bufferedImage, int width, int height, double angle) throws IOException {
         return Thumbnails.of(bufferedImage).size(width, height).rotate(angle).asBufferedImage();
     }
+
+    public static BufferedImage rotate(InputStream inputStream, int width, int height, double angle) throws IOException {
+        return Thumbnails.of(inputStream).size(width, height).rotate(angle).asBufferedImage();
+    }
+
 
     public static BufferedImage watermark(String filePath, String text, int fontSize, Color color) throws IOException {
         return Thumbnails.of(filePath).scale(1f).watermark(Positions.BOTTOM_RIGHT, drawWatermarkImg(text, fontSize, color), 0.70f).asBufferedImage();
@@ -267,15 +293,15 @@ public class ImageUtil {
         return false;
     }
 
-    public static boolean checkToParam(BufferedImage bufferedImage, String formatName, String... param) throws IllegalArgumentException {
+    public static boolean checkToParam(BufferedImage bufferedImage, String formatName, String... otherParam) throws IllegalArgumentException {
         if (StringUtils.isBlank(formatName) || !IMG_EXT_LIST.contains(formatName.trim())) {
             throw new IllegalArgumentException("param error:formatName=" + formatName + " is not support in " + IMG_EXT_LIST.toString());
         }
         if (bufferedImage == null) {
             throw new IllegalArgumentException("param error:bufferedImage can not be null.");
         }
-        if (param != null) {
-            Arrays.stream(param).forEach(s -> {
+        if (otherParam != null) {
+            Arrays.stream(otherParam).forEach(s -> {
                 if (StringUtils.isBlank(s)) {
                     throw new IllegalArgumentException("param error:param can not be null,please check.");
                 }
