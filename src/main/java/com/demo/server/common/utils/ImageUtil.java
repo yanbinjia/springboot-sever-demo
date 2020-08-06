@@ -125,14 +125,13 @@ public class ImageUtil {
             Font font = new Font("", Font.BOLD, fontSize);
             FontMetrics fm = new JLabel(text).getFontMetrics(font);
 
-            int extraSize = fontSize / 12;// 预留多出一点宽度和高度
+            int extraSize = fontSize / 10;// 预留多出一点宽度和高度
             int width = fm.charsWidth(text.toCharArray(), 0, text.length()) + extraSize; // 所有设置字体的字符总宽度
             int height = fontSize + extraSize;// 高度
 
-            logger.debug("watermark fontSize={},extraSize={},watermarkImage(水印画布) width={},height={}", fontSize, extraSize, width, height);
+            logger.debug("watermark fontSize={},extraSize={}, watermarkImage:width={},height={}", fontSize, extraSize, width, height);
 
             watermarkImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
             graphics = watermarkImage.createGraphics();
 
             // 设置为背景透明
