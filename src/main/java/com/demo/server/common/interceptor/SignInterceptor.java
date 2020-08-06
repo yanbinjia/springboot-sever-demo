@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020 demo ^-^.
  * @Author: yanbinjia@126.com
- * @LastModified: 2020-07-28T19:01:46.984+08:00
+ * @LastModified: 2020-08-06T18:00:26.894+08:00
  */
 
 package com.demo.server.common.interceptor;
@@ -124,14 +124,15 @@ public class SignInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        if (excludesMap == null) {
+        if (excludesMap == null || excludesMap.isEmpty()) {
             return false;
         }
 
         Pattern pattern;
+        Matcher m;
         for (Map.Entry<String, Pattern> entry : excludesMap.entrySet()) {
             pattern = entry.getValue();
-            Matcher m = pattern.matcher(request.getRequestURI());
+            m = pattern.matcher(request.getRequestURI());
             if (m.find()) {
                 log.debug(">>> sign pass, uri=[{}] in excludes. ", request.getRequestURI());
                 return true;

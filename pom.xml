@@ -15,7 +15,9 @@
     <artifactId>demo-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
+
     <name>demo-server</name>
+    <url>https://github.com/yanbinjia/springboot-sever-demo</url>
     <description>demo-server,a SpringBoot demo for developing faster and personal study.</description>
 
     <repositories>
@@ -25,6 +27,20 @@
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>public</id>
+            <name>aliyun nexus</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <properties>
         <java.version>1.8</java.version>
