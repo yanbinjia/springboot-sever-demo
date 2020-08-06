@@ -26,7 +26,7 @@ It is a simple work,just put the pieces together for developing faster and perso
 - XSS(Cross Site Scripting) filter, simple implement
 - 异常处理和日志打印(error log), Controller请求和响应日志打印(access log), @ControllerAdvice实现
 - RateLimitAspect, 基于guava RateLimiter接口限流，Controller方法注解 @RateLimit(qps = 50)
-- 工具封装:SpringUtil、HashUtil、RandomUtil、DateUtil、Base64Util等
+- 工具封装:SpringUtil、HashUtil、RandomUtil、DateUtil、Base64Util、ImageUtil、RedisUtil等
 - 好用工具:guava、commons-lang3、commons-io、commons-collections4、commons-codec、jsoup、lombok
 - 图片验证码(utils.captcha with [EasyCaptcha](https://github.com/whvcse/EasyCaptcha))
 - 二维码生成(utils.qrcode with [ZXing](https://github.com/zxing/zxing))
