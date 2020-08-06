@@ -74,14 +74,15 @@ public class XssFilter implements Filter {
             return true;
         }
 
-        if (excludesMap == null) {
+        if (excludesMap == null || excludesMap.isEmpty()) {
             return false;
         }
 
         Pattern pattern;
+        Matcher m;
         for (Map.Entry<String, Pattern> entry : excludesMap.entrySet()) {
             pattern = entry.getValue();
-            Matcher m = pattern.matcher(request.getRequestURI());
+            m = pattern.matcher(request.getRequestURI());
             if (m.find()) {
                 log.debug(">>> xss pass, url=[{}] in excludes.", request.getRequestURI());
                 return true;
