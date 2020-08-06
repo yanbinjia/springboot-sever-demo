@@ -44,7 +44,7 @@ public class QRCodeTestController {
     public void testOutput1(HttpServletResponse response,
                             @NotEmpty(message = "不能为空") @RequestParam String content) {
         BufferedImage bufferedImage = QRCodeUtil.genQRCodeImg(content, 300, 300);
-        QRCodeUtil.outToWeb(response, content, bufferedImage);
+        QRCodeUtil.toWebResponse(response, bufferedImage, content);
     }
 
     @TokenPass
@@ -54,6 +54,6 @@ public class QRCodeTestController {
                             @NotEmpty(message = "不能为空") @RequestParam String content) {
         String logoPath = JvmUtil.getClassPathRoot() + "/resources/logo-wechat.png";
         BufferedImage bufferedImage = QRCodeUtil.genQRCodeImg(content, 300, 300, ARGBColor.DoderBlue, ARGBColor.White, logoPath, null);
-        QRCodeUtil.outToWeb(response, content, bufferedImage);
+        QRCodeUtil.toWebResponse(response, bufferedImage, content);
     }
 }

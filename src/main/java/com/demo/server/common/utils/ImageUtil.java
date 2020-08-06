@@ -10,20 +10,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 public class ImageUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageUtil.class);
 
-    private static final List<String> IMAGE_EXT_LIST = Arrays.asList("bmp", "gif", "jpg", "jpeg", "png");
+    public static final String FMT_PNG = "png";
+    public static final String FMT_GIF = "gif";
+    public static final String FMT_JPG = "jpg";
+    public static final String FMT_JPEG = "jpeg";
+    public static final String FMT_BMP = "bmp";
+    public static final String FMT_ICO = "ico";
+
+    public static final List<String> IMG_EXT_LIST = Arrays.asList(FMT_PNG, FMT_GIF, FMT_JPG, FMT_JPEG, FMT_BMP, FMT_ICO);
 
     public static boolean isImageByIO(File file) {
         boolean result = false;
@@ -47,7 +54,7 @@ public class ImageUtil {
     }
 
     public static boolean isImageByExt(String filename) {
-        return IMAGE_EXT_LIST.contains(getExt(filename).toLowerCase());
+        return IMG_EXT_LIST.contains(getExt(filename).toLowerCase());
     }
 
     public static String getExt(String filename) {
@@ -167,11 +174,15 @@ public class ImageUtil {
         return Thumbnails.of(filePath).scale(1f).watermark(Positions.BOTTOM_RIGHT, watermarkImage, 0.70f).asBufferedImage();
     }
 
-    public static boolean saveToFile(BufferedImage bufferedImage, String formatName, String filePath) {
-        if (bufferedImage == null || StringUtils.isBlank(filePath)) {
-            logger.error("saveToPath error. qrBuffImg,filePath cannot be null.");
-            return false;
-        }
+    /**
+     * @param bufferedImage
+     * @param formatName
+     * @param filePath
+     * @return boolean 操作是否成功
+     */
+    public static boolean toFile(BufferedImage bufferedImage, String formatName, String filePath) {
+        checkToParam(bufferedImage, formatName, filePath);
+        formatName = formatName.trim();
         try {
             ImageIO.write(bufferedImage, formatName, new File(filePath));
             return true;
@@ -181,17 +192,102 @@ public class ImageUtil {
         return false;
     }
 
+    /**
+     * @param bufferedImage
+     * @param formatName
+     * @return 图片的base64 String
+     */
+    public static String toBase64(BufferedImage bufferedImage, String formatName) {
+        checkToParam(bufferedImage, formatName);
+        formatName = formatName.trim();
+        String type = "data:image/" + formatName + ";base64,";
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(bufferedImage, formatName, outputStream);
+            outputStream.flush();
+        } catch (IOException e) {
+            logger.error("toBase64 error.", e);
+        } finally {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                logger.error("toBase64 error.", e);
+            }
+        }
+        return type + Base64.getEncoder().encodeToString(outputStream.toByteArray());
+    }
+
+    public static void setHeader(HttpServletResponse response, String formatName, String content) {
+        response.setContentType("image/" + formatName);
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setHeader("CustomContent", content);// content
+    }
+
+    public static boolean toWebResponse(HttpServletResponse response, BufferedImage bufferedImage, String formatName, String content) {
+        // 检查ToX参数合法性
+        checkToParam(bufferedImage, formatName);
+        formatName = formatName.trim();
+
+        // 设置头信息
+        setHeader(response, formatName, content);
+
+        // 输出到OutputStream
+        OutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            ImageIO.write(bufferedImage, formatName, out);
+            out.flush();
+            return true;
+        } catch (IOException e) {
+            logger.error("output error.", e);
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                logger.error("output error.", e);
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkToParam(BufferedImage bufferedImage, String formatName, String... param) throws IllegalArgumentException {
+        if (StringUtils.isBlank(formatName) || !IMG_EXT_LIST.contains(formatName.trim())) {
+            throw new IllegalArgumentException("param error:formatName=" + formatName + " is not support in " + IMG_EXT_LIST.toString());
+        }
+        if (bufferedImage == null) {
+            throw new IllegalArgumentException("param error:bufferedImage can not be null.");
+        }
+        String[] otherParams = param;
+        if (otherParams != null) {
+            Arrays.stream(otherParams).forEach(s -> {
+                if (StringUtils.isBlank(s)) {
+                    throw new IllegalArgumentException("param error:param can not be null,please check.");
+                }
+            });
+        }
+        return true;
+    }
+
     public static void main(String[] args) throws IOException {
-        System.out.println(ImageUtil.isImageByExt("/sf/sf/saf/ddd.txt.png"));
         String filePath = "./tmp/readFileFromUrl.png";
         String url = "https://www.baidu.com/img/flexible/logo/pc/result@2.png";
         ImageUtil.getFromUrl(url, filePath);
 
         String srcFilePath = "./tmp/src_img.jpg";
-        BufferedImage bufferedImage = ImageUtil.zoomByRatio(srcFilePath, 0.2, 0.9);
-        ImageUtil.saveToFile(bufferedImage, "jpg", "./tmp/src_img_0.2.jpg");
+        BufferedImage zoomImage = ImageUtil.zoomByRatio(srcFilePath, 0.2, 0.9);
+        ImageUtil.toFile(zoomImage, ImageUtil.FMT_JPG, "./tmp/src_img_0.2.jpg");
 
-        bufferedImage = ImageUtil.watermark(srcFilePath, "Power by demo. @demo inc.", 30, Color.lightGray);
-        ImageUtil.saveToFile(bufferedImage, "jpg", "./tmp/src_img_watermark.jpg");
+        BufferedImage watermarkImage = ImageUtil.watermark(srcFilePath, "Power by demo. @demo inc.", 30, Color.lightGray);
+        ImageUtil.toFile(watermarkImage, ImageUtil.FMT_JPG, "./tmp/src_img_watermark.jpg");
+
+        System.out.println(ImageUtil.toBase64(zoomImage, ImageUtil.FMT_JPG));
+
+        zoomImage = null;
+        watermarkImage = null;
     }
 }

@@ -6,6 +6,7 @@
 
 package com.demo.server.common.utils.qrcode;
 
+import com.demo.server.common.utils.ImageUtil;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
@@ -19,11 +20,8 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -185,73 +183,6 @@ public class QRCodeUtil {
         return bufferedImage;
     }
 
-    public static boolean saveToFile(BufferedImage bufferedImage, String formatName, String filePath) {
-        if (bufferedImage == null || org.apache.commons.lang3.StringUtils.isBlank(filePath)) {
-            logger.error("saveToPath error. qrBuffImg,filePath cannot be null.");
-            return false;
-        }
-        try {
-            ImageIO.write(bufferedImage, formatName, new File(filePath));
-            return true;
-        } catch (IOException e) {
-            logger.error("saveToPath error. filePath=[{}]", filePath, e);
-        }
-        return false;
-    }
-
-    public static String toBase64(BufferedImage bufferedImage) {
-        String type = "data:image/png;base64,";
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(bufferedImage, IMG_FORMAT_PNG, outputStream);
-            outputStream.flush();
-        } catch (IOException e) {
-            logger.error("toBase64 error.", e);
-        } finally {
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                logger.error("toBase64 error.", e);
-            }
-        }
-        return type + Base64.getEncoder().encodeToString(outputStream.toByteArray());
-    }
-
-    public static void setHeader(HttpServletResponse response, String content) {
-        response.setContentType("image/png");
-        response.setHeader("Pragma", "No-cache");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setDateHeader("Expires", 0);
-        response.setHeader("QRCodeContent", content);// content
-    }
-
-    public static boolean outToWeb(HttpServletResponse response, String content, BufferedImage bufferedImage) {
-        setHeader(response, content);
-        return outToWeb(response, bufferedImage);
-    }
-
-    public static boolean outToWeb(HttpServletResponse response, BufferedImage bufferedImage) {
-        OutputStream out = null;
-        try {
-            out = response.getOutputStream();
-            ImageIO.write(bufferedImage, IMG_FORMAT_PNG, out);
-            out.flush();
-            return true;
-        } catch (IOException e) {
-            logger.error("output error.", e);
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                logger.error("output error.", e);
-            }
-        }
-        return false;
-    }
-
     public static String decode(String filePath) {
         String content = null;
         File qrFile = new File(filePath);
@@ -286,6 +217,19 @@ public class QRCodeUtil {
         return content;
     }
 
+    public static boolean toFile(BufferedImage bufferedImage, String filePath) {
+        return ImageUtil.toFile(bufferedImage, ImageUtil.FMT_PNG, filePath);
+    }
+
+    public static String toBase64(BufferedImage bufferedImage) {
+        return ImageUtil.toBase64(bufferedImage, ImageUtil.FMT_PNG);
+    }
+
+
+    public static boolean toWebResponse(HttpServletResponse response, BufferedImage bufferedImage, String content) {
+        return ImageUtil.toWebResponse(response, bufferedImage, ImageUtil.FMT_PNG, content);
+    }
+
     public static void main(String[] args) {
         String content = "https://www.baidu.com/s?wd=qrcode%20zxing";
         String logoPath = "./doc/resources/logo-transformers.png";
@@ -303,10 +247,10 @@ public class QRCodeUtil {
         BufferedImage bufferedImage3 = QRCodeUtil.genQRCodeImg(content, width, height, ARGBColor.SeaGreen, ARGBColor.White, logoPath, backgroundPath);
         BufferedImage bufferedImage4 = QRCodeUtil.genQRCodeImg(content, width, height, ARGBColor.Purple2, ARGBColor.White, logoPath, backgroundPath);
 
-        QRCodeUtil.saveToFile(bufferedImage1, QRCodeUtil.IMG_FORMAT_PNG, dstPath + "qrcode1.png");
-        QRCodeUtil.saveToFile(bufferedImage2, QRCodeUtil.IMG_FORMAT_PNG, dstPath + "qrcode2.png");
-        QRCodeUtil.saveToFile(bufferedImage3, QRCodeUtil.IMG_FORMAT_PNG, dstPath + "qrcode3.png");
-        QRCodeUtil.saveToFile(bufferedImage4, QRCodeUtil.IMG_FORMAT_PNG, dstPath + "qrcode4.png");
+        QRCodeUtil.toFile(bufferedImage1, dstPath + "qrcode1.png");
+        QRCodeUtil.toFile(bufferedImage2, dstPath + "qrcode2.png");
+        QRCodeUtil.toFile(bufferedImage3, dstPath + "qrcode3.png");
+        QRCodeUtil.toFile(bufferedImage4, dstPath + "qrcode4.png");
 
         System.out.println("decode(buffImg)=" + QRCodeUtil.decode(bufferedImage1));
         System.out.println("decode(filePath)=" + QRCodeUtil.decode(dstPath + "qrcode1.png"));
