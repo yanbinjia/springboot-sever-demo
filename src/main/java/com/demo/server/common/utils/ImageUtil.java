@@ -20,7 +20,6 @@ import java.util.Base64;
 import java.util.List;
 
 public class ImageUtil {
-
     private static final Logger logger = LoggerFactory.getLogger(ImageUtil.class);
 
     public static final String FMT_PNG = "png";
@@ -82,47 +81,52 @@ public class ImageUtil {
 
     /**
      * 按大小,等比例缩放
-     *
-     * @param filePath
-     * @param width
-     * @param height
-     * @param quality
-     * @return BufferedImage
-     * @throws IOException
      */
     public static BufferedImage zoomByRatio(String filePath, int width, int height, double quality) throws IOException {
         return Thumbnails.of(filePath).size(width, height).outputQuality(quality).asBufferedImage();
     }
 
     /**
+     * 按大小,等比例缩放
+     */
+    public static BufferedImage zoomByRatio(BufferedImage bufferedImage, int width, int height, double quality) throws IOException {
+        return Thumbnails.of(bufferedImage).size(width, height).outputQuality(quality).asBufferedImage();
+    }
+
+    /**
      * 按百分比,等比例缩放
-     *
-     * @param filePath
-     * @param scale
-     * @param quality
-     * @return BufferedImage
-     * @throws IOException
      */
     public static BufferedImage zoomByRatio(String filePath, double scale, double quality) throws IOException {
         return Thumbnails.of(filePath).scale(scale).outputQuality(quality).asBufferedImage();
     }
 
     /**
+     * 按百分比,等比例缩放
+     */
+    public static BufferedImage zoomByRatio(BufferedImage bufferedImage, double scale, double quality) throws IOException {
+        return Thumbnails.of(bufferedImage).scale(scale).outputQuality(quality).asBufferedImage();
+    }
+
+    /**
      * 按大小缩放,不保持比例
-     *
-     * @param filePath
-     * @param width
-     * @param height
-     * @param quality
-     * @return BufferedImage
-     * @throws IOException
      */
     public static BufferedImage zoomBySize(String filePath, int width, int height, double quality) throws IOException {
         return Thumbnails.of(filePath).size(width, height).outputQuality(quality).keepAspectRatio(false).asBufferedImage();
     }
 
+    /**
+     * 按大小缩放,不保持比例
+     */
+    public static BufferedImage zoomBySize(BufferedImage bufferedImage, int width, int height, double quality) throws IOException {
+        return Thumbnails.of(bufferedImage).size(width, height).outputQuality(quality).keepAspectRatio(false).asBufferedImage();
+    }
+
     public static BufferedImage rotate(String filePath, int width, int height, double angle) throws IOException {
         return Thumbnails.of(filePath).size(width, height).rotate(angle).asBufferedImage();
+    }
+
+    public static BufferedImage rotate(BufferedImage bufferedImage, int width, int height, double angle) throws IOException {
+        return Thumbnails.of(bufferedImage).size(width, height).rotate(angle).asBufferedImage();
     }
 
     public static BufferedImage watermark(String filePath, String text, int fontSize, Color color) throws IOException {
