@@ -130,6 +130,14 @@ public class ImageUtil {
     }
 
     public static BufferedImage watermark(String filePath, String text, int fontSize, Color color) throws IOException {
+        return Thumbnails.of(filePath).scale(1f).watermark(Positions.BOTTOM_RIGHT, drawWatermarkImg(text, fontSize, color), 0.70f).asBufferedImage();
+    }
+
+    public static BufferedImage watermark(BufferedImage bufferedImage, String text, int fontSize, Color color) throws IOException {
+        return Thumbnails.of(bufferedImage).scale(1f).watermark(Positions.BOTTOM_RIGHT, drawWatermarkImg(text, fontSize, color), 0.70f).asBufferedImage();
+    }
+
+    public static BufferedImage drawWatermarkImg(String text, int fontSize, Color color) {
         Graphics2D graphics = null;
         BufferedImage watermarkImage = null;
         try {
@@ -175,7 +183,7 @@ public class ImageUtil {
             }
         }
 
-        return Thumbnails.of(filePath).scale(1f).watermark(Positions.BOTTOM_RIGHT, watermarkImage, 0.70f).asBufferedImage();
+        return watermarkImage;
     }
 
     /**
