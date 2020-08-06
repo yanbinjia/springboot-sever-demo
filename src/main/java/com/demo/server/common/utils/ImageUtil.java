@@ -274,9 +274,8 @@ public class ImageUtil {
         if (bufferedImage == null) {
             throw new IllegalArgumentException("param error:bufferedImage can not be null.");
         }
-        String[] otherParams = param;
-        if (otherParams != null) {
-            Arrays.stream(otherParams).forEach(s -> {
+        if (param != null) {
+            Arrays.stream(param).forEach(s -> {
                 if (StringUtils.isBlank(s)) {
                     throw new IllegalArgumentException("param error:param can not be null,please check.");
                 }
