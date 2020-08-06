@@ -25,16 +25,30 @@ import java.util.TreeMap;
 
 public class HttpUtil {
     private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
-
-    public static final int CONNECT_TIMEOUT = 2 * 1000;// milliseconds
-    public static final int READ_TIMEOUT = 2 * 1000;// milliseconds
+    public static final int CONNECT_TIMEOUT = 3 * 1000;// milliseconds
+    public static final int READ_TIMEOUT = 3 * 1000;// milliseconds
     public static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36";
+
+    public static String sendQueryByJsoup(String url, Map<String, String> param) {
+        String queryStr = queryStr(url, param);
+        try {
+            Connection.Response response = Jsoup.connect(queryStr)
+                    .userAgent(USER_AGENT)
+                    .timeout(READ_TIMEOUT)
+                    .ignoreContentType(true)
+                    .execute();
+            return response.body();
+        } catch (IOException e) {
+            logger.error("sendQueryByJsoup error. url={}", queryStr, e);
+        }
+        return "";
+    }
 
     public static String sendGet(String url, Map<String, String> param) {
         StringBuilder result = new StringBuilder();
         BufferedReader in = null;
+        String queryStr = queryStr(url, param);
         try {
-            String queryStr = queryStr(url, param);
             logger.info("sendGet - {}", queryStr);
             URL realUrl = new URL(queryStr);
             URLConnection conn = realUrl.openConnection();
@@ -51,20 +65,20 @@ public class HttpUtil {
             }
             logger.info("recv - {}", result);
         } catch (ConnectException e) {
-            logger.error("调用HttpUtils.sendGet ConnectException, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpUtils.sendGet ConnectException, url={}", queryStr, e);
         } catch (SocketTimeoutException e) {
-            logger.error("调用HttpUtils.sendGet SocketTimeoutException, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpUtils.sendGet SocketTimeoutException, url={}", queryStr, e);
         } catch (IOException e) {
-            logger.error("调用HttpUtils.sendGet IOException, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpUtils.sendGet IOException, url={}", queryStr, e);
         } catch (Exception e) {
-            logger.error("调用HttpsUtil.sendGet Exception, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpsUtil.sendGet Exception, url={}", queryStr, e);
         } finally {
             try {
                 if (in != null) {
                     in.close();
                 }
             } catch (Exception ex) {
-                logger.error("调用in.close Exception, url=" + url + ",param=" + param, ex);
+                logger.error("调用in.close Exception, url={}", queryStr, ex);
             }
         }
         return result.toString();
@@ -74,10 +88,10 @@ public class HttpUtil {
         PrintWriter out = null;
         BufferedReader in = null;
         StringBuilder result = new StringBuilder();
+        String queryStr = queryStr(url, param);
         try {
-            String urlNameString = url;
-            logger.info("sendPost - {}", urlNameString);
-            URL realUrl = new URL(urlNameString);
+            logger.info("sendPost - {}", url);
+            URL realUrl = new URL(url);
             URLConnection conn = realUrl.openConnection();
             conn.setConnectTimeout(CONNECT_TIMEOUT);
             conn.setReadTimeout(READ_TIMEOUT);
@@ -98,13 +112,13 @@ public class HttpUtil {
             }
             logger.info("recv - {}", result);
         } catch (ConnectException e) {
-            logger.error("调用HttpUtils.sendPost ConnectException, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpUtils.sendPost ConnectException, url={}", queryStr, e);
         } catch (SocketTimeoutException e) {
-            logger.error("调用HttpUtils.sendPost SocketTimeoutException, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpUtils.sendPost SocketTimeoutException, url={}", queryStr, e);
         } catch (IOException e) {
-            logger.error("调用HttpUtils.sendPost IOException, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpUtils.sendPost IOException, url={}", queryStr, e);
         } catch (Exception e) {
-            logger.error("调用HttpsUtil.sendPost Exception, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpsUtil.sendPost Exception, url={}", queryStr, e);
         } finally {
             try {
                 if (out != null) {
@@ -114,7 +128,7 @@ public class HttpUtil {
                     in.close();
                 }
             } catch (IOException ex) {
-                logger.error("调用in.close Exception, url=" + url + ",param=" + param, ex);
+                logger.error("调用in.close Exception, url={}", queryStr, ex);
             }
         }
         return result.toString();
@@ -154,13 +168,13 @@ public class HttpUtil {
             conn.disconnect();
             br.close();
         } catch (ConnectException e) {
-            logger.error("调用HttpUtils.sendSSLPost ConnectException, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpUtils.sendSSLPost ConnectException, url={}", queryStr, e);
         } catch (SocketTimeoutException e) {
-            logger.error("调用HttpUtils.sendSSLPost SocketTimeoutException, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpUtils.sendSSLPost SocketTimeoutException, url={}", queryStr, e);
         } catch (IOException e) {
-            logger.error("调用HttpUtils.sendSSLPost IOException, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpUtils.sendSSLPost IOException, url={}", queryStr, e);
         } catch (Exception e) {
-            logger.error("调用HttpsUtil.sendSSLPost Exception, url=" + url + ",param=" + param, e);
+            logger.error("调用HttpsUtil.sendSSLPost Exception, url={}", queryStr, e);
         }
         return result.toString();
     }
@@ -214,12 +228,11 @@ public class HttpUtil {
         param.put("ip", "106.38.36.10");
         param.put("accessKey", "accessKey12313");
         String url = "http://ip.taobao.com/outGetIpInfo";
+
         System.out.println(HttpUtil.sendGet(url, param));
         System.out.println(HttpUtil.sendPost(url, param));
         System.out.println(HttpUtil.sendSSLPost(url, param));
 
-        // timeout(1000) Read timeout
-        Connection.Response response = Jsoup.connect(queryStr(url, param)).userAgent(USER_AGENT).method(Connection.Method.POST).timeout(1000).ignoreContentType(true).execute();
-        System.out.println(response.body().toString());
+        System.out.println(sendQueryByJsoup(url, param));
     }
 }
