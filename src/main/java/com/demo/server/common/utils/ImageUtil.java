@@ -73,14 +73,43 @@ public class ImageUtil {
         return result;
     }
 
+    /**
+     * 按大小,等比例缩放
+     *
+     * @param filePath
+     * @param width
+     * @param height
+     * @param quality
+     * @return BufferedImage
+     * @throws IOException
+     */
     public static BufferedImage zoomByRatio(String filePath, int width, int height, double quality) throws IOException {
         return Thumbnails.of(filePath).size(width, height).outputQuality(quality).asBufferedImage();
     }
 
+    /**
+     * 按百分比,等比例缩放
+     *
+     * @param filePath
+     * @param scale
+     * @param quality
+     * @return BufferedImage
+     * @throws IOException
+     */
     public static BufferedImage zoomByRatio(String filePath, double scale, double quality) throws IOException {
         return Thumbnails.of(filePath).scale(scale).outputQuality(quality).asBufferedImage();
     }
 
+    /**
+     * 按大小缩放,不保持比例
+     *
+     * @param filePath
+     * @param width
+     * @param height
+     * @param quality
+     * @return BufferedImage
+     * @throws IOException
+     */
     public static BufferedImage zoomBySize(String filePath, int width, int height, double quality) throws IOException {
         return Thumbnails.of(filePath).size(width, height).outputQuality(quality).keepAspectRatio(false).asBufferedImage();
     }
@@ -100,7 +129,7 @@ public class ImageUtil {
             int width = fm.charsWidth(text.toCharArray(), 0, text.length()) + extraSize; // 所有设置字体的字符总宽度
             int height = fontSize + extraSize;// 高度
 
-            logger.debug("fontSize={},extraSize={},watermarkImage(水印画布) width={},height={}", fontSize, extraSize, width, height);
+            logger.debug("watermark fontSize={},extraSize={},watermarkImage(水印画布) width={},height={}", fontSize, extraSize, width, height);
 
             watermarkImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -163,7 +192,7 @@ public class ImageUtil {
         BufferedImage bufferedImage = ImageUtil.zoomByRatio(srcFilePath, 0.2, 0.9);
         ImageUtil.saveToFile(bufferedImage, "jpg", "./tmp/src_img_0.2.jpg");
 
-        bufferedImage = ImageUtil.watermark(srcFilePath, "Power by demo. @balabalabala.", 30, Color.lightGray);
+        bufferedImage = ImageUtil.watermark(srcFilePath, "Power by demo. @demo inc.", 30, Color.lightGray);
         ImageUtil.saveToFile(bufferedImage, "jpg", "./tmp/src_img_watermark.jpg");
     }
 }
