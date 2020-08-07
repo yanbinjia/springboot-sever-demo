@@ -28,10 +28,16 @@ public class HttpUtil {
                     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"// chrome mac
                     , "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15"// safari mac
                     , "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36 OPR/70.0.3728.95"// opera mac
-                    , "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)"// IE8
-                    , "Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11"// Opera 11.11 Windows
-                    , "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE)"// 360浏览器
-                    , "Mozilla/5.0 (Windows NT 6.1; rv,2.0.1) Gecko/20100101 Firefox/4.0.1",// Firefox 4.0.1 Windows
+                    , "Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11"// Opera11  windows7(Windows NT 6.1)
+                    , "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE)"// 360浏览器 windowsXp(Windows NT 5.1)
+                    , "Mozilla/5.0 (Windows NT 6.1; rv,2.0.1) Gecko/20100101 Firefox/4.0.1"// Firefox4.0.1 windows7(Windows NT 6.1)
+                    , "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"// win10 Chrome
+                    , "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; rv:11.0) like Gecko" // win10 ie11
+                    , "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299"// win10 Edge
+                    , "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0"// win10 Firefox
+                    , "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; rv:11.0) like Gecko"// win10 360极速-兼容模式
+                    , "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 SE 2.X MetaSr 1.0"// win10 搜狗高速
+                    , "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; Core/1.63.5680.400 QQBrowser/10.2.1852.400; rv:11.0) like Gecko"//win10 QQ兼容
             };
 
     public static String sendGet(String url, Map<String, String> param, int timeoutSeconds) {
@@ -46,7 +52,7 @@ public class HttpUtil {
                     .execute();
             logger.info("sendQuery url={}", queryStr);
             String responseStr = new String(response.bodyAsBytes(), response.charset());
-            logger.info("sendQuery response.charset()={}, response.body={}", response.charset(), responseStr);
+            logger.info("sendQuery response: status={},charset()={},body={}", response.statusCode(), response.charset(), responseStr);
             return responseStr;
         } catch (IOException e) {
             logger.error("sendQuery error. url={}", queryStr, e);
@@ -67,7 +73,7 @@ public class HttpUtil {
                     .execute();
             logger.info("sendQueryPost url={}", queryStr);
             String responseStr = new String(response.bodyAsBytes(), response.charset());
-            logger.info("sendQueryPost response.charset()={}, response.body={}", response.charset(), responseStr);
+            logger.info("sendQueryPost response: status={},charset()={},body={}", response.statusCode(), response.charset(), responseStr);
             return responseStr;
         } catch (IOException e) {
             logger.error("sendQueryPost error. url={}", queryStr, e);
