@@ -6,6 +6,7 @@
 
 package com.demo.server.common.utils.thread;
 
+import org.apache.commons.lang3.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,5 +115,11 @@ public class ThreadUtil {
 
         System.out.println("cpuIntesivePoolSize=" + ThreadUtil.cpuIntesivePoolSize());
         System.out.println("poolSize=" + ThreadUtil.poolSize(0.5));
+
+
+        ThreadUtils.getAllThreads().stream().forEach(thread -> {
+            System.out.println(thread.getId() + ":" + thread.getName());
+        });
+
     }
 }
