@@ -7,6 +7,7 @@
 package com.demo.server.common.utils.http;
 
 import com.demo.server.common.utils.RandomUtil;
+import com.demo.server.common.utils.thread.ThreadUtil;
 import lombok.SneakyThrows;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -126,8 +127,8 @@ public class HttpUtil {
         param.put("page", "1");
         param.put("count", "10");
 
-        int threadSize = 4;
-        long sendCont = 100;
+        int threadSize = ThreadUtil.availableProcessors();
+        long sendCont = 10;
         LongAdder longAdder = new LongAdder();
         for (int i = 0; i < threadSize; i++) {
             String finalUrl = url;
