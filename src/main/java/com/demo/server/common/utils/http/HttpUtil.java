@@ -99,7 +99,6 @@ public class HttpUtil {
         return paramStrSb.toString();
     }
 
-
     public static void main(String[] args) throws IOException {
         Map<String, String> param = new HashMap<>();
         param.put("tel", "13466799355");
