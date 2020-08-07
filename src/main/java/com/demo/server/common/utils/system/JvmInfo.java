@@ -14,6 +14,7 @@ public class JvmInfo {
     private String userHome;
     private String userDir;
     private String classPath;
+    private String javaHomePath;
 
     private String jvmName;
     private String jvmVersion;

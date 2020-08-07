@@ -154,7 +154,6 @@ public class ImageUtil {
         return Thumbnails.of(inputStream).size(width, height).rotate(angle).asBufferedImage();
     }
 
-
     public static BufferedImage watermark(String filePath, String text, int fontSize, Color color) throws IOException {
         return Thumbnails.of(filePath).scale(1f).watermark(Positions.BOTTOM_RIGHT, drawWatermarkImg(text, fontSize, color), 0.70f).asBufferedImage();
     }

@@ -29,6 +29,10 @@ public class JvmUtil {
         return JvmUtil.class.getResource("/").getPath();
     }
 
+    public static String getJavaHomePath() {
+        return System.getProperty("java.home");
+    }
+
 
     public static JvmInfo getJvmInfo() {
         ThreadMXBean threads = ManagementFactory.getThreadMXBean();
@@ -43,6 +47,7 @@ public class JvmUtil {
         jvmInfo.setUserHome(System.getProperty("user.home"));
         jvmInfo.setUserDir(System.getProperty("user.dir"));
         jvmInfo.setClassPath(getClassPathRoot());
+        jvmInfo.setJavaHomePath(getJavaHomePath());
 
         jvmInfo.setJvmName(System.getProperty("java.vm.name"));
         jvmInfo.setJvmVersion(System.getProperty("java.vm.version"));
@@ -188,9 +193,12 @@ public class JvmUtil {
     }
 
     public static void main(String[] args) throws Exception {
+        System.out.println("getJvmInfo=");
         System.out.println(JvmUtil.getJvmInfo());
+        System.out.println();
         System.out.println("getClassPathRoot=" + JvmUtil.getClassPathRoot());
         System.out.println("getUserDir=" + JvmUtil.getUserDir());
+        System.out.println("getJavaHomePath=" + JvmUtil.getJavaHomePath());
 
         File jstackFile = new File("./tmp/jstack-info.txt");
         if (!jstackFile.exists()) jstackFile.createNewFile();
