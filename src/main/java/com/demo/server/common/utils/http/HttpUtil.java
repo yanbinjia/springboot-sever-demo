@@ -7,6 +7,7 @@
 package com.demo.server.common.utils.http;
 
 import com.demo.server.common.utils.RandomUtil;
+import lombok.SneakyThrows;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.LongAdder;
 
 public class HttpUtil {
     private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
@@ -118,6 +120,22 @@ public class HttpUtil {
         param.put("page", "1");
         param.put("count", "10");
 
-        HttpUtil.sendPost(url, param, 2);
+        int threadSize = 4;
+        long sendCont = 100;
+        LongAdder longAdder = new LongAdder();
+        for (int i = 0; i < threadSize; i++) {
+            String finalUrl = url;
+            new Thread(new Runnable() {
+                @SneakyThrows
+                @Override
+                public void run() {
+                    while (true && longAdder.longValue() < sendCont) {
+                        HttpUtil.sendPost(finalUrl, param, 2);
+                        longAdder.increment();
+                    }
+
+                }
+            }).start();
+        }
     }
 }
