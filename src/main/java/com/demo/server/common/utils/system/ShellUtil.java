@@ -79,6 +79,7 @@ public class ShellUtil {
      * @param isNeedResultMsg whether need result msg
      */
     public static CommandResult execCommand(String[] commands, boolean isRoot, boolean isNeedResultMsg) {
+        long startTime = System.currentTimeMillis();
         int result = -1;
         if (commands == null || commands.length == 0) {
             return new CommandResult(result, null, null);
@@ -124,12 +125,13 @@ public class ShellUtil {
              */
             // 使用超时退出,不阻调用
             boolean exitedNormal = process.waitFor(TIME_OUT_SECONDS, TimeUnit.SECONDS);
+            long cost = System.currentTimeMillis() - startTime;
             try {
                 result = process.exitValue();
-                logger.info("execCommand process exited normal. exitcode=[{}]", result);
+                logger.info("execCommand process exited normal. exitcode=[{}], cost=[{}ms]", result, cost);
             } catch (IllegalThreadStateException e) {
                 result = -1;
-                logger.error("execCommand process exit error. Probably cause by timeout=[{}s].", TIME_OUT_SECONDS, e);
+                logger.error("execCommand process exit error. exitcode=[{}], cost=[{}ms], timeout=[{}s].", result, cost, TIME_OUT_SECONDS, e);
                 process.destroy();// 退出
                 return new CommandResult(result, "", "");
             }
