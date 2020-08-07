@@ -2,7 +2,7 @@ package com.demo.server.common.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.demo.study.testclass.thread.TaskMethod;
+import com.demo.server.common.utils.thread.runner.TaskMethod;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 

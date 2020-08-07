@@ -10,6 +10,7 @@ import org.apache.commons.lang3.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.concurrent.*;
 
 public class ThreadUtil {
@@ -107,19 +108,30 @@ public class ThreadUtil {
         }
     }
 
+    public static Collection<Thread> getAllThread() {
+        return ThreadUtils.getAllThreads();
+    }
+
+    public static Thread getMainThread() {
+        return ThreadUtils.findThreadById(1);
+    }
+
     public static void main(String[] args) {
         System.out.println("availableProcessors=" + ThreadUtil.availableProcessors());
         System.out.println("ioIntesivePoolSize=" + ThreadUtil.ioIntesivePoolSize());
 
-        ThreadUtil.sleep(1000);
+        ThreadUtil.sleep(200);
 
         System.out.println("cpuIntesivePoolSize=" + ThreadUtil.cpuIntesivePoolSize());
         System.out.println("poolSize=" + ThreadUtil.poolSize(0.5));
 
+        Collection<Thread> list = getAllThread();
 
-        ThreadUtils.getAllThreads().stream().forEach(thread -> {
+        list.stream().forEach(thread -> {
             System.out.println(thread.getId() + ":" + thread.getName());
         });
+
+        System.out.println(getMainThread().getName());
 
     }
 }

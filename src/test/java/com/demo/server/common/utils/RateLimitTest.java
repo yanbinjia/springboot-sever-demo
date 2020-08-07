@@ -1,6 +1,7 @@
 package com.demo.server.common.utils;
 
-import com.demo.study.testclass.thread.MultiTreadTestCase;
+import com.demo.server.common.utils.thread.ThreadUtil;
+import com.demo.server.common.utils.thread.runner.MultiTreadRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +21,8 @@ public class RateLimitTest {
 
     @Test
     public void rateLimitTest() throws Exception {
-        MultiTreadTestCase tc = new MultiTreadTestCase(RateLimitTaskMethod.class, 10, 100);
-        tc.runCase();
+        MultiTreadRunner runner = new MultiTreadRunner(RateLimitTaskMethod.class, ThreadUtil.availableProcessors(), 10);
+        runner.run();
     }
 
 }
