@@ -27,14 +27,10 @@ public class ShellUtil {
     public static final String COMMAND_LINE_END = "\n";
     public static final int TIME_OUT_SECONDS = 6;
 
-
     private ShellUtil() {
         throw new AssertionError();
     }
 
-    /**
-     * check whether has root permission
-     */
     public static boolean checkRootPermission() {
         return execCommand("echo root", true, false).result == 0;
     }
