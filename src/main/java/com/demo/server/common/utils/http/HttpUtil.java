@@ -6,6 +6,7 @@
 
 package com.demo.server.common.utils.http;
 
+import com.demo.server.common.utils.RandomUtil;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -20,19 +21,24 @@ import java.util.TreeMap;
 public class HttpUtil {
     private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
     public static final int READ_TIMEOUT = 3 * 1000;// milliseconds
-    /**
-     * Chrome@2020 版本号 84.0.4147.105
-     * <p>
-     * Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36
-     */
-    public static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36";
+    public static final String[] USER_AGENT =
+            {
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"// chrome mac
+                    , "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15"// safari mac
+                    , "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36 OPR/70.0.3728.95"// opera mac
+                    , "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)"// IE8
+                    , "Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11"// Opera 11.11 Windows
+                    , "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE)"// 360浏览器
+                    , "Mozilla/5.0 (Windows NT 6.1; rv,2.0.1) Gecko/20100101 Firefox/4.0.1",// Firefox 4.0.1 Windows
+            };
 
-    public static String sendGet(String url, Map<String, String> param, int timeoutSec) {
+    public static String sendGet(String url, Map<String, String> param, int timeoutSeconds) {
         String queryStr = queryStr(url, param);
-        int timeout = timeoutSec <= 0 ? READ_TIMEOUT : timeoutSec * 1000;
+        int timeout = timeoutSeconds <= 0 ? READ_TIMEOUT : timeoutSeconds * 1000;
         try {
             Connection.Response response = Jsoup.connect(queryStr)
-                    .userAgent(USER_AGENT).timeout(timeout)
+                    .userAgent(getUserAgent())
+                    .timeout(timeout)
                     .ignoreContentType(true)
                     .method(Connection.Method.GET)
                     .execute();
@@ -46,12 +52,13 @@ public class HttpUtil {
         return "";
     }
 
-    public static String sendPost(String url, Map<String, String> param, int timeoutSec) {
+    public static String sendPost(String url, Map<String, String> param, int timeoutSeconds) {
         String queryStr = url;
-        int timeout = timeoutSec <= 0 ? READ_TIMEOUT : timeoutSec * 1000;
+        int timeout = timeoutSeconds <= 0 ? READ_TIMEOUT : timeoutSeconds * 1000;
         try {
             Connection.Response response = Jsoup.connect(url)
-                    .userAgent(USER_AGENT).timeout(timeout)
+                    .userAgent(getUserAgent())
+                    .timeout(timeout)
                     .ignoreContentType(true)
                     .method(Connection.Method.POST)
                     .data(param)
@@ -64,6 +71,12 @@ public class HttpUtil {
             logger.error("sendQueryPost error. url={}", queryStr, e);
         }
         return "";
+    }
+
+    public static String getUserAgent() {
+        String userAgent = "";
+        userAgent = USER_AGENT[RandomUtil.randomInt(0, USER_AGENT.length)];
+        return userAgent;
     }
 
     public static String queryStr(String url, Map<String, String> param) {
