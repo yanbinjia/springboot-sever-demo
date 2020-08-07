@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class ShellUtil {
@@ -24,6 +25,8 @@ public class ShellUtil {
     public static final String COMMAND_SH = "sh";
     public static final String COMMAND_EXIT = "exit\n";
     public static final String COMMAND_LINE_END = "\n";
+    public static final int TIME_OUT_SECONDS = 6;
+
 
     private ShellUtil() {
         throw new AssertionError();
@@ -106,7 +109,30 @@ public class ShellUtil {
             os.writeBytes(COMMAND_EXIT);
             os.flush();
 
-            result = process.waitFor();
+            /*
+             * 注意: public abstract int waitFor() 会阻塞直到命令退出. 如果遇到top这样不退出的命令会一直阻塞.
+             * @return the exit value of the subprocess represented by this {@code Process} object.
+             * By convention, the value {@code 0} indicates normal termination.
+             */
+            // result = process.waitFor();
+
+            /**
+             * public boolean waitFor(long timeout, TimeUnit unit)
+             * @return
+             * {@code true} if the subprocess has exited and
+             * {@code false} if he waiting time elapsed before the subprocess has exited.
+             */
+            // 使用超时退出,不阻调用
+            boolean exitedNormal = process.waitFor(TIME_OUT_SECONDS, TimeUnit.SECONDS);
+            try {
+                result = process.exitValue();
+                logger.info("execCommand process exited normal. exitcode=[{}]", result);
+            } catch (IllegalThreadStateException e) {
+                result = -1;
+                logger.error("execCommand process exit error. Probably cause by timeout=[{}s].", TIME_OUT_SECONDS, e);
+                process.destroy();// 退出
+                return new CommandResult(result, "", "");
+            }
 
             // get command result
             if (isNeedResultMsg) {
@@ -192,6 +218,16 @@ public class ShellUtil {
         System.out.println(result.errorMsg);
 
         result = ShellUtil.execCommand(new String[]{"cd " + JvmUtil.getJavaHomePath(), "pwd", "ls -al"});
+        System.out.println(result.result);
+        System.out.println(result.successMsg);
+        System.out.println(result.errorMsg);
+
+        result = ShellUtil.execCommand("iostat 1 3");
+        System.out.println(result.result);
+        System.out.println(result.successMsg);
+        System.out.println(result.errorMsg);
+
+        result = ShellUtil.execCommand("iostat 1");
         System.out.println(result.result);
         System.out.println(result.successMsg);
         System.out.println(result.errorMsg);
