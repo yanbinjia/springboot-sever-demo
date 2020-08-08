@@ -17,9 +17,11 @@ import java.util.regex.Pattern;
 
 public class IpUtil {
     private static final Logger logger = LoggerFactory.getLogger(IpUtil.class);
-    // LOCAL_IP & LOCAL_HOST Cache
+    // LOCAL_IP & LOCAL_HOST_NAME Cache
+    public static String LOOPBACK_ADDRESS = "127.0.0.1";
+    public static String LOCALHOST = LOOPBACK_ADDRESS;
     public static String LOCAL_IP = "";
-    public static String LOCAL_HOST = "";
+    public static String LOCAL_HOST_NAME = "";
     public static long LOCAL_TIME = 0;
     public static final long LOCAL_EXPIRE = 1000 * 60 * 10;// 缓存有效期10分钟
     // IP v4 Pattern
@@ -27,7 +29,7 @@ public class IpUtil {
     // IP v6 Pattern
     public static final Pattern IPV6 = Pattern.compile("(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))");
 
-    public static final String[] IP_HEADERS = {
+    public static final String[] IP_HTTP_HEADERS = {
             "NS-Client-IP",
             "x-forwarded-for",
             "Proxy-Client-IP",
@@ -45,7 +47,7 @@ public class IpUtil {
         String ip = "";
         String getBy = "";
 
-        for (String header : IP_HEADERS) {
+        for (String header : IP_HTTP_HEADERS) {
             ip = request.getHeader(header);
             if (StringUtils.isNotBlank(ip) && !"unknown".equalsIgnoreCase(ip = ip.trim())) {
                 getBy = header;
@@ -62,10 +64,10 @@ public class IpUtil {
             ip = request.getRemoteAddr();
             getBy = "request.getRemoteAddr()";
         }
-        
+
         logger.debug("get ip by [{}], ip={}", getBy, ip);
 
-        return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
+        return "0:0:0:0:0:0:0:1".equals(ip) ? LOCALHOST : ip;
     }
 
     public static String getLocalIp() {
@@ -79,17 +81,17 @@ public class IpUtil {
         } catch (UnknownHostException e) {
             logger.error("getLocalIp error.", e);
         }
-        return "127.0.0.1";
+        return LOCALHOST;
     }
 
-    public static String getLocalHost() {
+    public static String getLocalHostName() {
         if (isLocalCacheValid()) {
-            logger.debug("getLocalIp by cache LOCAL_HOST={} ", LOCAL_HOST);
-            return LOCAL_HOST;
+            logger.debug("getLocalIp by cache LOCAL_HOST={} ", LOCAL_HOST_NAME);
+            return LOCAL_HOST_NAME;
         }
         try {
             setLocalCache(InetAddress.getLocalHost());
-            return LOCAL_HOST;
+            return LOCAL_HOST_NAME;
         } catch (UnknownHostException e) {
             logger.error("getLocalHostName error.", e);
         }
@@ -97,48 +99,44 @@ public class IpUtil {
     }
 
     public static boolean isLocalCacheValid() {
-        return StringUtils.isNoneBlank(LOCAL_IP, LOCAL_HOST) && (System.currentTimeMillis() - LOCAL_TIME) < LOCAL_EXPIRE;
+        return StringUtils.isNoneBlank(LOCAL_IP, LOCAL_HOST_NAME) && (System.currentTimeMillis() - LOCAL_TIME) < LOCAL_EXPIRE;
     }
 
     public static void setLocalCache(InetAddress inetAddress) {
         LOCAL_IP = inetAddress.getHostAddress();
-        LOCAL_HOST = inetAddress.getHostName();
+        LOCAL_HOST_NAME = inetAddress.getHostName();
         LOCAL_TIME = System.currentTimeMillis();
-        logger.debug("setLocalCache LOCAL_IP={},LOCAL_HOST={},EXPIRE={}min", LOCAL_IP, LOCAL_HOST, LOCAL_EXPIRE / 1000 / 60);
+        logger.debug("setLocalCache LOCAL_IP={},LOCAL_HOST={},EXPIRE={}min", LOCAL_IP, LOCAL_HOST_NAME, LOCAL_EXPIRE / 1000 / 60);
     }
 
     /**
      * 根据long值获取ipv4地址
      */
     public static String longToIpv4(long longIp) {
-        final StringBuilder sb = new StringBuilder();
-        // 直接右移24位
-        sb.append((longIp >>> 24));
-        sb.append(".");
-        // 将高8位置0，然后右移16位
-        sb.append(((longIp & 0x00FFFFFF) >>> 16));
-        sb.append(".");
-        sb.append(((longIp & 0x0000FFFF) >>> 8));
-        sb.append(".");
-        sb.append((longIp & 0x000000FF));
-        return sb.toString();
+        return (longIp >>> 24) + // 直接右移24位
+                "." +
+                ((longIp & 0x00FFFFFF) >>> 16) + // 将高8位置0，然后右移16位
+                "." +
+                ((longIp & 0x0000FFFF) >>> 8) +
+                "." +
+                (longIp & 0x000000FF);
     }
 
     /**
      * 根据ipv4地址计算出long型的数据
      */
-    public static long ipv4ToLong(String strIP) {
-        if (isIpv4(strIP)) {
+    public static long ipv4ToLong(String strIp) {
+        if (isIpv4(strIp)) {
             long[] ip = new long[4];
             // 先找到IP地址字符串中.的位置
-            int position1 = strIP.indexOf(".");
-            int position2 = strIP.indexOf(".", position1 + 1);
-            int position3 = strIP.indexOf(".", position2 + 1);
+            int position1 = strIp.indexOf(".");
+            int position2 = strIp.indexOf(".", position1 + 1);
+            int position3 = strIp.indexOf(".", position2 + 1);
             // 将每个.之间的字符串转换成整型
-            ip[0] = Long.parseLong(strIP.substring(0, position1));
-            ip[1] = Long.parseLong(strIP.substring(position1 + 1, position2));
-            ip[2] = Long.parseLong(strIP.substring(position2 + 1, position3));
-            ip[3] = Long.parseLong(strIP.substring(position3 + 1));
+            ip[0] = Long.parseLong(strIp.substring(0, position1));
+            ip[1] = Long.parseLong(strIp.substring(position1 + 1, position2));
+            ip[2] = Long.parseLong(strIp.substring(position2 + 1, position3));
+            ip[3] = Long.parseLong(strIp.substring(position3 + 1));
             return (ip[0] << 24) + (ip[1] << 16) + (ip[2] << 8) + ip[3];
         }
         return 0;
@@ -212,7 +210,7 @@ public class IpUtil {
      * 网络广播地址 = NetworkAddress | Mask反码 (或操作)
      * 地址范围 = {网络地址,网络广播地址}
      *
-     * @param cidr
+     * @param cidr cidr地址
      * @return String[0]=startIp & String[1]=endIp
      */
     public static String[] cidrToIpRange(String cidr) {
@@ -231,6 +229,47 @@ public class IpUtil {
         return ipRange;
     }
 
+    /**
+     * 判定是否为内网IP
+     * <p>
+     * 私有IP：
+     * A类 10.0.0.0-10.255.255.255
+     * B类 172.16.0.0-172.31.255.255
+     * C类 192.168.0.0-192.168.255.255
+     * 还有127这个网段是环回地址
+     *
+     * @param ip IP地址
+     * @return 是否为内网IP
+     */
+    public static boolean isInnerIp(String ip) {
+        boolean isInnerIp;
+        long ipNum = ipv4ToLong(ip);
+
+        long aBegin = ipv4ToLong("10.0.0.0");
+        long aEnd = ipv4ToLong("10.255.255.255");
+
+        long bBegin = ipv4ToLong("172.16.0.0");
+        long bEnd = ipv4ToLong("172.31.255.255");
+
+        long cBegin = ipv4ToLong("192.168.0.0");
+        long cEnd = ipv4ToLong("192.168.255.255");
+
+        isInnerIp = isInRange(ipNum, aBegin, aEnd) || isInRange(ipNum, bBegin, bEnd) || isInRange(ipNum, cBegin, cEnd) || ip.equals(LOCALHOST);
+        return isInnerIp;
+    }
+
+    /**
+     * IP的long值是否在指定范围内
+     *
+     * @param ip    需要验证的IP
+     * @param begin 开始IP
+     * @param end   结束IP
+     * @return 是否在范围内
+     */
+    private static boolean isInRange(long ip, long begin, long end) {
+        return (ip >= begin) && (ip <= end);
+    }
+
     public static boolean ping(String ip) {
         return ping(ip, 300);
     }
@@ -247,9 +286,9 @@ public class IpUtil {
 
     public static void main(String[] args) {
         String ipv6 = "2001:0db8:3c4d:0015:0000:0000:1a2f:1a2b";
-        System.out.println(ipv6 + ":" + IpUtil.isIpv6(ipv6));
+        System.out.println(ipv6 + " isIpv6=" + IpUtil.isIpv6(ipv6));
         ipv6 = "0:0:0:0:0:0:0:1";
-        System.out.println(ipv6 + ":" + IpUtil.isIpv6(ipv6));
+        System.out.println(ipv6 + " isIpv6=" + IpUtil.isIpv6(ipv6));
 
         String localIpStr = IpUtil.getLocalIp();
         long localIpLong = IpUtil.ipv4ToLong(localIpStr);
@@ -275,5 +314,8 @@ public class IpUtil {
         System.out.println(Long.toBinaryString(IpUtil.ipv4ToLong("192.168.1.2")).length());
 
         System.out.println(IpUtil.ping("192.168.31.1"));
+
+        System.out.println(IpUtil.getLocalIp() + " isInnerIp=" + IpUtil.isInnerIp(IpUtil.getLocalIp()));
+        System.out.println(IpUtil.LOCALHOST + " isInnerIp=" + IpUtil.isInnerIp(IpUtil.LOCALHOST));
     }
 }
