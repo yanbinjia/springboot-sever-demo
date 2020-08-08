@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class IpUtil {
     private static final Logger logger = LoggerFactory.getLogger(IpUtil.class);
@@ -92,30 +94,24 @@ public class IpUtil {
     }
 
     /**
-     * 根据long值获取ip v4地址
-     *
-     * @param longIP IP的long表示形式
-     * @return IP V4 地址
+     * 根据long值获取ipv4地址
      */
-    public static String longToIpv4(long longIP) {
+    public static String longToIpv4(long longIp) {
         final StringBuilder sb = new StringBuilder();
         // 直接右移24位
-        sb.append((longIP >>> 24));
+        sb.append((longIp >>> 24));
         sb.append(".");
         // 将高8位置0，然后右移16位
-        sb.append(((longIP & 0x00FFFFFF) >>> 16));
+        sb.append(((longIp & 0x00FFFFFF) >>> 16));
         sb.append(".");
-        sb.append(((longIP & 0x0000FFFF) >>> 8));
+        sb.append(((longIp & 0x0000FFFF) >>> 8));
         sb.append(".");
-        sb.append((longIP & 0x000000FF));
+        sb.append((longIp & 0x000000FF));
         return sb.toString();
     }
 
     /**
-     * 根据ip地址计算出long型的数据
-     *
-     * @param strIP IP V4 地址
-     * @return long值
+     * 根据ipv4地址计算出long型的数据
      */
     public static long ipv4ToLong(String strIP) {
         if (isIpv4(strIP)) {
@@ -135,7 +131,12 @@ public class IpUtil {
     }
 
     /*
-     * ipv4共32位,点分十进制字符串长15.
+     * ipv4长度为32位(bit),点分十进制字符串长度15.
+     * 示例:
+     * 点分十进制表示: 192.168.1.2
+     * 十进制整数表示: 3232235778
+     * 二进制表示: 11000000101010000000000100000010
+     *
      */
     public static final int IPV4_LEN = 15;
 
@@ -147,7 +148,7 @@ public class IpUtil {
     }
 
     /*
-     * ipv6共128位,冒号分16进制长度为39,IPv6 地址的大小和格式使得寻址功能大为增强. support ipv4 on ipv6 模式下长度为46.
+     * ipv6长度为128位(bit),冒号分16进制长度为39,IPv6 地址的大小和格式使得寻址功能大为增强. support ipv4 on ipv6 模式下长度为46.
      * 地址表示法为 x:x:x:x:x:x:x:x, 其中每个 x 是地址的 8 个 16 位部分的十六进制值.
      * ipv6地址范围从 0000:0000:0000:0000:0000:0000:0000:0000 至 ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff
      */
@@ -160,9 +161,64 @@ public class IpUtil {
         return IPV6.matcher(ip).matches();
     }
 
+    /**
+     * 是否在CIDR规则配置范围内,支持ipv4
+     * <p>
+     * CIDR(无分类域间路由选择,Classless Inter-Domain Routing).
+     * CIDR放弃了之前的分类IP地址表示法,消除了传统的A类/B类/C类地址以及划分子网的概念.
+     * IP地址表示法,CIDR记法：
+     * IP地址::={<网络前缀>,<主机号>}/网络前缀所占位数
+     * <p>
+     * 例如: 128.14.35.7/20 网络前缀是20位
+     * CIDR-IP : 128.14.35.7/20 = 10000000  00001110  00100011  00000111
+     * 最小地址是: 128.14.32.0    = 10000000  00001110  00100000  00000000
+     * 最大地址是: 128.14.47.255  = 10000000  00001110  00101111 11111111
+     * 子网掩码是: 255.255.240.0  = 11111111  11111111  11110000  00000000
+     *
+     * @param ip   需要验证的IP
+     * @param cidr CIDR规则IP
+     * @return 是否在范围内
+     */
+    public static boolean isInRange(String ip, String cidr) {
+        String[] ips = StringUtils.splitByWholeSeparator(ip, ".");
+        int ipAddr = (Integer.parseInt(ips[0]) << 24) | (Integer.parseInt(ips[1]) << 16) | (Integer.parseInt(ips[2]) << 8) | Integer.parseInt(ips[3]);
+        int netbit = Integer.parseInt(cidr.replaceAll(".*/", ""));
+        int mask = 0xFFFFFFFF << (32 - netbit);
+        String cidrIp = cidr.replaceAll("/.*", "");
+        String[] cidrIps = cidrIp.split("\\.");
+        int cidrIpAddr = (Integer.parseInt(cidrIps[0]) << 24) | (Integer.parseInt(cidrIps[1]) << 16) | (Integer.parseInt(cidrIps[2]) << 8) | Integer.parseInt(cidrIps[3]);
+        return (ipAddr & mask) == (cidrIpAddr & mask);
+    }
+
+    /**
+     * cidrToIpRange,支持ipv4
+     * <p>
+     * 地址范围计算方法:
+     * 网络地址 = IpAddress & Mask (与操作)
+     * 网络广播地址 = NetworkAddress | Mask反码 (或操作)
+     * 地址范围 = {网络地址,网络广播地址}
+     *
+     * @param cidr
+     * @return String[0]=startIp & String[1]=endIp
+     */
+    public static String[] cidrToIpRange(String cidr) {
+        int netbit = Integer.parseInt(cidr.replaceAll(".*/", ""));
+        int mask = 0xFFFFFFFF << (32 - netbit);// 网络前缀置1,主机号置0 -> Mask(掩码)
+        int inverseMask = ~mask;// Mask取反,网络前缀置0,主机号置1 -> 与IP或操作取得最大主机号
+
+        String cidrIp = cidr.replaceAll("/.*", "");
+        long cidrIpLong = ipv4ToLong(cidrIp);
+        long networkAddress = cidrIpLong & mask;
+
+        String[] ipRange = new String[2];
+        ipRange[0] = longToIpv4(networkAddress);
+        ipRange[1] = longToIpv4(networkAddress | inverseMask);
+
+        return ipRange;
+    }
 
     public static boolean ping(String ip) {
-        return ping(ip, 200);
+        return ping(ip, 300);
     }
 
     public static boolean ping(String ip, int timeout) {
@@ -192,6 +248,16 @@ public class IpUtil {
         System.out.println(ipv4 + " pingok=" + IpUtil.ping(ipv4));
         System.out.println(IpUtil.getLocalIp() + " pingok=" + IpUtil.ping(IpUtil.getLocalIp()));
 
-        System.out.println(IpUtil.getLocalHost());
+        System.out.println(IpUtil.isInRange("192.168.24.253", "192.168.24.2/30"));
+        System.out.println(IpUtil.isInRange("192.168.23.12", "192.168.24.0/22"));
+
+        String cidr = "128.14.35.7/20";
+        String ipv4Range = Arrays.stream(IpUtil.cidrToIpRange(cidr)).collect(Collectors.joining("-"));
+        System.out.println(cidr + ", ipv4range=" + ipv4Range);
+
+        System.out.println(IpUtil.ipv4ToLong("192.168.1.2"));
+        System.out.println(Long.toBinaryString(IpUtil.ipv4ToLong("192.168.1.2")));
+        System.out.println(Long.toBinaryString(IpUtil.ipv4ToLong("192.168.1.2")).length());
+
     }
 }
