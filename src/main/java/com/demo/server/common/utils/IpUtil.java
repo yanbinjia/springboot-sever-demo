@@ -47,16 +47,10 @@ public class IpUtil {
 
         for (String header : IP_HEADERS) {
             ip = request.getHeader(header);
-            if (StringUtils.isNotBlank(ip) && !"unknown".equalsIgnoreCase(ip.trim())) {
-                ip = ip.trim();
+            if (StringUtils.isNotBlank(ip) && !"unknown".equalsIgnoreCase(ip = ip.trim())) {
                 getBy = header;
                 break;
             }
-        }
-
-        if (StringUtils.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-            getBy = "request.getRemoteAddr()";
         }
 
         // 处理 X-Forwarded-For:client,proxy1,proxy2
@@ -64,6 +58,11 @@ public class IpUtil {
             ip = StringUtils.splitByWholeSeparator(ip, ",")[0];
         }
 
+        if (StringUtils.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+            getBy = "request.getRemoteAddr()";
+        }
+        
         logger.debug("get ip by [{}], ip={}", getBy, ip);
 
         return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
