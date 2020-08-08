@@ -14,24 +14,6 @@ public class RequestUtil {
     private static final Logger logger = LoggerFactory.getLogger(RequestUtil.class);
 
     private static String getClientIp(HttpServletRequest request) {
-        /*
-        // old version
-        String ip = request.getHeader("NS-Client-IP");
-
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("x-forwarded-for");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        */
-
         return IpUtil.getClientIp(request);
     }
 
@@ -52,7 +34,7 @@ public class RequestUtil {
     public static Map<String, String> getParameterMap(HttpServletRequest request) {
 
         Map<String, String[]> map = request.getParameterMap();
-        Map<String, String> paramMap = new HashMap<String, String>();
+        Map<String, String> paramMap = new HashMap<>();
         for (Entry<String, String[]> entry : map.entrySet()) {
             String name = entry.getKey();
             String[] value = entry.getValue();
@@ -67,7 +49,7 @@ public class RequestUtil {
 
     public static Map<String, String> getParameterMapEndWith(HttpServletRequest request, String tag) {
         Map<String, String[]> map = request.getParameterMap();
-        Map<String, String> paramMap = new HashMap<String, String>();
+        Map<String, String> paramMap = new HashMap<>();
         for (Entry<String, String[]> entry : map.entrySet()) {
             String name = entry.getKey();
             String[] value = entry.getValue();
@@ -84,7 +66,7 @@ public class RequestUtil {
 
     public static Map<String, String> getParameterMapStartWith(HttpServletRequest request, String tag) {
         Map<String, String[]> map = request.getParameterMap();
-        Map<String, String> paramMap = new HashMap<String, String>();
+        Map<String, String> paramMap = new HashMap<>();
         for (Entry<String, String[]> entry : map.entrySet()) {
             String name = entry.getKey();
             String[] value = entry.getValue();
