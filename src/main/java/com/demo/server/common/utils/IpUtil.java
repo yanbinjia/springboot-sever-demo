@@ -33,31 +33,42 @@ public class IpUtil {
         }
 
         String ip = request.getHeader("NS-Client-IP");
+        String getBy = "NS-Client-IP";
 
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("x-forwarded-for");
+            getBy = "x-forwarded-for";
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
+            getBy = "Proxy-Client-IP";
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("X-Forwarded-For");
+            getBy = "X-Forwarded-For";
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
+            getBy = "WL-Proxy-Client-IP";
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("X-Real-IP");
+            getBy = "X-Real-IP";
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_CLIENT_IP");
+            getBy = "HTTP_CLIENT_IP";
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+            getBy = "HTTP_X_FORWARDED_FOR";
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
+            getBy = "request.getRemoteAddr()";
         }
+
+        logger.debug("get ip by [{}], ip={}", getBy, ip);
 
         return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
     }
@@ -234,6 +245,7 @@ public class IpUtil {
             // timeout 检测超时（毫秒）
             return InetAddress.getByName(ip).isReachable(timeout); // 当返回值是true时，说明host是可用的，false则不可。
         } catch (Exception ex) {
+            logger.error("ping error.", ex);
             return false;
         }
     }
@@ -267,5 +279,6 @@ public class IpUtil {
         System.out.println(Long.toBinaryString(IpUtil.ipv4ToLong("192.168.1.2")));
         System.out.println(Long.toBinaryString(IpUtil.ipv4ToLong("192.168.1.2")).length());
 
+        System.out.println(IpUtil.ping("192.168.31.1"));
     }
 }
