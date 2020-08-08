@@ -13,9 +13,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class IpUtil {
     private static final Logger logger = LoggerFactory.getLogger(IpUtil.class);
@@ -23,7 +21,7 @@ public class IpUtil {
     public static String LOCAL_IP = "";
     public static String LOCAL_HOST = "";
     public static long LOCAL_TIME = 0;
-    public static long LOCAL_EXPIRE = 1000 * 60 * 10;// 缓存有效期10分钟
+    public static final long LOCAL_EXPIRE = 1000 * 60 * 10;// 缓存有效期10分钟
     // IP v4 Pattern
     public final static Pattern IPV4 = Pattern.compile("\\b((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\b");
     // IP v6 Pattern
@@ -252,7 +250,7 @@ public class IpUtil {
         System.out.println(IpUtil.isInRange("192.168.23.12", "192.168.24.0/22"));
 
         String cidr = "128.14.35.7/20";
-        String ipv4Range = Arrays.stream(IpUtil.cidrToIpRange(cidr)).collect(Collectors.joining("-"));
+        String ipv4Range = String.join("-", IpUtil.cidrToIpRange(cidr));
         System.out.println(cidr + ", ipv4range=" + ipv4Range);
 
         System.out.println(IpUtil.ipv4ToLong("192.168.1.2"));
