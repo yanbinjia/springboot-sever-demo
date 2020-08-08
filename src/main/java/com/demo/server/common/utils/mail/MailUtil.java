@@ -6,7 +6,8 @@
 
 package com.demo.server.common.utils.mail;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,8 +22,9 @@ import java.io.File;
 import java.util.Map;
 
 @Component
-@Slf4j
 public class MailUtil {
+    private static final Logger logger = LoggerFactory.getLogger(MailUtil.class);
+
     @Autowired
     private JavaMailSender mailSender;
 
@@ -41,9 +43,9 @@ public class MailUtil {
             mailSender.send(message);
 
             result = true;
-            log.info("sendSimpleMail ok. from={},to={},subject={}", from, to, subject);
+            logger.info("sendSimpleMail ok. from={},to={},subject={}", from, to, subject);
         } catch (Exception e) {
-            log.error("sendSimpleMail error.", e);
+            logger.error("sendSimpleMail error.", e);
         }
         return result;
     }
@@ -64,16 +66,16 @@ public class MailUtil {
                     try {
                         helper.addAttachment(k, new FileSystemResource(v));
                     } catch (MessagingException e) {
-                        log.error("sendAttachmentsMail addAttachment error.", e);
+                        logger.error("sendAttachmentsMail addAttachment error.", e);
                     }
                 });
             }
             mailSender.send(mimeMessage);
 
             result = true;
-            log.info("sendAttachmentsMail ok. from={},to={},subject={}", from, to, subject);
+            logger.info("sendAttachmentsMail ok. from={},to={},subject={}", from, to, subject);
         } catch (Exception e) {
-            log.error("sendAttachmentsMail error.", e);
+            logger.error("sendAttachmentsMail error.", e);
         }
 
         return result;
@@ -91,9 +93,9 @@ public class MailUtil {
             mailSender.send(mimeMessage);
 
             result = true;
-            log.info("sendInlineMail ok. from={},to={},subject={}", from, to, subject);
+            logger.info("sendInlineMail ok. from={},to={},subject={}", from, to, subject);
         } catch (Exception e) {
-            log.error("sendInlineMail error.", e);
+            logger.error("sendInlineMail error.", e);
         }
         return result;
     }
