@@ -14,6 +14,8 @@ public class RequestUtil {
     private static final Logger logger = LoggerFactory.getLogger(RequestUtil.class);
 
     private static String getClientIp(HttpServletRequest request) {
+        /*
+        // old version
         String ip = request.getHeader("NS-Client-IP");
 
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
@@ -28,8 +30,9 @@ public class RequestUtil {
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
+        */
 
-        return ip;
+        return IpUtil.getClientIp(request);
     }
 
     public static String getIp(HttpServletRequest request) {
