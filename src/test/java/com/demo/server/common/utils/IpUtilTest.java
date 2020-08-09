@@ -1,11 +1,8 @@
 package com.demo.server.common.utils;
 
-import org.junit.After;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.net.InetAddress;
@@ -17,16 +14,8 @@ import java.net.InetAddress;
  * @version 1.0
  * @since <pre>8月 9, 2020</pre>
  */
+@Slf4j
 public class IpUtilTest {
-    private static final Logger logger = LoggerFactory.getLogger(IpUtilTest.class);
-
-    @Before
-    public void before() throws Exception {
-    }
-
-    @After
-    public void after() throws Exception {
-    }
 
     /**
      * Method: getClientIp(HttpServletRequest request)
@@ -50,7 +39,7 @@ public class IpUtilTest {
      */
     @Test
     public void testGetLocalIp() throws Exception {
-        logger.info(IpUtil.getLocalIp());
+        log.debug(IpUtil.getLocalIp());
         Assert.assertNotNull(IpUtil.getLocalIp());
     }
 
@@ -59,7 +48,7 @@ public class IpUtilTest {
      */
     @Test
     public void testGetLocalHostName() throws Exception {
-        logger.info(IpUtil.getLocalIp());
+        log.debug(IpUtil.getLocalIp());
         Assert.assertNotNull(IpUtil.getLocalIp());
     }
 
@@ -68,7 +57,7 @@ public class IpUtilTest {
      */
     @Test
     public void testIsLocalCacheValid() throws Exception {
-        logger.info("isLocalCacheValid=" + IpUtil.isLocalCacheValid());
+        log.debug("isLocalCacheValid=" + IpUtil.isLocalCacheValid());
     }
 
     /**
@@ -86,10 +75,10 @@ public class IpUtilTest {
     public void testLongToIpv4() throws Exception {
         String localIpStr = IpUtil.getLocalIp();
         long localIpLong = IpUtil.ipv4ToLong(localIpStr);
-        logger.info("localIpStr:" + localIpStr);
-        logger.info("localIpLong:" + localIpLong);
-        logger.info("localIpBinary:" + Long.toBinaryString(localIpLong));
-        logger.info("localIpLong from long:" + IpUtil.longToIpv4(localIpLong));
+        log.debug("localIpStr:" + localIpStr);
+        log.debug("localIpLong:" + localIpLong);
+        log.debug("localIpBinary:" + Long.toBinaryString(localIpLong));
+        log.debug("localIpLong from long:" + IpUtil.longToIpv4(localIpLong));
         Assert.assertEquals(localIpStr, IpUtil.longToIpv4(localIpLong));
     }
 
@@ -100,10 +89,10 @@ public class IpUtilTest {
     public void testIpv4ToLong() throws Exception {
         String localIpStr = IpUtil.getLocalIp();
         long localIpLong = IpUtil.ipv4ToLong(localIpStr);
-        logger.info("localIpStr:" + localIpStr);
-        logger.info("localIpLong:" + localIpLong);
-        logger.info("localIpBinary:" + Long.toBinaryString(localIpLong));
-        logger.info("localIpLong from long:" + IpUtil.longToIpv4(localIpLong));
+        log.debug("localIpStr:" + localIpStr);
+        log.debug("localIpLong:" + localIpLong);
+        log.debug("localIpBinary:" + Long.toBinaryString(localIpLong));
+        log.debug("localIpLong from long:" + IpUtil.longToIpv4(localIpLong));
         Assert.assertEquals(localIpStr, IpUtil.longToIpv4(localIpLong));
     }
 

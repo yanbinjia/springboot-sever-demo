@@ -85,6 +85,5 @@ public class MultiTreadRunner {
         System.out.println(">>> Task end at " + DateUtil.getCurrentDateTimeStr());
 
         executor.shutdown();
-
     }
 }
