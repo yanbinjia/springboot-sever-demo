@@ -9,6 +9,7 @@ package com.demo.server.common.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
@@ -18,8 +19,9 @@ import java.util.regex.Pattern;
 public class IpUtil {
     private static final Logger logger = LoggerFactory.getLogger(IpUtil.class);
     // LOCAL_IP & LOCAL_HOST_NAME Cache
-    public static String LOOPBACK_ADDRESS = "127.0.0.1";
-    public static String LOCALHOST = LOOPBACK_ADDRESS;
+    public static final String UNKNOWN = "unknown";
+    public static final String LOOPBACK_ADDRESS = "127.0.0.1";
+    public static final String LOCALHOST = LOOPBACK_ADDRESS;
     public static String LOCAL_IP = "";
     public static String LOCAL_HOST_NAME = "";
     public static long LOCAL_TIME = 0;
@@ -42,14 +44,14 @@ public class IpUtil {
 
     public static String getClientIp(HttpServletRequest request) {
         if (request == null) {
-            return "unknown";
+            return UNKNOWN;
         }
         String ip = "";
         String getBy = "";
 
         for (String header : IP_HTTP_HEADERS) {
             ip = request.getHeader(header);
-            if (StringUtils.isNotBlank(ip) && !"unknown".equalsIgnoreCase(ip = ip.trim())) {
+            if (StringUtils.isNotBlank(ip) && !UNKNOWN.equalsIgnoreCase(ip = ip.trim())) {
                 getBy = header;
                 break;
             }
@@ -60,7 +62,7 @@ public class IpUtil {
             ip = StringUtils.splitByWholeSeparator(ip, ",")[0];
         }
 
-        if (StringUtils.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+        if (StringUtils.isBlank(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
             getBy = "request.getRemoteAddr()";
         }
@@ -95,7 +97,7 @@ public class IpUtil {
         } catch (UnknownHostException e) {
             logger.error("getLocalHostName error.", e);
         }
-        return "unknown";
+        return UNKNOWN;
     }
 
     public static boolean isLocalCacheValid() {
@@ -317,5 +319,13 @@ public class IpUtil {
 
         System.out.println(IpUtil.getLocalIp() + " isInnerIp=" + IpUtil.isInnerIp(IpUtil.getLocalIp()));
         System.out.println(IpUtil.LOCALHOST + " isInnerIp=" + IpUtil.isInnerIp(IpUtil.LOCALHOST));
+
+        MockHttpServletRequest request;
+        request = new MockHttpServletRequest();
+        request.addHeader("X-Forwarded-For", "192.168.12.12,12.12.12.12");
+        request.setCharacterEncoding("UTF-8");
+        System.out.println(IpUtil.getClientIp(null));
+        System.out.println(IpUtil.getClientIp(request));
+
     }
 }
