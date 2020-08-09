@@ -7,13 +7,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.net.InetAddress;
 
-/**
- * IpUtil Tester.
- *
- * @author yanbinjia@126.com
- * @version 1.0
- * @since <pre>8月 9, 2020</pre>
- */
 @Slf4j
 public class IpUtilTest {
 
