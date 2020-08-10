@@ -25,7 +25,7 @@ public class IpUtil {
     public static String LOCAL_IP = "";
     public static String LOCAL_HOST_NAME = "";
     public static long LOCAL_TIME = 0;
-    public static final long LOCAL_EXPIRE = 1000 * 60 * 10;// 缓存有效期10分钟
+    public static long LOCAL_EXPIRE = 1000 * 60 * 10;// 缓存有效期10分钟
     // IP v4 Pattern
     public static final Pattern IPV4 = Pattern.compile("\\b((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\.((?!\\d\\d\\d)\\d+|1\\d\\d|2[0-4]\\d|25[0-5])\\b");
     // IP v6 Pattern
