@@ -1,38 +1,26 @@
 package com.demo.server.common.utils;
 
+import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileOutputStream;
 
-import org.jsoup.Connection.Response;
-import org.jsoup.Jsoup;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 public class JsoupUtilTest {
 
-	@Before
-	public void setUp() throws Exception {
+    @Test
+    public void writeToFileFromUrl() throws Exception {
 
-	}
+        String filePathLocal = "./tmp/readFileFromUrl.png";
+        String url = "https://www.baidu.com/img/flexible/logo/pc/result@2.png";
 
-	@After
-	public void tearDown() throws Exception {
+        Response response = Jsoup.connect(url).ignoreContentType(true).execute();
 
-	}
-
-	@Test
-	public void writeToFileFromUrl() throws Exception {
-
-		String filePathLocal = "./tmp/readFileFromUrl.png";
-		String url = "https://www.baidu.com/img/flexible/logo/pc/result@2.png";
-
-		Response response = Jsoup.connect(url).ignoreContentType(true).execute();
-
-		// output here
-		FileOutputStream out = new FileOutputStream(new File(filePathLocal));
-		out.write(response.bodyAsBytes());
-		// resultImageResponse.body() is where the image's contents are.
-		out.close();
-	}
+        // output here
+        FileOutputStream out = new FileOutputStream(new File(filePathLocal));
+        out.write(response.bodyAsBytes());
+        // resultImageResponse.body() is where the image's contents are.
+        out.close();
+    }
 }

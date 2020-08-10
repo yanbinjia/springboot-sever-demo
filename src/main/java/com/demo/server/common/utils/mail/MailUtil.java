@@ -21,6 +21,18 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.Map;
 
+/**
+ * application.properties 配置
+ * #######################################################
+ * # mail
+ * spring.mail.host=smtp.demo.com
+ * spring.mail.username=demo
+ * spring.mail.password=demo
+ * spring.mail.properties.mail.smtp.auth=true
+ * spring.mail.properties.mail.smtp.starttls.enable=true
+ * spring.mail.properties.mail.smtp.starttls.required=true
+ * #######################################################
+ */
 @Component
 public class MailUtil {
     private static final Logger logger = LoggerFactory.getLogger(MailUtil.class);

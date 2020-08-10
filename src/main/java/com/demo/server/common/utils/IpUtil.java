@@ -9,6 +9,7 @@ package com.demo.server.common.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
@@ -18,8 +19,9 @@ import java.util.regex.Pattern;
 public class IpUtil {
     private static final Logger logger = LoggerFactory.getLogger(IpUtil.class);
     // LOCAL_IP & LOCAL_HOST_NAME Cache
-    public static String LOOPBACK_ADDRESS = "127.0.0.1";
-    public static String LOCALHOST = LOOPBACK_ADDRESS;
+    public static final String UNKNOWN = "unknown";
+    public static final String LOOPBACK_ADDRESS = "127.0.0.1";
+    public static final String LOCALHOST = LOOPBACK_ADDRESS;
     public static String LOCAL_IP = "";
     public static String LOCAL_HOST_NAME = "";
     public static long LOCAL_TIME = 0;
@@ -42,14 +44,14 @@ public class IpUtil {
 
     public static String getClientIp(HttpServletRequest request) {
         if (request == null) {
-            return "unknown";
+            return UNKNOWN;
         }
         String ip = "";
         String getBy = "";
 
         for (String header : IP_HTTP_HEADERS) {
             ip = request.getHeader(header);
-            if (StringUtils.isNotBlank(ip) && !"unknown".equalsIgnoreCase(ip = ip.trim())) {
+            if (StringUtils.isNotBlank(ip) && !UNKNOWN.equalsIgnoreCase(ip = ip.trim())) {
                 getBy = header;
                 break;
             }
@@ -60,7 +62,7 @@ public class IpUtil {
             ip = StringUtils.splitByWholeSeparator(ip, ",")[0];
         }
 
-        if (StringUtils.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+        if (StringUtils.isBlank(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
             getBy = "request.getRemoteAddr()";
         }
@@ -95,7 +97,7 @@ public class IpUtil {
         } catch (UnknownHostException e) {
             logger.error("getLocalHostName error.", e);
         }
-        return "unknown";
+        return UNKNOWN;
     }
 
     public static boolean isLocalCacheValid() {
@@ -230,32 +232,31 @@ public class IpUtil {
     }
 
     /**
-     * 判定是否为内网IP
+     * 判定是否为内网地址,支持ipv4
      * <p>
      * 私有IP：
      * A类 10.0.0.0-10.255.255.255
      * B类 172.16.0.0-172.31.255.255
      * C类 192.168.0.0-192.168.255.255
-     * 还有127这个网段是环回地址
+     * LOOPBACK_ADDRESS 127.0.0.1
      *
-     * @param ip IP地址
+     * @param ip 需要验证的IP
      * @return 是否为内网IP
      */
     public static boolean isInnerIp(String ip) {
-        boolean isInnerIp;
         long ipNum = ipv4ToLong(ip);
 
-        long aBegin = ipv4ToLong("10.0.0.0");
-        long aEnd = ipv4ToLong("10.255.255.255");
+        long aBegin = 167772160L;// ipv4ToLong("10.0.0.0");// 167772160
+        long aEnd = 184549375L;// ipv4ToLong("10.255.255.255");// 184549375
+        long bBegin = 2886729728L;// ipv4ToLong("172.16.0.0");// 2886729728
+        long bEnd = 2887778303L;// ipv4ToLong("172.31.255.255");// 2887778303
+        long cBegin = 3232235520L; //ipv4ToLong("192.168.0.0");// 3232235520
+        long cEnd = 3232301055L;// ipv4ToLong("192.168.255.255");// 3232301055
 
-        long bBegin = ipv4ToLong("172.16.0.0");
-        long bEnd = ipv4ToLong("172.31.255.255");
-
-        long cBegin = ipv4ToLong("192.168.0.0");
-        long cEnd = ipv4ToLong("192.168.255.255");
-
-        isInnerIp = isInRange(ipNum, aBegin, aEnd) || isInRange(ipNum, bBegin, bEnd) || isInRange(ipNum, cBegin, cEnd) || ip.equals(LOCALHOST);
-        return isInnerIp;
+        return isInRange(ipNum, aBegin, aEnd)
+                || isInRange(ipNum, bBegin, bEnd)
+                || isInRange(ipNum, cBegin, cEnd)
+                || ip.equals(LOCALHOST);
     }
 
     /**
@@ -317,5 +318,13 @@ public class IpUtil {
 
         System.out.println(IpUtil.getLocalIp() + " isInnerIp=" + IpUtil.isInnerIp(IpUtil.getLocalIp()));
         System.out.println(IpUtil.LOCALHOST + " isInnerIp=" + IpUtil.isInnerIp(IpUtil.LOCALHOST));
+
+        MockHttpServletRequest request;
+        request = new MockHttpServletRequest();
+        request.addHeader("X-Forwarded-For", "192.168.12.12,12.12.12.12");
+        request.setCharacterEncoding("UTF-8");
+        System.out.println(IpUtil.getClientIp(null));
+        System.out.println(IpUtil.getClientIp(request));
+
     }
 }

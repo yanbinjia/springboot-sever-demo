@@ -7,5 +7,10 @@
 package com.demo.server.common.utils.thread.runner;
 
 public interface TaskMethod {
+    /**
+     * 运行任务具体的执行方法
+     *
+     * @return 成功或失败, true/false
+     */
     boolean run();
 }

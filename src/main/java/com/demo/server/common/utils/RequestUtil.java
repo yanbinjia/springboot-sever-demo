@@ -18,17 +18,7 @@ public class RequestUtil {
     }
 
     public static String getIp(HttpServletRequest request) {
-        String ip = getClientIp(request);
-
-        /* 注册ip长度限制为15 */
-        if (ip != null && ip.length() > 15) {
-            // **.***.***.***".length() = 15
-            if (ip.indexOf(",") > 0) {
-                ip = ip.substring(0, ip.indexOf(","));
-            }
-        }
-
-        return ip;
+        return getClientIp(request);
     }
 
     public static Map<String, String> getParameterMap(HttpServletRequest request) {

@@ -6,7 +6,6 @@
 
 package com.demo.server.common.utils.thread.runner;
 
-
 public class TaskResult {
     int successCount = 0;
     int failCount = 0;

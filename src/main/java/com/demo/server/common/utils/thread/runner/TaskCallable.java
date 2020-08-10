@@ -7,14 +7,13 @@
 package com.demo.server.common.utils.thread.runner;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import java.util.concurrent.atomic.LongAdder;
 
 public class TaskCallable implements Callable<TaskResult> {
-    TaskMethod taskMethod = null;
-    int loopInThreadSize = 1;
-    AtomicInteger successCount = new AtomicInteger(0);
-    AtomicInteger failCount = new AtomicInteger(0);
+    private TaskMethod taskMethod = null;
+    private int loopInThreadSize = 1;
+    private LongAdder successCount = new LongAdder();
+    private LongAdder failCount = new LongAdder();
 
     public TaskCallable(int loopInThreadSize, TaskMethod taskMethod) {
         this.loopInThreadSize = loopInThreadSize;
@@ -33,9 +32,9 @@ public class TaskCallable implements Callable<TaskResult> {
         while (currentLoop < loopInThreadSize) {
             currentLoop++;
             if (taskMethod.run()) {
-                successCount.incrementAndGet();
+                successCount.increment();
             } else {
-                failCount.incrementAndGet();
+                failCount.increment();
             }
         }
         long end = System.currentTimeMillis();
