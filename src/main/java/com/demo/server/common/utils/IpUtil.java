@@ -247,14 +247,12 @@ public class IpUtil {
         boolean isInnerIp;
         long ipNum = ipv4ToLong(ip);
 
-        long aBegin = ipv4ToLong("10.0.0.0");
-        long aEnd = ipv4ToLong("10.255.255.255");
-
-        long bBegin = ipv4ToLong("172.16.0.0");
-        long bEnd = ipv4ToLong("172.31.255.255");
-
-        long cBegin = ipv4ToLong("192.168.0.0");
-        long cEnd = ipv4ToLong("192.168.255.255");
+        long aBegin = 167772160L;// ipv4ToLong("10.0.0.0");// 167772160
+        long aEnd = 184549375L;// ipv4ToLong("10.255.255.255");// 184549375
+        long bBegin = 2886729728L;// ipv4ToLong("172.16.0.0");// 2886729728
+        long bEnd = 2887778303L;// ipv4ToLong("172.31.255.255");// 2887778303
+        long cBegin = 3232235520L; //ipv4ToLong("192.168.0.0");// 3232235520
+        long cEnd = 3232301055L;// ipv4ToLong("192.168.255.255");// 3232301055
 
         isInnerIp = isInRange(ipNum, aBegin, aEnd) || isInRange(ipNum, bBegin, bEnd) || isInRange(ipNum, cBegin, cEnd) || ip.equals(LOCALHOST);
         return isInnerIp;
