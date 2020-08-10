@@ -30,6 +30,7 @@ public class FileUtil extends org.apache.commons.io.FileUtils {
 
     public static void moveFile(File srcFile, File destFile) throws IOException {
         FileUtils.moveFile(srcFile, destFile);
+        log.info("moveFile ok. src={},dest={}", srcFile.getAbsolutePath(), destFile.getAbsolutePath());
     }
 
     public static boolean deleteFile(String path) {
@@ -42,6 +43,7 @@ public class FileUtil extends org.apache.commons.io.FileUtils {
         if (file.isFile() && file.exists()) {
             file.delete();
             flag = true;
+            log.info("deleteFile ok. path={}", path);
         }
         return flag;
     }
