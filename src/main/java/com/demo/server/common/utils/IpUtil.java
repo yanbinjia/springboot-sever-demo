@@ -232,15 +232,15 @@ public class IpUtil {
     }
 
     /**
-     * 判定是否为内网IP,支持ipv4
+     * 判定是否为内网地址,支持ipv4
      * <p>
      * 私有IP：
      * A类 10.0.0.0-10.255.255.255
      * B类 172.16.0.0-172.31.255.255
      * C类 192.168.0.0-192.168.255.255
-     * 还有127这个网段是环回地址
+     * LOOPBACK_ADDRESS 127.0.0.1
      *
-     * @param ip IP地址
+     * @param ip 需要验证的IP
      * @return 是否为内网IP
      */
     public static boolean isInnerIp(String ip) {
