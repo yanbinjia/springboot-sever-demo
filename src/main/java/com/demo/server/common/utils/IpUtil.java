@@ -232,7 +232,7 @@ public class IpUtil {
     }
 
     /**
-     * 判定是否为内网IP
+     * 判定是否为内网IP,支持ipv4
      * <p>
      * 私有IP：
      * A类 10.0.0.0-10.255.255.255
@@ -244,7 +244,6 @@ public class IpUtil {
      * @return 是否为内网IP
      */
     public static boolean isInnerIp(String ip) {
-        boolean isInnerIp;
         long ipNum = ipv4ToLong(ip);
 
         long aBegin = 167772160L;// ipv4ToLong("10.0.0.0");// 167772160
@@ -254,8 +253,10 @@ public class IpUtil {
         long cBegin = 3232235520L; //ipv4ToLong("192.168.0.0");// 3232235520
         long cEnd = 3232301055L;// ipv4ToLong("192.168.255.255");// 3232301055
 
-        isInnerIp = isInRange(ipNum, aBegin, aEnd) || isInRange(ipNum, bBegin, bEnd) || isInRange(ipNum, cBegin, cEnd) || ip.equals(LOCALHOST);
-        return isInnerIp;
+        return isInRange(ipNum, aBegin, aEnd)
+                || isInRange(ipNum, bBegin, bEnd)
+                || isInRange(ipNum, cBegin, cEnd)
+                || ip.equals(LOCALHOST);
     }
 
     /**
