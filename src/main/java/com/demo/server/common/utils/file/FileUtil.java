@@ -87,6 +87,7 @@ public class FileUtil extends org.apache.commons.io.FileUtils {
         }
         try {
             FileUtils.cleanDirectory(file);
+            log.warn("cleanDirectory ok. path={} is not exists or not directory", path);
             return true;
         } catch (IOException e) {
             log.error("cleanDirectory error. path={}", path, e);
