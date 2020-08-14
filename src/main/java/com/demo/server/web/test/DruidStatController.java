@@ -1,4 +1,10 @@
-package com.demo.server.web.druid;
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-08-14T15:13:25.626+08:00
+ */
+
+package com.demo.server.web.test;
 
 import com.alibaba.druid.stat.DruidStatManagerFacade;
 import com.demo.server.common.interceptor.SignPass;
