@@ -104,7 +104,7 @@ public class FileUploadUtil {
 
     public static String getPathStoreByDate(String uploadBasePath, String extension) {
         uploadBasePath = uploadBasePath.endsWith(File.separator) ? uploadBasePath : uploadBasePath + File.separator;
-        return uploadBasePath + DateUtil.datePathNow() + File.separator + RandomUtil.uuidWithoutSeparator() + "." + extension;
+        return uploadBasePath + DateUtil.datePathNow() + File.separator + System.currentTimeMillis() + "-" + RandomUtil.uuidWithoutSeparator() + "." + extension;
     }
 
     public static File getDestAbsoluteFile(String destAbsolutePath) throws IOException {
