@@ -1,6 +1,7 @@
 package com.demo.server.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.DateFormat;
@@ -862,6 +863,18 @@ public class DateUtil {
 
     public static Date addDays(Date date, int amount) {
         return DateUtils.addDays(date, amount);
+    }
+
+
+    /**
+     * 日期路径 即年/月/日 如2018/08/08
+     */
+    public static final String datePath(Date date) {
+        return DateFormatUtils.format(date, "yyyy/MM/dd");
+    }
+
+    public static final String datePathNow() {
+        return datePath(new Date());
     }
 
 }

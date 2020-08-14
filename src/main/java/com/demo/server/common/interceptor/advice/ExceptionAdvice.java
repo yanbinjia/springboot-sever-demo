@@ -10,6 +10,8 @@ import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.exception.AppException;
 import com.demo.server.common.utils.LogUtil;
+import com.demo.server.common.utils.file.FileUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +48,7 @@ import java.util.stream.Collectors;
  */
 @ControllerAdvice
 @Order(-1)
+@Slf4j
 public class ExceptionAdvice {
 
     @ResponseBody
@@ -164,6 +169,52 @@ public class ExceptionAdvice {
         return result;
     }
 
+    /**
+     * org.springframework.web.multipart.MultipartException:
+     * Current request is not a multipart request
+     */
+    @ResponseBody
+    @ExceptionHandler(value = {MultipartException.class})
+    public Result<?> handleException(MultipartException e, HttpServletRequest request,
+                                     HttpServletResponse response) {
+        Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
+        result.setExtMsg(e.getMessage());
+
+        LogUtil.exceptionLog(request, result, e);
+
+        return result;
+    }
+
+    /**
+     * org.springframework.web.multipart.MaxUploadSizeExceededException
+     * <p>
+     * # 上传文件总的最大值
+     * spring.servlet.multipart.max-request-size=10MB
+     * # 单个文件的最大值
+     * spring.servlet.multipart.max-file-size=10MB
+     */
+    @ResponseBody
+    @ExceptionHandler(value = {MaxUploadSizeExceededException.class})
+    public Result<?> handleException(MaxUploadSizeExceededException e, HttpServletRequest request,
+                                     HttpServletResponse response) {
+        Result<Void> result = new Result<Void>(ResultCode.PARAM_ERROR);
+
+        String readableSize = "";
+        try {
+            String eMessage = e.getMessage();
+            String maxUploadSizeStr = eMessage.substring(eMessage.lastIndexOf("(") + 1).replace(")", "").trim();
+            FileUtil.getReadableSizeStr(Long.parseLong(maxUploadSizeStr));
+        } catch (Exception numberFormatException) {
+            log.error("handleException error.", numberFormatException);
+        }
+
+        result.setExtMsg("上传文件大小超过限制" + readableSize);
+
+        LogUtil.exceptionLog(request, result, e);
+
+        return result;
+    }
+
     @ResponseBody
     @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
     public Result<?> handleException(MethodArgumentTypeMismatchException e, HttpServletRequest request,
@@ -226,5 +277,4 @@ public class ExceptionAdvice {
             return param + ":" + cv.getMessage();
         }).sorted().collect(Collectors.joining("; "));
     }
-
 }

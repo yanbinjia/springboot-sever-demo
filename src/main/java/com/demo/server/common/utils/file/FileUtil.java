@@ -68,6 +68,10 @@ public class FileUtil extends org.apache.commons.io.FileUtils {
         return false;
     }
 
+    public static String getReadableSizeStr(long maxUploadSize) {
+        return FileUtils.byteCountToDisplaySize(maxUploadSize);
+    }
+
     public static boolean isValidFilename(String filename) {
         return filename.matches(FILENAME_PATTERN);
     }

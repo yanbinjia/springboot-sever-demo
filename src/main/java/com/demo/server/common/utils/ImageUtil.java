@@ -8,6 +8,7 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -51,6 +52,28 @@ public class ImageUtil {
 
         return result;
     }
+
+    public static boolean isImageByIO(MultipartFile file) {
+        boolean result = false;
+
+        if (file == null || file.isEmpty()) {
+            return false;
+        }
+
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(file.getInputStream());
+            if (image != null && image.getWidth() > 0 && image.getHeight() > 0) {
+                result = true;
+            }
+        } catch (Exception e) {
+            logger.error("isImage error", e);
+        }
+
+        return result;
+    }
+
 
     public static boolean isImageByExt(String filename) {
         return IMG_EXT_LIST.contains(getExt(filename).toLowerCase());
