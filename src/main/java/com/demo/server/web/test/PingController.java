@@ -1,4 +1,10 @@
-package com.demo.server.web.ping;
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-08-14T15:18:54.432+08:00
+ */
+
+package com.demo.server.web.test;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
