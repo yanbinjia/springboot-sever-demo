@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotEmpty;
 
 @RestController
-@RequestMapping("/xss")
+@RequestMapping("/test/xss")
 @Validated
 public class XssTestController {
     @TokenPass

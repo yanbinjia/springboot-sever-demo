@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/redis")
+@RequestMapping("/test/redis")
 @Validated
 public class RedisTestController {
     @Autowired

@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 @RestController
-@RequestMapping("/validate")
+@RequestMapping("/test/validate")
 @Validated// 在@RequestParam上开启validate能力
 public class ValidateTestController {
     @TokenPass

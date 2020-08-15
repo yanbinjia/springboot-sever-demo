@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/metric")
+@RequestMapping("/test/metric")
 public class MetricControler {
     @TokenPass
     @SignPass

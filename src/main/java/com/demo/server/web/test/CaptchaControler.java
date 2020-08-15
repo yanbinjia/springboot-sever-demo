@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/captcha")
+@RequestMapping("/test/captcha")
 @Slf4j
 public class CaptchaControler {
     @TokenPass
