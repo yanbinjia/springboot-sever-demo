@@ -50,7 +50,7 @@ public class FileUtil extends org.apache.commons.io.FileUtils {
 
     public static boolean cleanDirectory(String path) {
         if (StringUtils.isBlank(path)) {
-            log.error("deleteFile error. path can not blank.");
+            log.error("cleanDirectory error. path can not blank.");
             return false;
         }
         File file = new File(path);

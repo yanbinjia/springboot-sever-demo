@@ -13,7 +13,6 @@ import com.demo.server.common.utils.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -38,6 +37,12 @@ public class FileUploadUtil {
         log.info("upload success. src={},save to dest={}", multipartFile.getOriginalFilename(), destAbsolutePath);
 
         return destAbsolutePath;
+    }
+
+    public static final String uploadImage(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize)
+            throws Exception {
+        String[] allowedExtension = ImageUtil.IMG_EXT_LIST.toArray(new String[0]);
+        return uploadImage(uploadBasePath, multipartFile, maxUploadSize, allowedExtension);
     }
 
     public static final String uploadImage(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize, String[] allowedExtension)
@@ -122,18 +127,5 @@ public class FileUploadUtil {
         return desc;
 
     }
-
-    public static void main(String[] args) throws Exception {
-        String path = FileUploadUtil.getDestAbsolutePath("/Users/ucredit/upload_data", new MockMultipartFile(
-                "test", "test.png", "", new byte[10]));
-        System.out.println(path);
-        System.out.println(FileUploadUtil.getDestAbsoluteFile(path));
-
-        System.out.println(isAllowedExtension("png", new String[]{"png", "jpg", "jpeg", "icon"}));
-        System.out.println(isAllowedExtension("pdf", new String[]{"png", "jpg", "jpeg", "icon"}));
-        System.out.println(isAllowedExtension("pdf", null));
-
-    }
-
 
 }

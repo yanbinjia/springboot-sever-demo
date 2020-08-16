@@ -346,6 +346,7 @@ public class ImageUtil {
 
         System.out.println(ImageUtil.toBase64(zoomImage, ImageUtil.FMT_JPG));
 
+        Arrays.stream(ImageUtil.IMG_EXT_LIST.toArray(new String[0])).forEach(s -> System.out.println(s));
         zoomImage = null;
         watermarkImage = null;
     }
