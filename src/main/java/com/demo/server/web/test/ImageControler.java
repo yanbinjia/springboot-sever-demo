@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 @RestController
-@RequestMapping("/image")
-public class ImageTestControler {
+@RequestMapping("/test/image")
+public class ImageControler {
     @TokenPass
     @SignPass
     @GetMapping("/test")

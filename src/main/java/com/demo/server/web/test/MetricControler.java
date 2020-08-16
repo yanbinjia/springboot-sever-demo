@@ -1,4 +1,10 @@
-package com.demo.server.web.metrics;
+/*
+ * Copyright (c) 2020 demo ^-^.
+ * @Author: yanbinjia@126.com
+ * @LastModified: 2020-08-14T15:13:33.822+08:00
+ */
+
+package com.demo.server.web.test;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
@@ -18,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/metric")
+@RequestMapping("/test/metric")
 public class MetricControler {
     @TokenPass
     @SignPass

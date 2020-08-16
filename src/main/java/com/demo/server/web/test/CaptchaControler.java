@@ -1,4 +1,4 @@
-package com.demo.server.web.captcha;
+package com.demo.server.web.test;
 
 import com.demo.server.bean.base.Result;
 import com.demo.server.bean.base.ResultCode;
@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/captcha")
+@RequestMapping("/test/captcha")
 @Slf4j
 public class CaptchaControler {
     @TokenPass

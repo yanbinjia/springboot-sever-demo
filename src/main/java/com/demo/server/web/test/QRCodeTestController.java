@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/qrcode")
+@RequestMapping("/test/qrcode")
 @Validated
 public class QRCodeTestController {
 

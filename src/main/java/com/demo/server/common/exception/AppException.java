@@ -34,9 +34,9 @@ public class AppException extends RuntimeException {
     }
 
     public AppException(ResultCode resultCode, String extMsg) {
-        super(resultCode.msg + " (" + extMsg + ")");
+        super(resultCode.msg + "(" + extMsg + ")");
         this.code = resultCode.code;
-        this.msg = resultCode.msg + " (" + extMsg + ")";
+        this.msg = resultCode.msg + "(" + extMsg + ")";
     }
 
     public AppException(String msg) {
