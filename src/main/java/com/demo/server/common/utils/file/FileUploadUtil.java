@@ -7,17 +7,18 @@
 package com.demo.server.common.utils.file;
 
 import com.demo.server.bean.base.ResultCode;
-import com.demo.server.common.utils.DateUtil;
 import com.demo.server.common.utils.ImageUtil;
 import com.demo.server.common.utils.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
 @Slf4j
 public class FileUploadUtil {
@@ -111,7 +112,7 @@ public class FileUploadUtil {
 
     private static String getPathStoreByDate(String uploadBasePath, String extension) {
         uploadBasePath = uploadBasePath.endsWith(File.separator) ? uploadBasePath : uploadBasePath + File.separator;
-        return uploadBasePath + DateUtil.datePathNow() + File.separator + System.currentTimeMillis() + "-" + RandomUtil.uuidWithoutSeparator() + "." + extension;
+        return uploadBasePath + datePath() + File.separator + System.currentTimeMillis() + "-" + RandomUtil.uuidWithoutSeparator() + "." + extension;
     }
 
     private static File getDestAbsoluteFile(String destAbsolutePath) throws IOException {
@@ -127,4 +128,10 @@ public class FileUploadUtil {
         return desc;
     }
 
+    /**
+     * 日期路径 即年/月/日 如2018/08/08
+     */
+    private static final String datePath() {
+        return DateFormatUtils.format(new Date(), "yyyy/MM/dd");
+    }
 }
