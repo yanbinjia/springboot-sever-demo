@@ -21,8 +21,8 @@ import java.util.Arrays;
 
 @Slf4j
 public class FileUploadUtil {
-    // 默认的文件名最大长度 100
-    public static final int DEFAULT_FILE_NAME_LENGTH = 100;
+    // 文件名最大长度
+    public static final int FILE_NAME_MAX_LENGTH = 100;
 
     public static final String upload(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize, String[] allowedExtension)
             throws Exception {
@@ -60,62 +60,61 @@ public class FileUploadUtil {
         return destAbsolutePath;
     }
 
-    public static void checkAllowedImage(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize, String[] allowedExtension) {
+    private static void checkAllowedImage(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize, String[] allowedExtension) {
         checkAllowed(uploadBasePath, multipartFile, maxUploadSize, allowedExtension);
         if (!ImageUtil.isImageByIO(multipartFile)) {
             throw new FileUploadException(ResultCode.PARAM_ERROR, "上传文件格式错误,请检查图片格式");
         }
     }
 
-    public static void checkAllowed(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize, String[] allowedExtension) {
-
+    private static void checkAllowed(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize, String[] allowedExtension) {
+        // 入参检查
         if (StringUtils.isBlank(uploadBasePath) || multipartFile == null || multipartFile.isEmpty() || maxUploadSize < 0) {
             throw new FileUploadException(ResultCode.PARAM_ERROR, "上传文件参数错误,请检查");
         }
 
+        // 扩展名限制
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-
         if (!isAllowedExtension(extension, allowedExtension)) {
             throw new FileUploadException(ResultCode.PARAM_ERROR, "上传文件格式错误,允许:" + String.join(",", allowedExtension));
         }
 
+        // 文件大小限制
         if (multipartFile.getSize() > maxUploadSize) {
-            // 超过限制大小
             throw new FileUploadException(ResultCode.PARAM_ERROR, "上传文件大小超过限制" + FileUtil.getReadableSizeStr(maxUploadSize));
         }
 
-        if (multipartFile.getOriginalFilename().length() > DEFAULT_FILE_NAME_LENGTH) {
-            // 文件名称超长
-            throw new FileUploadException(ResultCode.PARAM_ERROR, "上传文件名称超过长度限制" + DEFAULT_FILE_NAME_LENGTH);
+        // 文件名称长度限制
+        if (multipartFile.getOriginalFilename().length() > FILE_NAME_MAX_LENGTH) {
+            throw new FileUploadException(ResultCode.PARAM_ERROR, "上传文件名称超过长度限制" + FILE_NAME_MAX_LENGTH);
+        }
+
+        // 服务器上传路径检查
+        File basePath = new File(uploadBasePath);
+        if (!basePath.exists() || !basePath.isDirectory() || !basePath.canWrite()) {
+            throw new FileUploadException(ResultCode.SYS_ERROR, "上传路径不存在或无写权限,请检查");
         }
     }
 
-    public static final boolean isAllowedExtension(String extension, String[] allowedExtension) {
+    private static final boolean isAllowedExtension(String extension, String[] allowedExtension) {
         if (allowedExtension == null) {
             return true;
         }
         return Arrays.stream(allowedExtension).anyMatch(s -> s.equalsIgnoreCase(extension));
     }
 
-    public static String getDestAbsolutePath(String uploadBasePath, MultipartFile multipartFile) throws IOException {
-        if (StringUtils.isBlank(uploadBasePath) || multipartFile == null || multipartFile.isEmpty()) {
-            throw new IOException("getDestAbsolutePath error: uploadBasePath or multipartFile is blank.");
-        }
+    private static String getDestAbsolutePath(String uploadBasePath, MultipartFile multipartFile) throws IOException {
         String clientOriginalFileName = multipartFile.getOriginalFilename();
         String extension = FilenameUtils.getExtension(clientOriginalFileName);
-
         return getPathStoreByDate(uploadBasePath, extension);
     }
 
-    public static String getPathStoreByDate(String uploadBasePath, String extension) {
+    private static String getPathStoreByDate(String uploadBasePath, String extension) {
         uploadBasePath = uploadBasePath.endsWith(File.separator) ? uploadBasePath : uploadBasePath + File.separator;
         return uploadBasePath + DateUtil.datePathNow() + File.separator + System.currentTimeMillis() + "-" + RandomUtil.uuidWithoutSeparator() + "." + extension;
     }
 
-    public static File getDestAbsoluteFile(String destAbsolutePath) throws IOException {
-        if (StringUtils.isBlank(destAbsolutePath)) {
-            throw new IOException("getDestAbsoluteFile error: destAbsolutePath is blank.");
-        }
+    private static File getDestAbsoluteFile(String destAbsolutePath) throws IOException {
         File desc = new File(destAbsolutePath);
 
         if (!desc.getParentFile().exists()) {
@@ -124,8 +123,8 @@ public class FileUploadUtil {
         if (!desc.exists()) {
             desc.createNewFile();
         }
-        return desc;
 
+        return desc;
     }
 
 }
