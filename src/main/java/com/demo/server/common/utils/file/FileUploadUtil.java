@@ -7,6 +7,7 @@
 package com.demo.server.common.utils.file;
 
 import com.demo.server.bean.base.ResultCode;
+import com.demo.server.common.exception.FileUploadException;
 import com.demo.server.common.utils.ImageUtil;
 import com.demo.server.common.utils.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -25,19 +26,9 @@ public class FileUploadUtil {
     // 文件名最大长度
     public static final int FILE_NAME_MAX_LENGTH = 100;
 
-    public static final String upload(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize, String[] allowedExtension)
-            throws Exception {
-
+    public static final String upload(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize, String[] allowedExtension) {
         checkAllowed(uploadBasePath, multipartFile, maxUploadSize, allowedExtension);
-
-        String destAbsolutePath = getDestAbsolutePath(uploadBasePath, multipartFile);
-        File destFile = getDestAbsoluteFile(destAbsolutePath);
-
-        multipartFile.transferTo(destFile);
-
-        log.info("upload success. src={},save to dest={}", multipartFile.getOriginalFilename(), destAbsolutePath);
-
-        return destAbsolutePath;
+        return doUpload(uploadBasePath, multipartFile);
     }
 
     public static final String uploadImage(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize)
@@ -48,16 +39,21 @@ public class FileUploadUtil {
 
     public static final String uploadImage(String uploadBasePath, MultipartFile multipartFile, long maxUploadSize, String[] allowedExtension)
             throws Exception {
-
         checkAllowedImage(uploadBasePath, multipartFile, maxUploadSize, allowedExtension);
+        return doUpload(uploadBasePath, multipartFile);
+    }
 
-        String destAbsolutePath = getDestAbsolutePath(uploadBasePath, multipartFile);
-        File destFile = getDestAbsoluteFile(destAbsolutePath);
-
-        multipartFile.transferTo(destFile);
-
-        log.info("upload success. src={},save to dest={}", multipartFile.getOriginalFilename(), destAbsolutePath);
-
+    private static String doUpload(String uploadBasePath, MultipartFile multipartFile) {
+        String destAbsolutePath = null;
+        try {
+            destAbsolutePath = getDestAbsolutePath(uploadBasePath, multipartFile);
+            File destFile = getDestAbsoluteFile(destAbsolutePath);
+            multipartFile.transferTo(destFile);
+            log.info("doUpload success. src={},to dest={}", multipartFile.getOriginalFilename(), destAbsolutePath);
+        } catch (Exception e) {
+            log.error("doUpload error. src={},to dest={}", multipartFile.getOriginalFilename(), destAbsolutePath, e);
+            throw new FileUploadException(ResultCode.SYS_ERROR, e.getMessage());
+        }
         return destAbsolutePath;
     }
 
@@ -104,7 +100,7 @@ public class FileUploadUtil {
         return Arrays.stream(allowedExtension).anyMatch(s -> s.equalsIgnoreCase(extension));
     }
 
-    private static String getDestAbsolutePath(String uploadBasePath, MultipartFile multipartFile) throws IOException {
+    private static String getDestAbsolutePath(String uploadBasePath, MultipartFile multipartFile) {
         String clientOriginalFileName = multipartFile.getOriginalFilename();
         String extension = FilenameUtils.getExtension(clientOriginalFileName);
         return getPathStoreByDate(uploadBasePath, extension);

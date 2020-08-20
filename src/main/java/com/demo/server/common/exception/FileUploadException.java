@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2020 demo ^-^.
  * @Author: yanbinjia@126.com
- * @LastModified: 2020-08-14T11:00:57.280+08:00
+ * @LastModified: 2020-08-20T16:26:58.791+08:00
  */
 
-package com.demo.server.common.utils.file;
+package com.demo.server.common.exception;
 
 import com.demo.server.bean.base.ResultCode;
 import com.demo.server.common.exception.AppException;
