@@ -1,0 +1,37 @@
+https://github.com/robertdavidgraham/masscan
+
+masscan 扫描端口要比nmap快很多，可以考虑结合使用
+
+#sudo masscan 192.168.31.1  --banners -p1-65535 --rate=1000 > zzz.txt
+
+Discovered open port 8383/tcp on 192.168.31.1
+Discovered open port 8190/tcp on 192.168.31.1
+Discovered open port 8196/tcp on 192.168.31.1
+Discovered open port 8382/tcp on 192.168.31.1
+Discovered open port 80/tcp on 192.168.31.1
+Discovered open port 784/tcp on 192.168.31.1
+Discovered open port 8384/tcp on 192.168.31.1
+Discovered open port 8080/tcp on 192.168.31.1
+Discovered open port 8191/tcp on 192.168.31.1
+Discovered open port 8192/tcp on 192.168.31.1
+Discovered open port 5351/tcp on 192.168.31.1
+Discovered open port 8193/tcp on 192.168.31.1
+Discovered open port 8899/tcp on 192.168.31.1
+Discovered open port 8098/tcp on 192.168.31.1
+Discovered open port 8381/tcp on 192.168.31.1
+Discovered open port 5081/tcp on 192.168.31.1
+Discovered open port 8999/tcp on 192.168.31.1
+Discovered open port 8195/tcp on 192.168.31.1
+Discovered open port 8197/tcp on 192.168.31.1
+Discovered open port 8387/tcp on 192.168.31.1
+Discovered open port 53/tcp on 192.168.31.1
+Discovered open port 8380/tcp on 192.168.31.1
+
+转成一行端口号
+
+#cat zzz.txt|awk -F" " '{print $4}'|awk -F"/" '{print $1} '|awk BEGIN{RS=EOF}'{gsub(/\n/,",");print}'
+8383,8190,8196,8382,80,784,8384,8080,8191,8192,5351,8193,8899,8098,8381,5081,8999,8195,8197,8387,53,8380
+
+#cat zzz.txt|awk -F" " '{print $4}'|awk -F"/" '{print $1} ' |xargs
+8197 8191 8381 8195 8196 8190 8192 8382 5351 8098 8899 8383 8387 8999 8380 8384 784 8080 8193 80 53 5081
+

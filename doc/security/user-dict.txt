@@ -1,0 +1,11 @@
+root
+test
+guest
+admin
+administrator
+rrd
+renrendai
+haofenqi
+haohuan
+data
+datacenter
