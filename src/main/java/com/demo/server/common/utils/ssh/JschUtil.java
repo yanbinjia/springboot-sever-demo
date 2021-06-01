@@ -9,83 +9,81 @@ package com.demo.server.common.utils.ssh;
 import com.demo.server.common.utils.CharsetUtil;
 import com.demo.server.common.utils.IOUtil;
 import com.jcraft.jsch.*;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-@Slf4j
 public class JschUtil {
-    /**
-     * 不使用SSH的值
-     */
-    public final static String SSH_NONE = "none";
+
+    private static final Logger log = LoggerFactory.getLogger(JschUtil.class);
 
 
     /**
      * 打开一个新的SSH会话
      *
-     * @param sshHost 主机
-     * @param sshPort 端口
-     * @param sshUser 用户名
-     * @param sshPass 密码
-     * @param timeout Socket连接超时时长，单位毫秒
+     * @param host     主机
+     * @param port     端口
+     * @param user     用户名
+     * @param password 密码
+     * @param timeout  Socket连接超时时长，单位毫秒
      * @return SSH会话
      */
-    public static Session openSession(String sshHost, int sshPort, String sshUser, String sshPass, int timeout) {
+    public static Session openSession(String host, int port, String user, String password, int timeout) {
         long startTime = System.currentTimeMillis();
-        final Session session = createSession(sshHost, sshPort, sshUser, sshPass);
+        final Session session = createSession(host, port, user, password);
         try {
             session.connect(timeout);
         } catch (JSchException e) {
+            log.error("Connect to sftp {}@{}:{} error, cost={}ms", user, host, port, (System.currentTimeMillis() - startTime));
             throw new JschRuntimeException(e);
         }
-        long endTime = System.currentTimeMillis();
-        log.info("Connect to sftp {}@{}:{} success, cost={}ms", sshUser, sshHost, sshPort, (endTime - startTime));
+        log.info("Connect to sftp {}@{}:{} success, cost={}ms", user, host, port, (System.currentTimeMillis() - startTime));
         return session;
     }
 
     /**
      * 打开一个新的SSH会话
      *
-     * @param sshHost        主机
-     * @param sshPort        端口
-     * @param sshUser        用户名
+     * @param host           主机
+     * @param port           端口
+     * @param user           用户名
      * @param privateKeyPath 私钥的路径
      * @param passphrase     私钥文件的密码，可以为null
      * @return SSH会话
      */
-    public static Session openSession(String sshHost, int sshPort, String sshUser, String privateKeyPath, byte[] passphrase) {
+    public static Session openSession(String host, int port, String user, String privateKeyPath, byte[] passphrase) {
         long startTime = System.currentTimeMillis();
-        final Session session = createSession(sshHost, sshPort, sshUser, privateKeyPath, passphrase);
+        final Session session = createSession(host, port, user, privateKeyPath, passphrase);
         try {
             session.connect();
         } catch (JSchException e) {
             throw new JschRuntimeException(e);
         }
         long endTime = System.currentTimeMillis();
-        log.info("Connect to sftp {}@{}:{} success, cost={}ms", sshUser, sshHost, sshPort, (endTime - startTime));
+        log.info("Connect to sftp {}@{}:{} success, cost={}ms", user, host, port, (endTime - startTime));
         return session;
     }
 
     /**
      * 新建一个新的SSH会话，此方法并不打开会话（既不调用connect方法）
      *
-     * @param sshHost 主机
-     * @param sshPort 端口
-     * @param sshUser 用户名，如果为null，默认root
-     * @param sshPass 密码
+     * @param host     主机
+     * @param port     端口
+     * @param user     用户名，如果为null，默认root
+     * @param password 密码
      * @return SSH会话
      */
-    private static Session createSession(String sshHost, int sshPort, String sshUser, String sshPass) {
+    private static Session createSession(String host, int port, String user, String password) {
         final JSch jsch = new JSch();
-        final Session session = createSession(jsch, sshHost, sshPort, sshUser);
+        final Session session = createSession(jsch, host, port, user);
 
-        if (StringUtils.isNotEmpty(sshPass)) {
-            session.setPassword(sshPass);
+        if (StringUtils.isNotEmpty(password)) {
+            session.setPassword(password);
         }
 
         return session;
@@ -94,15 +92,15 @@ public class JschUtil {
     /**
      * 新建一个新的SSH会话，此方法并不打开会话（既不调用connect方法）
      *
-     * @param sshHost        主机
-     * @param sshPort        端口
-     * @param sshUser        用户名，如果为null，默认root
+     * @param host           主机
+     * @param port           端口
+     * @param user           用户名，如果为null，默认root
      * @param privateKeyPath 私钥的路径
      * @param passphrase     私钥文件的密码，可以为null
      * @return SSH会话
      * @since 5.0.0
      */
-    private static Session createSession(String sshHost, int sshPort, String sshUser, String privateKeyPath, byte[] passphrase) {
+    private static Session createSession(String host, int port, String user, String privateKeyPath, byte[] passphrase) {
 
         Assert.isTrue(StringUtils.isNotBlank(privateKeyPath), "PrivateKey Path must be not empty!");
 
@@ -113,26 +111,26 @@ public class JschUtil {
             throw new JschRuntimeException(e);
         }
 
-        return createSession(jsch, sshHost, sshPort, sshUser);
+        return createSession(jsch, host, port, user);
     }
 
     /**
      * 创建一个SSH会话，重用已经使用的会话
      *
-     * @param jsch    {@link JSch}
-     * @param sshHost 主机
-     * @param sshPort 端口
-     * @param sshUser 用户名，如果为null，默认root
+     * @param jsch {@link JSch}
+     * @param host 主机
+     * @param port 端口
+     * @param user 用户名，如果为null，默认root
      * @return {@link Session}
      * @since 5.0.3
      */
-    private static Session createSession(JSch jsch, String sshHost, int sshPort, String sshUser) {
-        Assert.isTrue(StringUtils.isNotBlank(sshHost), "SSH Host must be not empty!");
-        Assert.isTrue(sshPort > 0, "SSH port must be > 0");
+    private static Session createSession(JSch jsch, String host, int port, String user) {
+        Assert.isTrue(StringUtils.isNotBlank(host), "SSH host must be not empty!");
+        Assert.isTrue(port > 0, "SSH port must be > 0");
 
         // 默认root用户
-        if (StringUtils.isEmpty(sshUser)) {
-            sshUser = "root";
+        if (StringUtils.isEmpty(user)) {
+            user = "root";
         }
 
         if (null == jsch) {
@@ -141,7 +139,7 @@ public class JschUtil {
 
         Session session;
         try {
-            session = jsch.getSession(sshUser, sshHost, sshPort);
+            session = jsch.getSession(user, host, port);
         } catch (JSchException e) {
             throw new JschRuntimeException(e);
         }
