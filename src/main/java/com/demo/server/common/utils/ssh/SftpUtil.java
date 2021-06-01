@@ -85,14 +85,6 @@ public class SftpUtil {
         return true;
     }
 
-    public List<String> ls(String path) {
-        log.info("exec cmd: ls {}", path);
-        final List<ChannelSftp.LsEntry> entryList = lsEntries(path);
-        final List<String> list = new ArrayList<>();
-        entryList.stream().forEach(s -> list.add(s.getFilename()));
-        return list;
-    }
-
     public void upload(String ftpPath, String localFilePath) {
         try {
             long startTime = System.currentTimeMillis();
@@ -133,6 +125,14 @@ public class SftpUtil {
             }
         }
         return isDirExistFlag;
+    }
+
+    public List<String> ls(String path) {
+        log.info("exec cmd: ls {}", path);
+        final List<ChannelSftp.LsEntry> entryList = lsEntries(path);
+        final List<String> list = new ArrayList<>();
+        entryList.stream().forEach(s -> list.add(s.getFilename()));
+        return list;
     }
 
     /**
