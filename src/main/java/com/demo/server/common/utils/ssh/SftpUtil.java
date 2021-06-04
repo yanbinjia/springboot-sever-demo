@@ -92,7 +92,7 @@ public class SftpUtil {
             channel.cd(ftpPath);
             File file = new File(localFilePath);
             channel.put(new FileInputStream(file), file.getName());
-            log.info("exec upload success, cost={}", System.currentTimeMillis() - startTime);
+            log.info("exec upload success, cost={}ms", System.currentTimeMillis() - startTime);
         } catch (Exception e) {
             log.error("exec upload error, localFilePath={} to ftpPath={}", localFilePath, ftpPath, e);
             throw new JschRuntimeException(e);
@@ -106,7 +106,7 @@ public class SftpUtil {
             channel.cd(ftpPath);
             File file = new File(localFilePath);
             channel.get(ftpFile, new FileOutputStream(file));
-            log.info("exec download success, cost={}", System.currentTimeMillis() - startTime);
+            log.info("exec download success, cost={}ms", System.currentTimeMillis() - startTime);
         } catch (Exception e) {
             log.error("exec download error, ftpPath={}, ftpFile={} to localFilePath={}", ftpPath, ftpFile, localFilePath, e);
             throw new JschRuntimeException(e);
