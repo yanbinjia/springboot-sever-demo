@@ -5,6 +5,8 @@
 .settings/
 .classpath
 .project
+.gradle
+.ideaDataSources
 *.DS_Store
 *.class
 .idea/

@@ -102,6 +102,8 @@ public class JavaStream {
                 count++;
             }
         }
+
+        Map<Integer,Integer> map = new HashMap<>();
         return count;
     }
 

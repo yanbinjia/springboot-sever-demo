@@ -2,25 +2,19 @@ package com.demo.study.testclass.code;
 
 public class mergeTwoList {
 
-    public void merge(int[] A, int m, int[] B, int n) {
-
+    public void mergeTwoArray(int[] A, int m, int[] B, int n) {
         int length = m + n;
-
         for (int i = length - 1; i >= 0; i--) {
             if (m > 0 && n > 0) {
-                if (A[m - 1] < B[n - 1])           //比较AB最大值的大小，B更大则.....
-                {
+                if (A[m - 1] < B[n - 1]) {        //比较AB最大值的大小，B更大则.....
                     A[i] = B[--n];
-                } else                      //A更大
-                {
+                } else {                      //A更大
                     A[i] = A[--m];
                 }
-
             } else if (n > 0 && m == 0) {
                 A[i] = B[--n];
             }
         }
-
     }
 
     public static Node mergeTwoList(Node L1, Node L2) {
